@@ -374,11 +374,11 @@ enhance validate-token-usage to scan for hex/rgb/hsl values
 
 ## documentation requirements
 
-### single comprehensive report system
+### individual component report system
 
-**primary file**: `MCP_COMPONENT_REPORTS.md`
+**file naming**: `[ComponentName]_MCP_report.md` (e.g., `Button_MCP_report.md`, `Input_MCP_report.md`)
 
-when user asks to test a component, generate ONE comprehensive report that includes:
+when user asks to test a component, generate ONE comprehensive report file that includes:
 - all 10 review dimensions tested
 - performance metrics
 - issues discovered
@@ -388,11 +388,11 @@ when user asks to test a component, generate ONE comprehensive report that inclu
 - recommendation (ready for use / needs improvement / critical issues)
 
 **report format**:
-- use the template in MCP_COMPONENT_REPORTS.md
-- each component gets one complete section
-- update the index table at the top
-- include all test data, code examples, and findings in ONE place
+- create separate file for each component: `[ComponentName]_MCP_report.md`
+- use title format: `# [ComponentName] - MCP Comprehensive Test Report`
+- include all test data, code examples, and findings in the file
 - grade the mcp performance (A-F) for that component
+- keep `MCP_COMPONENT_REPORTS.md` as index/summary with links to individual reports
 
 ### reference files (for context only):
 
