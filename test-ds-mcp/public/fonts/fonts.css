@@ -1,0 +1,26 @@
+/* JioType Variable Font
+ *
+ * This font supports variable weight from 100 to 900.
+ * The font file (@JioTypeVar.woff2) must be in the same folder as this CSS file.
+ *
+ * IMPORTANT: This CSS must be loaded in the HTML <head> BEFORE any React scripts.
+ */
+
+@font-face {
+  font-family: "JioType Var";
+  src: url("./@JioTypeVar.woff2") format("woff2");
+  font-weight: 100 900; /* Variable weight range */
+  font-style: normal;
+  font-display: swap; /* Show fallback font while loading */
+}
+
+/* Global font application */
+:root {
+  --font-family-primary: "JioType Var", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+body {
+  font-family: var(--font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
