@@ -1,0 +1,447 @@
+---
+description: comprehensive review protocol for jio design system mcp testing and improvement
+alwaysApply: true
+---
+
+# design system mcp review protocol
+
+## purpose
+this rule ensures 360-degree review of the jio design system mcp performance, identifying failures, gaps, and opportunities for improvement across all dimensions.
+
+---
+
+## review dimensions
+
+### 1. mcp tool availability & discovery
+**check before every mcp-related task:**
+- [ ] are all expected mcp tools available via `ListMcpResources`?
+- [ ] can tools be discovered when user mentions design system concepts?
+- [ ] are tool descriptions clear and accurate?
+
+**document:**
+- missing tools that should exist
+- unclear tool descriptions
+- discovery failures (when tool exists but wasn't found)
+
+---
+
+### 2. tool execution & response quality
+**evaluate every mcp tool call:**
+- [ ] did the tool execute successfully?
+- [ ] was the response format valid and parseable?
+- [ ] was the response relevant to the query?
+- [ ] was the response complete (no truncated data)?
+- [ ] did response time meet user expectations (<3s ideal)?
+
+**common failure patterns to log:**
+```
+- tool timeout (>5s)
+- malformed json response
+- empty results when data should exist
+- incorrect schema validation
+- authentication/permission errors
+```
+
+---
+
+### 3. component documentation accuracy
+**when fetching component info:**
+- [ ] are prop definitions complete and accurate?
+- [ ] do code examples compile and run?
+- [ ] are all variants/appearances documented?
+- [ ] do typescript types match actual implementation?
+- [ ] are accessibility guidelines included?
+
+**validation checklist:**
+```typescript
+// verify against actual ds package
+import { Button } from '@marcelinodzn/ds-react';
+
+// check if mcp-provided props match reality:
+// - appearance options
+// - size options
+// - event handlers
+// - aria attributes
+// - children type
+```
+
+---
+
+### 4. token resolution & design values
+**when resolving design tokens:**
+- [ ] does token name exist in the system?
+- [ ] is resolved value correct for context (platform/theme/mode)?
+- [ ] are css values properly formatted?
+- [ ] do suggestions match actual token categories?
+
+**test cases to document:**
+```
+✅ working: "Surface/Bold/idle" → correct color
+❌ failing: "Spacing/large" → error/wrong value
+⚠️ ambiguous: partial token names → unclear suggestions
+```
+
+---
+
+### 5. code generation & scaffolding
+**evaluate generated code quality:**
+- [ ] does generated code use correct imports?
+- [ ] are component props syntactically correct?
+- [ ] does code follow design system best practices?
+- [ ] are tokens used instead of hardcoded values?
+- [ ] is generated code accessible (aria labels, roles)?
+
+**anti-patterns to catch:**
+```tsx
+// ❌ mcp should never generate:
+<Button color="#ff0000">         // hardcoded color
+<Button size="medium">           // wrong size value (should be "M")
+<Button onClick={}>              // wrong event (should be onPress)
+<div role="button">              // wrong component usage
+
+// ✅ mcp should generate:
+<Button appearance="primary" size="M" onPress={handleClick}>
+  {children}
+</Button>
+```
+
+---
+
+### 6. validation tools effectiveness
+**test validation tools with intentional errors:**
+- [ ] does `validate-component-usage` catch type mismatches?
+- [ ] does `validate-token-usage` detect hardcoded values?
+- [ ] are error messages clear and actionable?
+- [ ] do suggestions point to correct alternatives?
+
+**create test cases:**
+```tsx
+// intentional errors to test detection:
+const badCode = `
+  <Button size="medium" color="#fff">  // wrong size, hardcoded color
+    click me
+  </Button>
+`;
+// verify mcp flags all issues
+```
+
+---
+
+### 7. icon search & discovery
+**when searching icons:**
+- [ ] does fuzzy search return relevant results?
+- [ ] are icon names correct and importable?
+- [ ] does category filtering work?
+- [ ] are results paginated properly?
+
+**edge cases:**
+```
+- empty query → should list all icons
+- typo in search → should fuzzy match
+- invalid category → should error gracefully
+- limit=100 → should respect max results
+```
+
+---
+
+### 8. platform compatibility
+**cross-platform concerns:**
+- [ ] are web-only components clearly marked?
+- [ ] are native-only components documented?
+- [ ] does platform check tool work correctly?
+- [ ] are alternatives suggested for unavailable components?
+
+**test matrix:**
+```
+component: Button → available on: web ✅ native ✅
+component: HeaderNavigation → available on: web ✅ native ❌
+verify mcp accurately reports availability
+```
+
+---
+
+### 9. accessibility validation
+**when checking a11y:**
+- [ ] does mcp catch missing aria-labels?
+- [ ] does it validate against wcag aa standards?
+- [ ] are keyboard navigation issues detected?
+- [ ] do suggestions reference react aria best practices?
+
+**critical checks:**
+```tsx
+// mcp should flag:
+<Button>                           // icon-only, no aria-label
+  <Icon name="home" />
+</Button>
+
+// mcp should approve:
+<Button aria-label="go home">
+  <Icon name="home" />
+</Button>
+```
+
+---
+
+### 10. error handling & recovery
+**evaluate error scenarios:**
+- [ ] are error messages user-friendly?
+- [ ] do errors include actionable next steps?
+- [ ] does mcp gracefully handle network issues?
+- [ ] are fallback strategies suggested?
+
+**document error patterns:**
+```
+scenario: token not found
+current: "token X does not exist"
+improve: "token X not found. did you mean: [similar tokens]?"
+
+scenario: component unavailable
+current: "component not available"
+improve: "component Y not available on native. use Z instead."
+```
+
+---
+
+## prompt analysis framework
+
+### categorize user prompts
+**track and categorize all mcp-related prompts:**
+
+1. **component usage queries**
+   - "how do i use button?"
+   - "show me input component examples"
+
+2. **styling/token queries**
+   - "what's the color for primary surface?"
+   - "how do i use spacing tokens?"
+
+3. **validation requests**
+   - "check if this code is correct"
+   - "validate my component usage"
+
+4. **generation requests**
+   - "create a button component"
+   - "scaffold a form layout"
+
+5. **troubleshooting**
+   - "why isn't my button working?"
+   - "this code has errors"
+
+6. **discovery/exploration**
+   - "what icons are available?"
+   - "show me all button variants"
+
+---
+
+### success/failure tracking
+**for each prompt category, log:**
+```yaml
+category: component usage queries
+total_prompts: 15
+successful: 12
+failed: 2
+partial: 1
+
+failure_reasons:
+  - mcp returned outdated prop names (2x)
+  - example code didn't compile (1x)
+
+improvements_needed:
+  - sync mcp data with latest ds version
+  - validate example code before returning
+```
+
+---
+
+## mcp improvement workflow
+
+### when issues are identified:
+
+1. **document the issue**
+   ```markdown
+   ## issue: [clear title]
+   
+   **date**: 2026-02-10
+   **mcp tool**: validate-component-usage
+   **category**: validation accuracy
+   
+   **what happened**:
+   user code had `size="medium"` but mcp didn't flag it.
+   
+   **expected behavior**:
+   mcp should flag invalid size values (should be S/M/L).
+   
+   **impact**: high - incorrect prop values bypass validation
+   
+   **suggested fix**:
+   update size enum validation in mcp schema
+   ```
+
+2. **categorize severity**
+   - 🔴 **critical**: blocks user, wrong information, security issue
+   - 🟡 **major**: degraded experience, missing features, slow performance
+   - 🟢 **minor**: polish, edge cases, nice-to-haves
+
+3. **propose solution**
+   - mcp configuration change?
+   - design system documentation update?
+   - new mcp tool needed?
+   - existing tool enhancement?
+
+4. **track in project**
+   - create `MCP_ISSUES.md` in project root
+   - log all findings with dates
+   - mark resolved items
+   - maintain improvement backlog
+
+---
+
+## testing protocol
+
+### before reporting "success" to user:
+
+**mandatory verification steps:**
+1. **try the solution yourself**
+   - run the generated code
+   - verify it compiles
+   - check runtime behavior
+   - test edge cases
+
+2. **cross-reference mcp output**
+   - compare with actual ds package
+   - verify prop types in node_modules
+   - check official documentation
+   - test in browser/runtime
+
+3. **validate accessibility**
+   - screen reader friendly?
+   - keyboard navigable?
+   - proper aria attributes?
+   - wcag aa compliant?
+
+4. **check for regressions**
+   - does it break existing code?
+   - are there side effects?
+   - performance impact?
+
+**never assume mcp output is correct without verification.**
+
+---
+
+## improvement feedback loop
+
+### regular review cadence:
+- **daily**: log issues encountered during testing
+- **weekly**: analyze patterns in failures
+- **monthly**: propose mcp enhancements based on data
+
+### metrics to track:
+```yaml
+mcp_performance:
+  tool_success_rate: 85%          # target: >95%
+  response_time_avg: 2.3s         # target: <2s
+  validation_accuracy: 78%        # target: >90%
+  user_retry_rate: 22%            # target: <10%
+  
+common_failure_modes:
+  - outdated_prop_definitions: 12 occurrences
+  - missing_examples: 8 occurrences
+  - slow_responses: 5 occurrences
+  - incorrect_tokens: 3 occurrences
+```
+
+### improvement proposals format:
+```markdown
+## proposal: [enhancement name]
+
+**problem**: 
+validation tool doesn't catch hardcoded colors
+
+**user impact**:
+users write code with #fff instead of design tokens
+
+**proposed solution**:
+enhance validate-token-usage to scan for hex/rgb/hsl values
+
+**implementation effort**: medium
+**priority**: high
+**tracking**: issue #42
+```
+
+---
+
+## documentation requirements
+
+### maintain these files in project:
+
+1. **MCP_ISSUES.md** - all discovered issues
+2. **MCP_TEST_CASES.md** - test scenarios and results
+3. **MCP_IMPROVEMENTS.md** - proposed enhancements
+4. **MCP_METRICS.md** - performance tracking data
+
+### update after each testing session:
+```markdown
+## session: 2026-02-10
+
+**tasks tested**:
+- button variant generation
+- token resolution for colors
+- component validation
+
+**results**:
+✅ button generation worked perfectly
+⚠️ token resolution was slow (4.2s)
+❌ validation missed invalid size prop
+
+**action items**:
+- investigate token resolution latency
+- update size validation schema
+```
+
+---
+
+## checklist for every mcp interaction
+
+before completing any mcp-related task:
+- [ ] did the mcp tool execute successfully?
+- [ ] is the output accurate and complete?
+- [ ] have you verified against actual ds package?
+- [ ] have you tested the generated/suggested code?
+- [ ] are there any edge cases to document?
+- [ ] have you logged issues/improvements needed?
+- [ ] have you updated mcp metrics/documentation?
+- [ ] is the solution accessible and production-ready?
+
+---
+
+## anti-patterns to avoid
+
+**❌ don't:**
+- blindly trust mcp output without verification
+- report success without testing the code
+- ignore validation errors from mcp tools
+- skip documentation of failures
+- assume mcp is always up-to-date
+
+**✅ do:**
+- verify every mcp response against reality
+- test generated code before delivering
+- log every issue for improvement
+- maintain detailed metrics
+- propose enhancements proactively
+
+---
+
+## success criteria
+
+a mcp interaction is successful when:
+1. tool executes without errors
+2. output is accurate and complete
+3. generated code compiles and runs
+4. solution follows ds best practices
+5. no manual corrections needed
+6. user can immediately use the output
+7. accessibility requirements met
+8. documentation is clear
+
+if any criterion fails, document it as an improvement opportunity.
