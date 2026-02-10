@@ -8,6 +8,8 @@ alwaysApply: true
 ## purpose
 this rule ensures 360-degree review of the jio design system mcp performance, identifying failures, gaps, and opportunities for improvement across all dimensions.
 
+**key principle**: when user asks to test a component, generate ONE comprehensive report in `MCP_COMPONENT_REPORTS.md` that covers all testing dimensions, includes evidence, metrics, issues, and provides a final grade and recommendation.
+
 ---
 
 ## review dimensions
@@ -372,45 +374,51 @@ enhance validate-token-usage to scan for hex/rgb/hsl values
 
 ## documentation requirements
 
-### maintain these files in project:
+### single comprehensive report system
 
-1. **MCP_ISSUES.md** - all discovered issues
-2. **MCP_TEST_CASES.md** - test scenarios and results
-3. **MCP_IMPROVEMENTS.md** - proposed enhancements
-4. **MCP_METRICS.md** - performance tracking data
+**primary file**: `MCP_COMPONENT_REPORTS.md`
 
-### update after each testing session:
-```markdown
-## session: 2026-02-10
+when user asks to test a component, generate ONE comprehensive report that includes:
+- all 10 review dimensions tested
+- performance metrics
+- issues discovered
+- improvement suggestions
+- verification evidence
+- final score (0-100)
+- recommendation (ready for use / needs improvement / critical issues)
 
-**tasks tested**:
-- button variant generation
-- token resolution for colors
-- component validation
+**report format**:
+- use the template in MCP_COMPONENT_REPORTS.md
+- each component gets one complete section
+- update the index table at the top
+- include all test data, code examples, and findings in ONE place
+- grade the mcp performance (A-F) for that component
 
-**results**:
-✅ button generation worked perfectly
-⚠️ token resolution was slow (4.2s)
-❌ validation missed invalid size prop
+### reference files (for context only):
 
-**action items**:
-- investigate token resolution latency
-- update size validation schema
-```
+keep these for historical tracking:
+1. **MCP_ISSUES.md** - issue log reference
+2. **MCP_TEST_CASES.md** - test scenario reference
+3. **MCP_IMPROVEMENTS.md** - improvement proposals
+4. **MCP_METRICS.md** - aggregate metrics
+
+but the main deliverable is always the comprehensive component report.
 
 ---
 
-## checklist for every mcp interaction
+## checklist for every component test
 
-before completing any mcp-related task:
-- [ ] did the mcp tool execute successfully?
-- [ ] is the output accurate and complete?
-- [ ] have you verified against actual ds package?
-- [ ] have you tested the generated/suggested code?
-- [ ] are there any edge cases to document?
-- [ ] have you logged issues/improvements needed?
-- [ ] have you updated mcp metrics/documentation?
-- [ ] is the solution accessible and production-ready?
+when user asks to test a component with mcp:
+- [ ] generate ONE comprehensive report in MCP_COMPONENT_REPORTS.md
+- [ ] test all 10 review dimensions
+- [ ] include actual code testing (compile + run)
+- [ ] verify against real @marcelinodzn/ds-react package
+- [ ] document all issues found
+- [ ] provide improvement suggestions
+- [ ] calculate final score (0-100)
+- [ ] give clear recommendation
+- [ ] update index table
+- [ ] include all evidence and test data in the report
 
 ---
 
