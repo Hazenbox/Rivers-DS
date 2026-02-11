@@ -291,9 +291,10 @@ import { Input } from '@marcelinodzn/ds-react';
 - WCAG AA compliant
 
 ### ✅ Visual Variants
-- 270+ combinations covered in showcase
-- All core visual styles demonstrated
+- 31 unique variants displayed in showcase
+- All core visual styles demonstrated (sizes, appearances, attention, shapes, states)
 - Grid-based layout consistent with design system
+- Note: 270+ theoretical combinations possible (3×9×3×2×etc), but showcase focuses on demonstrating each prop category clearly
 
 ---
 

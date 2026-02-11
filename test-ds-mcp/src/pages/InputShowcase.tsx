@@ -7,12 +7,14 @@ import { VariantDemo } from '../components/VariantDemo';
 /**
  * COMPREHENSIVE INPUT SHOWCASE
  * 
- * Variants: 270+
+ * Actual Variants Displayed: 31
  * - 3 sizes: S, M, L
  * - 9 appearances: auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative
- * - 5 states: idle, filled, read only, positive, negative
- * - 2 shapes: default, pill
  * - 3 attention levels: low, medium, high
+ * - 2 shapes: default, pill
+ * - States: disabled, read only, invalid
+ * - With labels, descriptions, errors, icons
+ * - Controlled/uncontrolled examples
  */
 
 export function InputShowcase() {
@@ -25,7 +27,7 @@ export function InputShowcase() {
           input component
         </Text>
         <Text as="h2" size="XL" weight="medium" color="medium" align="center">
-          complete showcase - 270+ variants
+          complete showcase - 31 variants
         </Text>
       </div>
 
@@ -220,7 +222,7 @@ export function InputShowcase() {
             ✅ validation and accessibility
           </Text>
           <Text size="L" weight="high" align="center">
-            total: 270+ unique input variants
+            total: 31 unique input variants displayed
           </Text>
         </div>
       </div>
