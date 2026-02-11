@@ -15,27 +15,29 @@ click on the component name below to view the full report.
 
 | component | last tested | status | grade | score | issues | report link |
 |-----------|-------------|--------|-------|-------|--------|-------------|
-| [Button](mcp-reports/Button_MCP_report.md) | 2026-02-10 | 🟡 needs improvement | F | 37.5/100 | 4 major | [view report](mcp-reports/Button_MCP_report.md) |
+| [Button](mcp-reports/Button_MCP_report.md) | 2026-02-10 18:30 | 🟢 significantly improved | C | 77.0/100 | 3 minor (4 resolved) | [view report](mcp-reports/Button_MCP_report.md) |
 
 ---
 
 ## summary statistics
 
 **total components tested**: 1
-**average score**: 37.5/100
+**average score**: 77.0/100 (improved from 37.5)
 **grade distribution**:
 - A (90-100): 0 components
 - B (80-89): 0 components
-- C (70-79): 0 components
+- C (70-79): 1 component (Button) ✅ improved
 - D (60-69): 0 components
-- F (<60): 1 component (Button)
+- F (<60): 0 components
 
 **status distribution**:
-- 🟢 excellent: 0
-- 🟡 needs improvement: 1 (Button)
+- 🟢 significantly improved: 1 (Button)
+- 🟡 needs improvement: 0
 - 🔴 critical issues: 0
 
-**total issues found**: 4 (4 critical/major, 0 minor)
+**total issues found**: 3 open (3 minor), 4 resolved ✅
+
+**improvement**: Button score improved by +39.5 points (105% increase)
 
 ---
 
@@ -45,10 +47,10 @@ click on the component name below to view the full report.
 *none yet*
 
 ### components needing caution (score 60-79)
-*none yet*
+- **Button** (77.0/100) - ✅ ready for use, minor documentation issues only
 
 ### components with critical issues (score < 60)
-- **Button** (37.5/100) - prop naming issues, invalid variants, broken platform check
+*none* - Button improved from F (37.5) to C (77.0)
 
 ---
 

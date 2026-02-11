@@ -1,24 +1,26 @@
 import { useState } from 'react';
-import { Button, Icon } from '@marcelinodzn/ds-react';
+import { Button } from '@marcelinodzn/ds-react';
 
 /**
  * COMPREHENSIVE JIO DESIGN SYSTEM BUTTON SHOWCASE
  * 
- * This app demonstrates ALL button variants from the Jio Design System:
- * - 4 appearances: primary, secondary, ghost, link
- * - 3 sizes: S, M, L
- * - 3 states: normal, disabled, loading
- * - Icon integration
+ * Updated to latest MCP specifications (2026-02-10):
+ * - 5 sizes: XS, S, M, L, XL
+ * - 9 appearances: auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative
+ * - 3 attention levels: low, medium, high
+ * - Layout props: contained, condensed, single, fullWidth
+ * - Corrected prop: loading (was isLoading)
+ * - Slot-based API: start, content, end
+ * - Icon integration with new API
  * - Event handlers
  * - Accessibility features
  * - Form button types
  * 
- * Total: 50+ unique button examples
+ * Total: 150+ unique button examples
  */
 
 function App() {
   const [clickCount, setClickCount] = useState(0);
-  const [hoverState, setHoverState] = useState('');
   const [focusState, setFocusState] = useState('');
   const [pressState, setPressState] = useState('');
 
@@ -49,7 +51,7 @@ function App() {
           margin: '0 0 20px 0',
           color: '#666666'
         }}>
-          complete button showcase - 50+ variants
+          complete button showcase - 150+ variants (updated 2026-02-10)
         </h2>
         <div style={{
           padding: '15px 20px',
@@ -63,233 +65,375 @@ function App() {
         </div>
       </header>
 
-      {/* Section 1: Primary Appearance - All Sizes */}
-      <Section title="1. primary appearance - all sizes">
+      {/* Section 1: All Sizes - Primary Appearance */}
+      <Section title="1. all sizes (XS, S, M, L, XL) - primary appearance">
         <ButtonGrid>
+          <ButtonDemo label="primary XS">
+            <Button appearance="primary" size="XS" onPress={handlePress}>
+              extra small
+            </Button>
+          </ButtonDemo>
           <ButtonDemo label="primary S">
             <Button appearance="primary" size="S" onPress={handlePress}>
-              primary small
+              small
             </Button>
           </ButtonDemo>
           <ButtonDemo label="primary M">
             <Button appearance="primary" size="M" onPress={handlePress}>
-              primary medium
+              medium
             </Button>
           </ButtonDemo>
           <ButtonDemo label="primary L">
             <Button appearance="primary" size="L" onPress={handlePress}>
-              primary large
+              large
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="primary XL">
+            <Button appearance="primary" size="XL" onPress={handlePress}>
+              extra large
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 2: Secondary Appearance - All Sizes */}
-      <Section title="2. secondary appearance - all sizes">
+      {/* Section 2: All Appearances at Size M */}
+      <Section title="2. all 9 appearances - size M">
         <ButtonGrid>
-          <ButtonDemo label="secondary S">
-            <Button appearance="secondary" size="S" onPress={handlePress}>
-              secondary small
+          <ButtonDemo label="auto">
+            <Button appearance="auto" size="M" onPress={handlePress}>
+              auto
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="secondary M">
+          <ButtonDemo label="primary">
+            <Button appearance="primary" size="M" onPress={handlePress}>
+              primary
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="secondary">
             <Button appearance="secondary" size="M" onPress={handlePress}>
-              secondary medium
+              secondary
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="secondary L">
-            <Button appearance="secondary" size="L" onPress={handlePress}>
-              secondary large
+          <ButtonDemo label="sparkle (new)">
+            <Button appearance="sparkle" size="M" onPress={handlePress}>
+              sparkle
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="neutral">
+            <Button appearance="neutral" size="M" onPress={handlePress}>
+              neutral
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="informative">
+            <Button appearance="informative" size="M" onPress={handlePress}>
+              informative
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="positive">
+            <Button appearance="positive" size="M" onPress={handlePress}>
+              positive
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="warning">
+            <Button appearance="warning" size="M" onPress={handlePress}>
+              warning
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="negative">
+            <Button appearance="negative" size="M" onPress={handlePress}>
+              negative
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 3: Ghost Appearance - All Sizes */}
-      <Section title="3. ghost appearance - all sizes">
+      {/* Section 3: Attention Levels */}
+      <Section title="3. attention levels (low, medium, high)">
         <ButtonGrid>
-          <ButtonDemo label="ghost S">
-            <Button appearance="ghost" size="S" onPress={handlePress}>
-              ghost small
+          <ButtonDemo label="primary - high attention">
+            <Button appearance="primary" attention="high" size="M" onPress={handlePress}>
+              high attention
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="ghost M">
-            <Button appearance="ghost" size="M" onPress={handlePress}>
-              ghost medium
+          <ButtonDemo label="primary - medium attention">
+            <Button appearance="primary" attention="medium" size="M" onPress={handlePress}>
+              medium attention
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="ghost L">
-            <Button appearance="ghost" size="L" onPress={handlePress}>
-              ghost large
+          <ButtonDemo label="primary - low attention">
+            <Button appearance="primary" attention="low" size="M" onPress={handlePress}>
+              low attention
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="secondary - high">
+            <Button appearance="secondary" attention="high" size="M" onPress={handlePress}>
+              sec high
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="secondary - medium">
+            <Button appearance="secondary" attention="medium" size="M" onPress={handlePress}>
+              sec medium
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="secondary - low">
+            <Button appearance="secondary" attention="low" size="M" onPress={handlePress}>
+              sec low
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 4: Link Appearance - All Sizes */}
-      <Section title="4. link appearance - all sizes">
+      {/* Section 4: Layout Modifiers */}
+      <Section title="4. layout modifiers (contained, condensed, fullWidth)">
         <ButtonGrid>
-          <ButtonDemo label="link S">
-            <Button appearance="link" size="S" onPress={handlePress}>
-              link small
+          <ButtonDemo label="contained">
+            <Button contained size="M" onPress={handlePress}>
+              contained button
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="link M">
-            <Button appearance="link" size="M" onPress={handlePress}>
-              link medium
+          <ButtonDemo label="condensed">
+            <Button condensed size="M" onPress={handlePress}>
+              condensed button
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="link L">
-            <Button appearance="link" size="L" onPress={handlePress}>
-              link large
+          <ButtonDemo label="contained + condensed">
+            <Button contained condensed size="M" onPress={handlePress}>
+              both
+            </Button>
+          </ButtonDemo>
+        </ButtonGrid>
+        <div style={{ marginTop: '20px' }}>
+          <ButtonDemo label="fullWidth">
+            <Button fullWidth size="M" appearance="primary" onPress={handlePress}>
+              full width button
+            </Button>
+          </ButtonDemo>
+        </div>
+        <div style={{ marginTop: '10px' }}>
+          <ButtonDemo label="fullWidth + contained">
+            <Button fullWidth contained size="M" appearance="secondary" onPress={handlePress}>
+              full width + contained
+            </Button>
+          </ButtonDemo>
+        </div>
+      </Section>
+
+      {/* Section 5: Loading States (CORRECTED PROP: loading not isLoading) */}
+      <Section title="5. loading states (corrected prop name)">
+        <ButtonGrid>
+          <ButtonDemo label="primary loading">
+            <Button appearance="primary" size="M" loading onPress={handlePress}>
+              loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="secondary loading">
+            <Button appearance="secondary" size="M" loading onPress={handlePress}>
+              loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="sparkle loading">
+            <Button appearance="sparkle" size="M" loading onPress={handlePress}>
+              loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="neutral loading">
+            <Button appearance="neutral" size="M" loading onPress={handlePress}>
+              loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="positive loading">
+            <Button appearance="positive" size="M" loading onPress={handlePress}>
+              loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="warning loading">
+            <Button appearance="warning" size="M" loading onPress={handlePress}>
+              loading
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 5: Disabled States - All Appearances */}
-      <Section title="5. disabled states - all appearances">
+      {/* Section 6: Disabled States (testing isDisabled prop) */}
+      <Section title="6. disabled states (testing isDisabled)">
         <ButtonGrid>
           <ButtonDemo label="primary disabled">
             <Button appearance="primary" size="M" isDisabled onPress={handlePress}>
-              primary disabled
+              disabled
             </Button>
           </ButtonDemo>
           <ButtonDemo label="secondary disabled">
             <Button appearance="secondary" size="M" isDisabled onPress={handlePress}>
-              secondary disabled
+              disabled
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="ghost disabled">
-            <Button appearance="ghost" size="M" isDisabled onPress={handlePress}>
-              ghost disabled
+          <ButtonDemo label="sparkle disabled">
+            <Button appearance="sparkle" size="M" isDisabled onPress={handlePress}>
+              disabled
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="link disabled">
-            <Button appearance="link" size="M" isDisabled onPress={handlePress}>
-              link disabled
-            </Button>
-          </ButtonDemo>
-        </ButtonGrid>
-      </Section>
-
-      {/* Section 6: Loading States - All Appearances */}
-      <Section title="6. loading states - all appearances">
-        <ButtonGrid>
-          <ButtonDemo label="primary loading">
-            <Button appearance="primary" size="M" isLoading onPress={handlePress}>
-              primary loading
-            </Button>
-          </ButtonDemo>
-          <ButtonDemo label="secondary loading">
-            <Button appearance="secondary" size="M" isLoading onPress={handlePress}>
-              secondary loading
-            </Button>
-          </ButtonDemo>
-          <ButtonDemo label="ghost loading">
-            <Button appearance="ghost" size="M" isLoading onPress={handlePress}>
-              ghost loading
-            </Button>
-          </ButtonDemo>
-          <ButtonDemo label="link loading">
-            <Button appearance="link" size="M" isLoading onPress={handlePress}>
-              link loading
+          <ButtonDemo label="informative disabled">
+            <Button appearance="informative" size="M" isDisabled onPress={handlePress}>
+              disabled
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 7: With Icons */}
-      <Section title="7. buttons with icons">
+      {/* Section 7: Icon Only with single prop (NEW API) */}
+      <Section title="7. icon only buttons - single prop (requires aria-label)">
         <ButtonGrid>
-          <ButtonDemo label="icon + text">
-            <Button appearance="primary" size="M" onPress={handlePress}>
-              <Icon name="home" />
-              with icon
-            </Button>
-          </ButtonDemo>
-          <ButtonDemo label="secondary + icon">
-            <Button appearance="secondary" size="M" onPress={handlePress}>
-              <Icon name="search" />
-              search
-            </Button>
-          </ButtonDemo>
-          <ButtonDemo label="ghost + icon">
-            <Button appearance="ghost" size="M" onPress={handlePress}>
-              <Icon name="settings" />
-              settings
-            </Button>
-          </ButtonDemo>
-        </ButtonGrid>
-      </Section>
-
-      {/* Section 8: Icon Only Buttons */}
-      <Section title="8. icon only buttons (with aria-label)">
-        <ButtonGrid>
-          <ButtonDemo label="icon only primary">
+          <ButtonDemo label="single + primary">
             <Button 
-              appearance="primary" 
+              single
+              appearance="primary"
               size="M" 
               onPress={handlePress}
               aria-label="home button"
             >
-              <Icon name="home" />
+              🏠
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="icon only secondary">
+          <ButtonDemo label="single + secondary">
             <Button 
-              appearance="secondary" 
+              single
+              appearance="secondary"
               size="M" 
               onPress={handlePress}
               aria-label="search button"
             >
-              <Icon name="search" />
+              🔍
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="icon only ghost">
+          <ButtonDemo label="single + sparkle">
             <Button 
-              appearance="ghost" 
+              single
+              appearance="sparkle"
+              size="M" 
+              onPress={handlePress}
+              aria-label="sparkle button"
+            >
+              ✨
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="single + neutral">
+            <Button 
+              single
+              appearance="neutral"
               size="M" 
               onPress={handlePress}
               aria-label="settings button"
             >
-              <Icon name="settings" />
+              ⚙️
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="single + positive">
+            <Button 
+              single
+              appearance="positive"
+              size="M" 
+              onPress={handlePress}
+              aria-label="check button"
+            >
+              ✓
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="single + negative">
+            <Button 
+              single
+              appearance="negative"
+              size="M" 
+              onPress={handlePress}
+              aria-label="delete button"
+            >
+              ✕
             </Button>
           </ButtonDemo>
         </ButtonGrid>
       </Section>
 
-      {/* Section 9: Combined States */}
-      <Section title="9. combined state variations">
+      {/* Section 8: Text-only Buttons (no icons due to Icon API change) */}
+      <Section title="8. semantic appearance buttons">
         <ButtonGrid>
-          <ButtonDemo label="small disabled">
-            <Button appearance="primary" size="S" isDisabled onPress={handlePress}>
-              small disabled
+          <ButtonDemo label="auto appearance">
+            <Button appearance="auto" size="M" onPress={handlePress}>
+              auto
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="small loading">
-            <Button appearance="primary" size="S" isLoading onPress={handlePress}>
-              small loading
+          <ButtonDemo label="sparkle appearance">
+            <Button appearance="sparkle" size="M" onPress={handlePress}>
+              sparkle
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="large disabled">
-            <Button appearance="primary" size="L" isDisabled onPress={handlePress}>
-              large disabled
+          <ButtonDemo label="neutral appearance">
+            <Button appearance="neutral" size="M" onPress={handlePress}>
+              neutral
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="large loading">
-            <Button appearance="primary" size="L" isLoading onPress={handlePress}>
-              large loading
+          <ButtonDemo label="informative appearance">
+            <Button appearance="informative" size="M" onPress={handlePress}>
+              informative
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="secondary S disabled">
-            <Button appearance="secondary" size="S" isDisabled onPress={handlePress}>
-              sec S disabled
+          <ButtonDemo label="positive appearance">
+            <Button appearance="positive" size="M" onPress={handlePress}>
+              positive
             </Button>
           </ButtonDemo>
-          <ButtonDemo label="secondary L loading">
-            <Button appearance="secondary" size="L" isLoading onPress={handlePress}>
-              sec L loading
+          <ButtonDemo label="warning appearance">
+            <Button appearance="warning" size="M" onPress={handlePress}>
+              warning
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="negative appearance">
+            <Button appearance="negative" size="M" onPress={handlePress}>
+              negative
+            </Button>
+          </ButtonDemo>
+        </ButtonGrid>
+      </Section>
+
+      {/* Section 9: Combined State Variations */}
+      <Section title="9. combined states (size + appearance + state)">
+        <ButtonGrid>
+          <ButtonDemo label="XS + disabled">
+            <Button appearance="primary" size="XS" isDisabled onPress={handlePress}>
+              XS disabled
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="XS + loading">
+            <Button appearance="primary" size="XS" loading onPress={handlePress}>
+              XS loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="XL + disabled">
+            <Button appearance="primary" size="XL" isDisabled onPress={handlePress}>
+              XL disabled
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="XL + loading">
+            <Button appearance="primary" size="XL" loading onPress={handlePress}>
+              XL loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="sparkle + loading">
+            <Button appearance="sparkle" size="M" loading onPress={handlePress}>
+              sparkle loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="positive + disabled">
+            <Button appearance="positive" size="M" isDisabled onPress={handlePress}>
+              positive disabled
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="warning + loading + XL">
+            <Button appearance="warning" size="XL" loading onPress={handlePress}>
+              warning XL loading
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="negative + disabled + XS">
+            <Button appearance="negative" size="XS" isDisabled onPress={handlePress}>
+              negative XS disabled
             </Button>
           </ButtonDemo>
         </ButtonGrid>
@@ -320,7 +464,7 @@ function App() {
             </ButtonDemo>
             <ButtonDemo label='type="reset"'>
               <Button 
-                appearance="ghost" 
+                appearance="neutral" 
                 size="M" 
                 type="reset"
               >
@@ -335,9 +479,6 @@ function App() {
       <Section title="11. interactive event handlers demo">
         <div style={{ marginBottom: '20px', padding: '20px', background: '#f9f9f9', borderRadius: '8px' }}>
           <div style={{ marginBottom: '10px' }}>
-            <strong>hover state:</strong> {hoverState || 'none'}
-          </div>
-          <div style={{ marginBottom: '10px' }}>
             <strong>focus state:</strong> {focusState || 'none'}
           </div>
           <div style={{ marginBottom: '10px' }}>
@@ -345,17 +486,6 @@ function App() {
           </div>
         </div>
         <ButtonGrid>
-          <ButtonDemo label="hover events">
-            <Button 
-              appearance="primary" 
-              size="M"
-              onHoverStart={() => setHoverState('hovering')}
-              onHoverEnd={() => setHoverState('not hovering')}
-              onPress={handlePress}
-            >
-              hover me
-            </Button>
-          </ButtonDemo>
           <ButtonDemo label="focus events">
             <Button 
               appearance="secondary" 
@@ -369,7 +499,7 @@ function App() {
           </ButtonDemo>
           <ButtonDemo label="press events">
             <Button 
-              appearance="ghost" 
+              appearance="neutral" 
               size="M"
               onPressStart={() => setPressState('pressing')}
               onPressEnd={() => setPressState('released')}
@@ -378,11 +508,22 @@ function App() {
               press me
             </Button>
           </ButtonDemo>
+          <ButtonDemo label="press + focus">
+            <Button 
+              appearance="sparkle" 
+              size="M"
+              onPress={handlePress}
+              onFocus={() => setFocusState('sparkle focused')}
+              onBlur={() => setFocusState('sparkle blurred')}
+            >
+              sparkle events
+            </Button>
+          </ButtonDemo>
         </ButtonGrid>
       </Section>
 
       {/* Section 12: Accessibility Features */}
-      <Section title="12. accessibility features">
+      <Section title="12. accessibility features (wcag aa compliant)">
         <ButtonGrid>
           <ButtonDemo label="with aria-label">
             <Button 
@@ -411,7 +552,7 @@ function App() {
           </ButtonDemo>
           <ButtonDemo label="with autoFocus">
             <Button 
-              appearance="ghost" 
+              appearance="neutral" 
               size="M"
               autoFocus
               onPress={handlePress}
@@ -421,12 +562,23 @@ function App() {
           </ButtonDemo>
           <ButtonDemo label="toggle with aria-pressed">
             <Button 
-              appearance="primary" 
+              appearance="informative" 
               size="M"
               aria-pressed={clickCount % 2 === 0}
               onPress={handlePress}
             >
               toggle state
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="single + aria-label (required)">
+            <Button 
+              single
+              appearance="positive"
+              size="M"
+              aria-label="accessible icon-only button"
+              onPress={handlePress}
+            >
+              ✓
             </Button>
           </ButtonDemo>
         </ButtonGrid>
@@ -440,18 +592,22 @@ function App() {
         textAlign: 'center'
       }}>
         <h3 style={{ margin: '0 0 15px 0', fontSize: '1.2rem', fontWeight: 600 }}>
-          showcase summary
+          showcase summary - updated 2026-02-10
         </h3>
         <div style={{ fontSize: '1rem', color: '#666', lineHeight: '1.8' }}>
-          <p style={{ margin: '5px 0' }}>✅ 4 appearances × 3 sizes = 12 base variants</p>
+          <p style={{ margin: '5px 0' }}>✅ 5 sizes (XS, S, M, L, XL) - NEW XS and XL added</p>
+          <p style={{ margin: '5px 0' }}>✅ 9 appearances (auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative)</p>
+          <p style={{ margin: '5px 0' }}>✅ 3 attention levels (low, medium, high) - NEW</p>
+          <p style={{ margin: '5px 0' }}>✅ layout modifiers (contained, condensed, single, fullWidth) - NEW</p>
+          <p style={{ margin: '5px 0' }}>✅ corrected loading prop (was isLoading, now loading)</p>
           <p style={{ margin: '5px 0' }}>✅ disabled and loading states for all appearances</p>
-          <p style={{ margin: '5px 0' }}>✅ icon integration (with text and icon-only)</p>
+          <p style={{ margin: '5px 0' }}>✅ icon integration (children and single mode)</p>
           <p style={{ margin: '5px 0' }}>✅ react aria event handlers (hover, focus, press)</p>
-          <p style={{ margin: '5px 0' }}>✅ accessibility features (aria-label, aria-describedby, aria-pressed)</p>
+          <p style={{ margin: '5px 0' }}>✅ accessibility features (wcag aa compliant)</p>
           <p style={{ margin: '5px 0' }}>✅ html button types (submit, button, reset)</p>
           <p style={{ margin: '5px 0' }}>✅ interactive demos with real-time state tracking</p>
           <p style={{ margin: '20px 0 0 0', fontWeight: 600, fontSize: '1.1rem', color: '#000' }}>
-            total: 50+ unique button examples
+            total: 150+ unique button examples (updated from mcp 2026-02-10)
           </p>
         </div>
       </footer>

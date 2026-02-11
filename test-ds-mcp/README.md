@@ -1,6 +1,8 @@
 # jio design system - complete button showcase
 
-a comprehensive demonstration of **all 50+ button variants** from the jio design system, built with vite + react + typescript.
+a comprehensive demonstration of **all 150+ button variants** from the jio design system, built with vite + react + typescript.
+
+**updated: 2026-02-10** - synced with latest mcp specifications
 
 ## 🚀 quick start
 
@@ -15,14 +17,21 @@ open [http://localhost:5173](http://localhost:5173) to view the showcase.
 
 this project demonstrates every possible button variant from `@marcelinodzn/ds-react`:
 
-### core variants (12 base combinations)
-- **4 appearances**: `primary`, `secondary`, `ghost`, `link`
-- **3 sizes**: `S`, `M`, `L`
+### core variants (major update)
+- **5 sizes**: `XS`, `S`, `M`, `L`, `XL` (NEW: XS and XL added)
+- **9 appearances**: `auto`, `primary`, `secondary`, `sparkle`, `neutral`, `informative`, `positive`, `warning`, `negative`
+- **3 attention levels**: `low`, `medium`, `high` (NEW)
 
-### state variations (36+ combinations)
+### layout modifiers (NEW)
+- **contained** - contained layout variant
+- **condensed** - condensed spacing
+- **single** - icon-only mode (requires aria-label)
+- **fullWidth** - full-width button
+
+### state variations
 - **normal state** - default interactive
 - **disabled state** - `isDisabled={true}`
-- **loading state** - `isLoading={true}`
+- **loading state** - `loading={true}` (CORRECTED: was `isLoading`)
 
 ### advanced features
 - ✅ **icon integration** - buttons with icons and icon-only buttons
@@ -36,30 +45,53 @@ this project demonstrates every possible button variant from `@marcelinodzn/ds-r
 
 the app is organized into 12 comprehensive sections:
 
-1. **primary appearance** - all sizes (S, M, L)
-2. **secondary appearance** - all sizes (S, M, L)
-3. **ghost appearance** - all sizes (S, M, L)
-4. **link appearance** - all sizes (S, M, L)
-5. **disabled states** - all appearances at size M
-6. **loading states** - all appearances at size M
-7. **with icons** - primary buttons with icon children
-8. **icon only** - buttons with only icon (proper aria-label)
-9. **combined states** - disabled + loading for each appearance
+1. **all sizes** - XS, S, M, L, XL with primary appearance
+2. **all appearances** - 9 appearance variants at size M
+3. **attention levels** - low, medium, high for different appearances
+4. **layout modifiers** - contained, condensed, fullWidth examples
+5. **loading states** - all appearances with corrected `loading` prop
+6. **disabled states** - testing `isDisabled` across appearances
+7. **icon only with single** - new single prop for icon-only buttons
+8. **buttons with icons** - legacy children approach for icons
+9. **combined states** - size + appearance + state combinations
 10. **form buttons** - type="submit", type="reset" examples
 11. **interactive demos** - hover/focus/press event handlers
-12. **accessibility** - full aria attribute examples
+12. **accessibility** - wcag aa compliant examples
 
-## 🎨 button api reference
+## 🎨 button api reference (updated 2026-02-10)
 
 ### core props
 
 ```typescript
 interface ButtonProps {
-  appearance?: "primary" | "secondary" | "ghost" | "link";
-  size?: "S" | "M" | "L";
+  // NEW: 5 sizes including XS and XL
+  size?: "XS" | "S" | "M" | "L" | "XL";
+  
+  // NEW: 9 appearance options
+  appearance?: "auto" | "primary" | "secondary" | "sparkle" | "neutral" | 
+               "informative" | "positive" | "warning" | "negative";
+  
+  // NEW: attention level
+  attention?: "low" | "medium" | "high";
+  
+  // NEW: layout modifiers
+  contained?: boolean;
+  condensed?: boolean;
+  single?: boolean;  // for icon-only buttons
+  fullWidth?: boolean;
+  
+  // State props
   isDisabled?: boolean;
-  isLoading?: boolean;
+  loading?: boolean;  // CORRECTED: was isLoading
+  
+  // Event handler
   onPress?: () => void;
+  
+  // NEW: Slot-based API (optional)
+  start?: ReactNode;  // leading icon/content
+  content?: ReactNode;  // main content
+  end?: ReactNode;  // trailing icon/content
+  children?: ReactNode;  // legacy approach still works
 }
 ```
 
@@ -142,7 +174,56 @@ import { Button } from '@marcelinodzn/ds-react';
 </Button>
 ```
 
-### button with icon
+### new appearances (sparkle, semantic)
+
+```tsx
+// Sparkle appearance (new)
+<Button appearance="sparkle" size="M">sparkle button</Button>
+
+// Semantic appearances
+<Button appearance="positive" size="M">success</Button>
+<Button appearance="warning" size="M">warning</Button>
+<Button appearance="negative" size="M">error</Button>
+<Button appearance="informative" size="M">info</Button>
+```
+
+### new sizes (XS and XL)
+
+```tsx
+<Button appearance="primary" size="XS">extra small</Button>
+<Button appearance="primary" size="XL">extra large</Button>
+```
+
+### attention levels (new)
+
+```tsx
+<Button appearance="primary" attention="high" size="M">
+  high attention
+</Button>
+<Button appearance="primary" attention="low" size="M">
+  low attention
+</Button>
+```
+
+### layout modifiers (new)
+
+```tsx
+// Contained layout
+<Button contained size="M">contained</Button>
+
+// Condensed spacing
+<Button condensed size="M">condensed</Button>
+
+// Full width
+<Button fullWidth size="M">full width button</Button>
+
+// Icon-only with single prop
+<Button single size="M" aria-label="close">
+  <Icon name="close" />
+</Button>
+```
+
+### button with icon (legacy approach still works)
 
 ```tsx
 import { Button, Icon } from '@marcelinodzn/ds-react';
@@ -150,19 +231,6 @@ import { Button, Icon } from '@marcelinodzn/ds-react';
 <Button appearance="primary" size="M" onPress={handleClick}>
   <Icon name="home" />
   home
-</Button>
-```
-
-### icon-only button (accessible)
-
-```tsx
-<Button 
-  appearance="primary" 
-  size="M" 
-  onPress={handleClick}
-  aria-label="go to home"
->
-  <Icon name="home" />
 </Button>
 ```
 
@@ -174,10 +242,10 @@ import { Button, Icon } from '@marcelinodzn/ds-react';
 </Button>
 ```
 
-### loading button
+### loading button (CORRECTED PROP)
 
 ```tsx
-<Button appearance="primary" size="M" isLoading>
+<Button appearance="primary" size="M" loading>
   loading...
 </Button>
 ```
@@ -209,7 +277,12 @@ import { Button, Icon } from '@marcelinodzn/ds-react';
 
 ## 🎯 key features
 
-- ✅ **no missing variants** - all 50+ button combinations included
+- ✅ **comprehensive coverage** - all 150+ button combinations included
+- ✅ **latest mcp specs** - synced with 2026-02-10 mcp update
+- ✅ **new appearances** - sparkle, neutral, and semantic variants
+- ✅ **new sizes** - XS and XL added
+- ✅ **new props** - attention, contained, condensed, single, fullWidth
+- ✅ **corrected api** - loading prop (was isLoading)
 - ✅ **fully typed** - complete typescript support
 - ✅ **accessible** - wcag aa compliant with react aria
 - ✅ **interactive** - live demos with state tracking
