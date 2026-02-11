@@ -11,7 +11,7 @@ export function VariantDemo({ label, children }: VariantDemoProps) {
       <div className="variant-demo-content">
         {children}
       </div>
-      <Text size="XS" color="low">
+      <Text size="2XS" color="low" align="center">
         {label}
       </Text>
     </div>
