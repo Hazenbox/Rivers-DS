@@ -33,79 +33,79 @@ export function CardShowcase() {
 
       <ShowcaseSection title="1. all sizes">
         <VariantGrid columns={3}>
-          <VariantDemo label="size S">
+          <VariantDemo label="S">
             <Card size="S">
-              <Text size="S" weight="medium">small card</Text>
+              <Text size="S" weight="medium">small</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="size M (default)">
+          <VariantDemo label="M">
             <Card size="M">
-              <Text size="M" weight="medium">medium card</Text>
+              <Text size="M" weight="medium">medium</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="size L">
+          <VariantDemo label="L">
             <Card size="L">
-              <Text size="L" weight="medium">large card</Text>
+              <Text size="L" weight="medium">large</Text>
             </Card>
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="2. elevations (shadow depth)">
+      <ShowcaseSection title="2. elevations">
         <VariantGrid columns={3}>
-          <VariantDemo label="elevation 0 (flat)">
+          <VariantDemo label="0">
             <Card elevation={0} size="M">
-              <Text size="M">no shadow</Text>
+              <Text size="M">flat</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="elevation 1">
+          <VariantDemo label="1">
             <Card elevation={1} size="M">
-              <Text size="M">subtle shadow</Text>
+              <Text size="M">subtle</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="elevation 2">
+          <VariantDemo label="2">
             <Card elevation={2} size="M">
-              <Text size="M">medium shadow</Text>
+              <Text size="M">medium</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="elevation 3">
+          <VariantDemo label="3">
             <Card elevation={3} size="M">
               <Text size="M">elevated</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="elevation 4">
+          <VariantDemo label="4">
             <Card elevation={4} size="M">
-              <Text size="M">high elevation</Text>
+              <Text size="M">high</Text>
             </Card>
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="3. surface variants">
+      <ShowcaseSection title="3. surfaces">
         <VariantGrid columns={3}>
-          <VariantDemo label="default surface">
+          <VariantDemo label="default">
             <Card surface="default" size="M">
-              <Text size="M">default surface</Text>
+              <Text size="M">default</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="minimal surface">
+          <VariantDemo label="minimal">
             <Card surface="minimal" size="M">
-              <Text size="M">minimal surface</Text>
+              <Text size="M">minimal</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="moderate surface">
+          <VariantDemo label="moderate">
             <Card surface="moderate" size="M">
-              <Text size="M">moderate surface</Text>
+              <Text size="M">moderate</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="bold surface">
+          <VariantDemo label="bold">
             <Card surface="bold" size="M">
-              <Text size="M">bold surface</Text>
+              <Text size="M">bold</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="neutral surface">
+          <VariantDemo label="neutral">
             <Card surface="neutral" size="M">
-              <Text size="M">neutral surface</Text>
+              <Text size="M">neutral</Text>
             </Card>
           </VariantDemo>
         </VariantGrid>
@@ -136,73 +136,66 @@ export function CardShowcase() {
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="5. interactive cards">
+      <ShowcaseSection title="5. interactive">
         <VariantGrid columns={2}>
-          <VariantDemo label="pressable card">
+          <VariantDemo label="pressable">
             <Card isPressable onPress={() => setClickCount(c => c + 1)} size="M">
               <Text size="M" weight="medium">click me</Text>
-              <Text size="S" color="medium">pressable card</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="hoverable card">
+          <VariantDemo label="hoverable">
             <Card isHoverable size="M">
-              <Text size="M" weight="medium">hover over me</Text>
-              <Text size="S" color="medium">hoverable state</Text>
+              <Text size="M" weight="medium">hover me</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="pressable + hoverable">
+          <VariantDemo label="both">
             <Card isPressable isHoverable onPress={() => setClickCount(c => c + 1)} size="M">
               <Text size="M" weight="medium">interactive</Text>
-              <Text size="S" color="medium">both states</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="disabled interactive">
+          <VariantDemo label="disabled">
             <Card isPressable isDisabled size="M">
               <Text size="M" weight="medium">disabled</Text>
-              <Text size="S" color="medium">cannot interact</Text>
             </Card>
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="6. full width cards">
-        <div className="vertical-stack">
-          <VariantDemo label="full width card">
+      <ShowcaseSection title="6. full width">
+        <VariantGrid columns={2}>
+          <VariantDemo label="full width">
             <Card fullWidth size="M">
-              <Text size="M" weight="medium">full width card</Text>
-              <Text size="S" color="medium">spans container width</Text>
+              <Text size="M" weight="medium">full width</Text>
             </Card>
           </VariantDemo>
           <VariantDemo label="full width + pressable">
             <Card fullWidth isPressable onPress={() => setClickCount(c => c + 1)} size="M">
-              <Text size="M" weight="medium">full width pressable</Text>
-              <Text size="S" color="medium">click to increment counter</Text>
+              <Text size="M" weight="medium">pressable</Text>
             </Card>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="7. combined variants (size + elevation + surface)">
+      <ShowcaseSection title="7. combined variants">
         <VariantGrid columns={2}>
-          <VariantDemo label="S + elevation 2 + minimal">
+          <VariantDemo label="S + elevation 2">
             <Card size="S" elevation={2} surface="minimal">
-              <Text size="S">small elevated minimal</Text>
+              <Text size="S">small elevated</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="L + elevation 4 + bold">
+          <VariantDemo label="L + elevation 4">
             <Card size="L" elevation={4} surface="bold">
-              <Text size="L">large high elevation bold</Text>
+              <Text size="L">large elevated</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="M + elevation 3 + primary">
+          <VariantDemo label="M + primary">
             <Card size="M" elevation={3} appearance="primary">
-              <Text size="M">medium elevated primary</Text>
+              <Text size="M">primary</Text>
             </Card>
           </VariantDemo>
-          <VariantDemo label="L + pressable + moderate">
+          <VariantDemo label="L + pressable">
             <Card size="L" isPressable surface="moderate" onPress={() => setClickCount(c => c + 1)}>
-              <Text size="L" weight="medium">interactive moderate</Text>
-              <Text size="S" color="medium">click me</Text>
+              <Text size="L" weight="medium">click me</Text>
             </Card>
           </VariantDemo>
         </VariantGrid>

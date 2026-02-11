@@ -1,5 +1,6 @@
 import { Divider, Text } from '@marcelinodzn/ds-react';
 import { ShowcaseSection } from '../components/ShowcaseSection';
+import { VariantGrid } from '../components/VariantGrid';
 import { VariantDemo } from '../components/VariantDemo';
 
 /**
@@ -24,8 +25,8 @@ export function DividerShowcase() {
       </div>
 
       <ShowcaseSection title="1. orientations">
-        <div className="vertical-stack">
-          <VariantDemo label="horizontal (default)">
+        <VariantGrid columns={2}>
+          <VariantDemo label="horizontal">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider orientation="horizontal" />
@@ -39,104 +40,104 @@ export function DividerShowcase() {
               <Text size="M">right content</Text>
             </div>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="2. attention levels - horizontal">
-        <div className="vertical-stack">
-          <VariantDemo label="low attention">
+      <ShowcaseSection title="2. attention levels">
+        <VariantGrid columns={3}>
+          <VariantDemo label="low">
             <div className="vertical-stack">
               <Text size="M">content</Text>
               <Divider attention="low" />
               <Text size="M">content</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="medium attention">
+          <VariantDemo label="medium">
             <div className="vertical-stack">
               <Text size="M">content</Text>
               <Divider attention="medium" />
               <Text size="M">content</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="high attention">
+          <VariantDemo label="high">
             <div className="vertical-stack">
               <Text size="M">content</Text>
               <Divider attention="high" />
               <Text size="M">content</Text>
             </div>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="3. with labels - horizontal">
-        <div className="vertical-stack">
-          <VariantDemo label="label aligned start">
+      <ShowcaseSection title="3. with labels">
+        <VariantGrid columns={3}>
+          <VariantDemo label="align start">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider alignment="start">section</Divider>
               <Text size="M">content below</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="label aligned center">
+          <VariantDemo label="align center">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider alignment="center">or</Divider>
               <Text size="M">content below</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="label aligned end">
+          <VariantDemo label="align end">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider alignment="end">end</Divider>
               <Text size="M">content below</Text>
             </div>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
       <ShowcaseSection title="4. with icons">
-        <div className="vertical-stack">
-          <VariantDemo label="icon in center">
+        <VariantGrid columns={2}>
+          <VariantDemo label="center icon">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider alignment="center">⭐</Divider>
               <Text size="M">content below</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="icon at start">
+          <VariantDemo label="start icon">
             <div className="vertical-stack">
               <Text size="M">content above</Text>
               <Divider alignment="start">🔥</Divider>
               <Text size="M">content below</Text>
             </div>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
       <ShowcaseSection title="5. combined variants">
-        <div className="vertical-stack">
-          <VariantDemo label="high attention + center label">
+        <VariantGrid columns={3}>
+          <VariantDemo label="high + center">
             <div className="vertical-stack">
               <Text size="M">section 1</Text>
               <Divider attention="high" alignment="center">important</Divider>
               <Text size="M">section 2</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="medium attention + start label">
+          <VariantDemo label="medium + start">
             <div className="vertical-stack">
               <Text size="M">header</Text>
               <Divider attention="medium" alignment="start">details</Divider>
               <Text size="M">body content</Text>
             </div>
           </VariantDemo>
-          <VariantDemo label="low attention + icon">
+          <VariantDemo label="low + icon">
             <div className="vertical-stack">
               <Text size="M">part 1</Text>
               <Divider attention="low" alignment="center">✨</Divider>
               <Text size="M">part 2</Text>
             </div>
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
       <div className="section">

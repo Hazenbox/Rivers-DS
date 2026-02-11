@@ -17,8 +17,6 @@ import { VariantDemo } from '../components/VariantDemo';
 
 export function InputShowcase() {
   const [value, setValue] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
   return (
     <div className="vertical-stack">
@@ -31,93 +29,91 @@ export function InputShowcase() {
         </Text>
       </div>
 
-      <ShowcaseSection title="1. all sizes - primary appearance">
+      <ShowcaseSection title="1. all sizes">
         <VariantGrid columns={3}>
-          <VariantDemo label="size S">
-            <Input size="S" placeholder="small input" value={value} onChange={setValue} />
+          <VariantDemo label="S">
+            <Input size="S" placeholder="small input" />
           </VariantDemo>
-          <VariantDemo label="size M (default)">
-            <Input size="M" placeholder="medium input" value={value} onChange={setValue} />
+          <VariantDemo label="M">
+            <Input size="M" placeholder="medium input" />
           </VariantDemo>
-          <VariantDemo label="size L">
-            <Input size="L" placeholder="large input" value={value} onChange={setValue} />
+          <VariantDemo label="L">
+            <Input size="L" placeholder="large input" />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="2. all appearances - size M">
+      <ShowcaseSection title="2. all appearances">
         <VariantGrid columns={3}>
           <VariantDemo label="auto">
-            <Input appearance="auto" size="M" placeholder="auto appearance" />
+            <Input appearance="auto" size="M" placeholder="auto" />
           </VariantDemo>
           <VariantDemo label="primary">
-            <Input appearance="primary" size="M" placeholder="primary appearance" />
+            <Input appearance="primary" size="M" placeholder="primary" />
           </VariantDemo>
           <VariantDemo label="secondary">
-            <Input appearance="secondary" size="M" placeholder="secondary appearance" />
+            <Input appearance="secondary" size="M" placeholder="secondary" />
           </VariantDemo>
           <VariantDemo label="sparkle">
-            <Input appearance="sparkle" size="M" placeholder="sparkle appearance" />
+            <Input appearance="sparkle" size="M" placeholder="sparkle" />
           </VariantDemo>
           <VariantDemo label="neutral">
-            <Input appearance="neutral" size="M" placeholder="neutral appearance" />
+            <Input appearance="neutral" size="M" placeholder="neutral" />
           </VariantDemo>
           <VariantDemo label="informative">
-            <Input appearance="informative" size="M" placeholder="informative appearance" />
+            <Input appearance="informative" size="M" placeholder="informative" />
           </VariantDemo>
           <VariantDemo label="positive">
-            <Input appearance="positive" size="M" placeholder="positive appearance" />
+            <Input appearance="positive" size="M" placeholder="positive" />
           </VariantDemo>
           <VariantDemo label="warning">
-            <Input appearance="warning" size="M" placeholder="warning appearance" />
+            <Input appearance="warning" size="M" placeholder="warning" />
           </VariantDemo>
           <VariantDemo label="negative">
-            <Input appearance="negative" size="M" placeholder="negative appearance" />
+            <Input appearance="negative" size="M" placeholder="negative" />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
       <ShowcaseSection title="3. attention levels">
         <VariantGrid columns={3}>
-          <VariantDemo label="low attention">
-            <Input attention="low" size="M" placeholder="low attention" />
+          <VariantDemo label="low">
+            <Input attention="low" size="M" placeholder="low" />
           </VariantDemo>
-          <VariantDemo label="medium attention">
-            <Input attention="medium" size="M" placeholder="medium attention" />
+          <VariantDemo label="medium">
+            <Input attention="medium" size="M" placeholder="medium" />
           </VariantDemo>
-          <VariantDemo label="high attention">
-            <Input attention="high" size="M" placeholder="high attention" />
+          <VariantDemo label="high">
+            <Input attention="high" size="M" placeholder="high" />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
       <ShowcaseSection title="4. shapes">
         <VariantGrid columns={2}>
-          <VariantDemo label="default shape">
-            <Input shape="default" size="M" placeholder="default shape" />
+          <VariantDemo label="default">
+            <Input shape="default" size="M" placeholder="default" />
           </VariantDemo>
-          <VariantDemo label="pill shape">
-            <Input shape="pill" size="M" placeholder="pill shape" />
+          <VariantDemo label="pill">
+            <Input shape="pill" size="M" placeholder="pill" />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="5. with labels and descriptions">
+      <ShowcaseSection title="5. with labels">
         <VariantGrid columns={2}>
           <VariantDemo label="with label">
-            <Input label="email address" size="M" placeholder="you@example.com" value={email} onChange={setEmail} />
+            <Input label="email address" size="M" placeholder="you@example.com" />
           </VariantDemo>
-          <VariantDemo label="with label + description">
+          <VariantDemo label="label + description">
             <Input 
               label="password" 
               description="must be at least 8 characters"
               size="M" 
               placeholder="enter password"
-              value={password} 
-              onChange={setPassword}
             />
           </VariantDemo>
-          <VariantDemo label="with error message">
+          <VariantDemo label="with error">
             <Input 
               label="username" 
               errorMessage="username is already taken"
@@ -126,7 +122,7 @@ export function InputShowcase() {
               placeholder="choose username"
             />
           </VariantDemo>
-          <VariantDemo label="required field">
+          <VariantDemo label="required">
             <Input 
               label="full name" 
               isRequired
@@ -137,79 +133,59 @@ export function InputShowcase() {
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="6. state variants">
+      <ShowcaseSection title="6. states">
         <VariantGrid columns={3}>
           <VariantDemo label="disabled">
-            <Input label="disabled" isDisabled size="M" placeholder="cannot edit" />
+            <Input isDisabled size="M" placeholder="disabled" />
           </VariantDemo>
           <VariantDemo label="read only">
-            <Input label="read only" isReadOnly size="M" defaultValue="read only value" />
+            <Input isReadOnly size="M" defaultValue="read only" />
           </VariantDemo>
           <VariantDemo label="invalid">
-            <Input label="invalid" isInvalid errorMessage="this field has an error" size="M" />
+            <Input isInvalid errorMessage="error message" size="M" placeholder="invalid" />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="7. with start/end slots (icons)">
-        <VariantGrid columns={2}>
-          <VariantDemo label="with start icon">
-            <Input size="M" placeholder="search..." start={<span>🔍</span>} />
+      <ShowcaseSection title="7. with icons">
+        <VariantGrid columns={3}>
+          <VariantDemo label="start icon">
+            <Input size="M" placeholder="search" start={<span>🔍</span>} />
           </VariantDemo>
-          <VariantDemo label="with end icon">
-            <Input size="M" placeholder="enter amount" end={<span>💰</span>} />
+          <VariantDemo label="end icon">
+            <Input size="M" placeholder="amount" end={<span>💰</span>} />
           </VariantDemo>
-          <VariantDemo label="with both icons">
+          <VariantDemo label="both icons">
             <Input size="M" placeholder="email" start={<span>📧</span>} end={<span>✓</span>} />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="8. layout modifiers">
-        <div className="vertical-stack">
+      <ShowcaseSection title="8. full width">
+        <VariantGrid columns={2}>
           <VariantDemo label="full width">
-            <Input fullWidth size="M" placeholder="full width input" />
+            <Input fullWidth size="M" placeholder="full width" />
           </VariantDemo>
-          <VariantDemo label="full width with label">
-            <Input fullWidth label="full width field" size="M" placeholder="spans container width" />
+          <VariantDemo label="full width + label">
+            <Input fullWidth label="full width field" size="M" placeholder="spans container" />
           </VariantDemo>
-        </div>
+        </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="9. interactive handlers">
+      <ShowcaseSection title="9. controlled input">
         <VariantGrid columns={2}>
-          <VariantDemo label="onChange handler">
+          <VariantDemo label="controlled">
             <Input 
-              label="controlled input"
               size="M" 
               placeholder="type something"
               value={value}
               onChange={setValue}
             />
           </VariantDemo>
-          <VariantDemo label="current value">
+          <VariantDemo label="value display">
             <Text size="M" weight="medium">
-              value: {value || '(empty)'}
+              {value || '(empty)'}
             </Text>
-          </VariantDemo>
-        </VariantGrid>
-      </ShowcaseSection>
-
-      <ShowcaseSection title="10. accessibility features">
-        <VariantGrid columns={2}>
-          <VariantDemo label="with autoFocus">
-            <Input label="auto focused" autoFocus size="M" placeholder="focused on load" />
-          </VariantDemo>
-          <VariantDemo label="with validation">
-            <Input 
-              label="email validation"
-              size="M" 
-              placeholder="email@example.com"
-              validate={(val) => {
-                if (!val.includes('@')) return 'must be valid email';
-                return true;
-              }}
-            />
           </VariantDemo>
         </VariantGrid>
       </ShowcaseSection>
