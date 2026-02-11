@@ -13,18 +13,59 @@ export function SideNav() {
       </Text>
       
       <div className="side-nav-section">
-        <Text size="S" weight="medium" color="medium">
+        <Text size="M" weight="high">
           components
         </Text>
-        <Link to="/button">
-          <Button 
-            appearance={isActive('/button') ? 'primary' : 'neutral'}
-            fullWidth
-            size="M"
-          >
-            button
-          </Button>
-        </Link>
+        
+        {/* Form Components */}
+        <div className="side-nav-subsection">
+          <Text size="XS" weight="medium" color="medium">
+            form components (3)
+          </Text>
+          <Link to="/button">
+            <Button appearance={isActive('/button') ? 'primary' : 'neutral'} fullWidth size="S">
+              button
+            </Button>
+          </Link>
+          <Link to="/input">
+            <Button appearance={isActive('/input') ? 'primary' : 'neutral'} fullWidth size="S">
+              input
+            </Button>
+          </Link>
+          <Link to="/textarea">
+            <Button appearance={isActive('/textarea') ? 'primary' : 'neutral'} fullWidth size="S">
+              textarea
+            </Button>
+          </Link>
+        </div>
+        
+        {/* Display Components */}
+        <div className="side-nav-subsection">
+          <Text size="XS" weight="medium" color="medium">
+            display components (4)
+          </Text>
+          <Link to="/badge">
+            <Button appearance={isActive('/badge') ? 'primary' : 'neutral'} fullWidth size="S">
+              badge
+            </Button>
+          </Link>
+          <Link to="/avatar">
+            <Button appearance={isActive('/avatar') ? 'primary' : 'neutral'} fullWidth size="S">
+              avatar
+            </Button>
+          </Link>
+          <Link to="/card">
+            <Button appearance={isActive('/card') ? 'primary' : 'neutral'} fullWidth size="S">
+              card
+            </Button>
+          </Link>
+          <Link to="/divider">
+            <Button appearance={isActive('/divider') ? 'primary' : 'neutral'} fullWidth size="S">
+              divider
+            </Button>
+          </Link>
+        </div>
+        
       </div>
       
       <div className="side-nav-section">

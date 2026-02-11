@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@base-ui/react": "^1.1.0",
     "@marcelinodzn/ds-react": "^1.0.6",
     "@marcelinodzn/ds-tokens": "^1.0.0",
     "@types/react-router-dom": "^5.3.3",
