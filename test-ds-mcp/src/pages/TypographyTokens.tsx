@@ -7,65 +7,59 @@ export function TypographyTokens() {
   
   if (loading) {
     return (
-      <Text as="div">
+      <div>
         <Text size="M" weight="medium">
           loading tokens...
         </Text>
-      </Text>
+      </div>
     );
   }
   
   return (
-    <Text as="div">
-      <Text as="div">
-        <Text as="h1" size="2XL" weight="high">
-          typography tokens
-        </Text>
-        
-        <Text as="div">
-          <Text as="h2" size="XL" weight="high">
-            font sizes
-          </Text>
-          <Text as="div">
-            {tokens.sizes?.map((token) => (
-              <Text as="div" key={token.name}>
-                <Text as="div">
-                  <TokenCard
-                    name={token.name}
-                    value={token.value}
-                    category={token.category}
-                  />
-                  <Text size="M" weight="medium">
-                    sample text at this size
-                  </Text>
-                </Text>
-              </Text>
-            ))}
-          </Text>
-        </Text>
-        
-        <Text as="div">
-          <Text as="h2" size="XL" weight="high">
-            font weights
-          </Text>
-          <Text as="div">
-            {tokens.weights?.map((token) => (
-              <Text as="div" key={token.name}>
-                <Text as="div">
-                  <TokenCard
-                    name={token.name}
-                    value={token.value}
-                    category={token.category}
-                  />
-                  <Text size="M" weight={token.name.includes('Low') ? 'low' : token.name.includes('High') ? 'high' : 'medium'}>
-                    sample text at this weight
-                  </Text>
-                </Text>
-              </Text>
-            ))}
-          </Text>
-        </Text>
+    <div className="vertical-stack">
+      <Text as="h1" size="2XL" weight="high">
+        typography tokens
       </Text>
-    </Text>
+      
+      <div className="section">
+        <Text as="h2" size="XL" weight="high">
+          font sizes
+        </Text>
+        <div className="token-grid">
+          {tokens.sizes?.map((token) => (
+            <div key={token.name} className="vertical-stack">
+              <TokenCard
+                name={token.name}
+                value={token.value}
+                category={token.category}
+              />
+              <Text size="M" weight="medium">
+                sample text at this size
+              </Text>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <div className="section">
+        <Text as="h2" size="XL" weight="high">
+          font weights
+        </Text>
+        <div className="token-grid">
+          {tokens.weights?.map((token) => (
+            <div key={token.name} className="vertical-stack">
+              <TokenCard
+                name={token.name}
+                value={token.value}
+                category={token.category}
+              />
+              <Text size="M" weight={token.name.includes('Low') ? 'low' : token.name.includes('High') ? 'high' : 'medium'}>
+                sample text at this weight
+              </Text>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

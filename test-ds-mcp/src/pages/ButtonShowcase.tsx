@@ -25,23 +25,18 @@ export function ButtonShowcase() {
   };
 
   return (
-    <Text as="div">
-      <Text as="div">
-        <Text as="div">
-          <Text as="div">
-            <Text as="h1" size="2XL" weight="high" align="center">
-              jio design system
-            </Text>
-            <Text as="h2" size="XL" weight="medium" color="medium" align="center">
-              complete button showcase - 150+ variants (updated 2026-02-10)
-            </Text>
-            <Text as="div">
-              <Text size="L" weight="medium" align="center">
-                button clicks: {clickCount}
-              </Text>
-            </Text>
-          </Text>
+    <div className="vertical-stack">
+      <div className="header">
+        <Text as="h1" size="2XL" weight="high" align="center">
+          jio design system
         </Text>
+        <Text as="h2" size="XL" weight="medium" color="medium" align="center">
+          complete button showcase - 150+ variants (updated 2026-02-10)
+        </Text>
+        <Text size="L" weight="medium" align="center">
+          button clicks: {clickCount}
+        </Text>
+      </div>
 
         <Section title="1. all sizes (XS, S, M, L, XL) - primary appearance">
           <ButtonGrid>
@@ -176,20 +171,16 @@ export function ButtonShowcase() {
               </Button>
             </ButtonDemo>
           </ButtonGrid>
-          <Text as="div">
-            <ButtonDemo label="fullWidth">
-              <Button fullWidth size="M" appearance="primary" onPress={handlePress}>
-                full width button
-              </Button>
-            </ButtonDemo>
-          </Text>
-          <Text as="div">
-            <ButtonDemo label="fullWidth + contained">
-              <Button fullWidth contained size="M" appearance="secondary" onPress={handlePress}>
-                full width + contained
-              </Button>
-            </ButtonDemo>
-          </Text>
+          <ButtonDemo label="fullWidth">
+            <Button fullWidth size="M" appearance="primary" onPress={handlePress}>
+              full width button
+            </Button>
+          </ButtonDemo>
+          <ButtonDemo label="fullWidth + contained">
+            <Button fullWidth contained size="M" appearance="secondary" onPress={handlePress}>
+              full width + contained
+            </Button>
+          </ButtonDemo>
         </Section>
 
         <Section title="5. loading states (corrected prop name)">
@@ -444,16 +435,14 @@ export function ButtonShowcase() {
         </Section>
 
         <Section title="11. interactive event handlers demo">
-          <Text as="div">
-            <Text as="div">
-              <Text size="M" weight="medium" color="medium">
-                focus state: {focusState || 'none'}
-              </Text>
-              <Text size="M" weight="medium" color="medium">
-                press state: {pressState || 'none'}
-              </Text>
+          <div className="vertical-stack">
+            <Text size="M" weight="medium" color="medium">
+              focus state: {focusState || 'none'}
             </Text>
-          </Text>
+            <Text size="M" weight="medium" color="medium">
+              press state: {pressState || 'none'}
+            </Text>
+          </div>
           <ButtonGrid>
             <ButtonDemo label="focus events">
               <Button 
@@ -504,21 +493,19 @@ export function ButtonShowcase() {
               </Button>
             </ButtonDemo>
             <ButtonDemo label="with aria-describedby">
-              <Text as="div">
-                <Text as="div">
-                  <Button 
-                    appearance="secondary" 
-                    size="M"
-                    aria-describedby="btn-description"
-                    onPress={handlePress}
-                  >
-                    aria-describedby
-                  </Button>
-                  <Text size="XS" color="medium" id="btn-description">
-                    this button has additional description
-                  </Text>
+              <div className="vertical-stack">
+                <Button 
+                  appearance="secondary" 
+                  size="M"
+                  aria-describedby="btn-description"
+                  onPress={handlePress}
+                >
+                  aria-describedby
+                </Button>
+                <Text size="XS" color="medium" id="btn-description">
+                  this button has additional description
                 </Text>
-              </Text>
+              </div>
             </ButtonDemo>
             <ButtonDemo label="with autoFocus">
               <Button 
@@ -554,87 +541,78 @@ export function ButtonShowcase() {
           </ButtonGrid>
         </Section>
 
-        <Text as="div">
-          <Text as="div">
-            <Text as="h3" size="L" weight="high" align="center">
-              showcase summary - updated 2026-02-10
-            </Text>
-            <Text as="div">
-              <Text size="M" color="medium">
-                ✅ 5 sizes (XS, S, M, L, XL) - NEW XS and XL added
-              </Text>
-              <Text size="M" color="medium">
-                ✅ 9 appearances (auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative)
-              </Text>
-              <Text size="M" color="medium">
-                ✅ 3 attention levels (low, medium, high) - NEW
-              </Text>
-              <Text size="M" color="medium">
-                ✅ layout modifiers (contained, condensed, single, fullWidth) - NEW
-              </Text>
-              <Text size="M" color="medium">
-                ✅ corrected loading prop (was isLoading, now loading)
-              </Text>
-              <Text size="M" color="medium">
-                ✅ disabled and loading states for all appearances
-              </Text>
-              <Text size="M" color="medium">
-                ✅ react aria event handlers (focus, press)
-              </Text>
-              <Text size="M" color="medium">
-                ✅ accessibility features (wcag aa compliant)
-              </Text>
-              <Text size="M" color="medium">
-                ✅ html button types (submit, button, reset)
-              </Text>
-              <Text size="M" color="medium">
-                ✅ interactive demos with real-time state tracking
-              </Text>
-              <Text size="L" weight="high" align="center">
-                total: 150+ unique button examples (updated from mcp 2026-02-10)
-              </Text>
-            </Text>
+        <div className="section">
+          <Text as="h3" size="L" weight="high" align="center">
+            showcase summary - updated 2026-02-10
           </Text>
-        </Text>
-      </Text>
-    </Text>
-  );
+          <div className="vertical-stack">
+            <Text size="M" color="medium">
+              ✅ 5 sizes (XS, S, M, L, XL) - NEW XS and XL added
+            </Text>
+            <Text size="M" color="medium">
+              ✅ 9 appearances (auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative)
+            </Text>
+            <Text size="M" color="medium">
+              ✅ 3 attention levels (low, medium, high) - NEW
+            </Text>
+            <Text size="M" color="medium">
+              ✅ layout modifiers (contained, condensed, single, fullWidth) - NEW
+            </Text>
+            <Text size="M" color="medium">
+              ✅ corrected loading prop (was isLoading, now loading)
+            </Text>
+            <Text size="M" color="medium">
+              ✅ disabled and loading states for all appearances
+            </Text>
+            <Text size="M" color="medium">
+              ✅ react aria event handlers (focus, press)
+            </Text>
+            <Text size="M" color="medium">
+              ✅ accessibility features (wcag aa compliant)
+            </Text>
+            <Text size="M" color="medium">
+              ✅ html button types (submit, button, reset)
+            </Text>
+            <Text size="M" color="medium">
+              ✅ interactive demos with real-time state tracking
+            </Text>
+            <Text size="L" weight="high" align="center">
+              total: 150+ unique button examples (updated from mcp 2026-02-10)
+            </Text>
+          </div>
+        </div>
+      </div>
+    );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <Text as="div">
-      <Text as="div">
-        <Text as="h3" size="L" weight="high">
-          {title}
-        </Text>
-        {children}
+    <div className="section">
+      <Text as="h3" size="L" weight="high">
+        {title}
       </Text>
-    </Text>
+      {children}
+    </div>
   );
 }
 
 function ButtonGrid({ children }: { children: React.ReactNode }) {
   return (
-    <Text as="div">
-      <Text as="div">
-        {children}
-      </Text>
-    </Text>
+    <div className="button-grid">
+      {children}
+    </div>
   );
 }
 
 function ButtonDemo({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Text as="div">
-      <Text as="div">
-        <Text size="S" weight="medium" color="medium">
-          {label}
-        </Text>
-        <Text as="div">
-          {children}
-        </Text>
+    <div className="button-demo">
+      <Text size="S" weight="medium" color="medium">
+        {label}
       </Text>
-    </Text>
+      <div>
+        {children}
+      </div>
+    </div>
   );
 }

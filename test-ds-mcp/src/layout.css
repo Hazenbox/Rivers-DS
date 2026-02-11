@@ -1,0 +1,86 @@
+/* 
+ * MINIMAL LAYOUT CSS - WORKAROUND FOR MISSING DS LAYOUT COMPONENTS
+ * 
+ * CRITICAL BUG: Box, Stack, Flex, Container are NOT exported from @marcelinodzn/ds-react
+ * MCP tools incorrectly report these components as available
+ * This file uses design system tokens where possible
+ */
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.side-nav {
+  width: 250px;
+  padding: 24px 16px;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.side-nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.button-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.button-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.token-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.token-card {
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+
+.vertical-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.horizontal-flex {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
