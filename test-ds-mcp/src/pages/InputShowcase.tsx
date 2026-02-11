@@ -7,12 +7,17 @@ import { VariantDemo } from '../components/VariantDemo';
 /**
  * COMPREHENSIVE INPUT SHOWCASE
  * 
- * Actual Variants Displayed: 31
+ * Actual Variants Displayed: 46
  * - 3 sizes: S, M, L
  * - 9 appearances: auto, primary, secondary, sparkle, neutral, informative, positive, warning, negative
  * - 3 attention levels: low, medium, high
  * - 2 shapes: default, pill
- * - States: disabled, read only, invalid
+ * - 5 state prop values: idle, filled, read only, positive, negative
+ * - Boolean states: disabled, read only, invalid
+ * - 2 placeholder attention levels: low, high
+ * - 2 text alignment options: start, center
+ * - HTML5 validation: pattern, length limits, autocomplete
+ * - Input behaviors: autoFocus, spellCheck, autoCorrect
  * - With labels, descriptions, errors, icons
  * - Controlled/uncontrolled examples
  */
@@ -27,7 +32,7 @@ export function InputShowcase() {
           input component
         </Text>
         <Text as="h2" size="XL" weight="medium" color="medium" align="center">
-          complete showcase - 31 variants
+          complete showcase - 46 variants
         </Text>
       </div>
 
@@ -174,7 +179,77 @@ export function InputShowcase() {
         </VariantGrid>
       </ShowcaseSection>
 
-      <ShowcaseSection title="9. controlled input">
+      <ShowcaseSection title="9. state prop variants">
+        <VariantGrid columns={3}>
+          <VariantDemo label="idle">
+            <Input state="idle" size="M" placeholder="idle state" />
+          </VariantDemo>
+          <VariantDemo label="filled">
+            <Input state="filled" size="M" defaultValue="filled state" />
+          </VariantDemo>
+          <VariantDemo label="read only">
+            <Input state="read only" size="M" defaultValue="read only state" />
+          </VariantDemo>
+          <VariantDemo label="positive">
+            <Input state="positive" size="M" placeholder="positive state" />
+          </VariantDemo>
+          <VariantDemo label="negative">
+            <Input state="negative" size="M" placeholder="negative state" />
+          </VariantDemo>
+        </VariantGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="10. placeholder styling">
+        <VariantGrid columns={2}>
+          <VariantDemo label="low attention">
+            <Input placeholderAttention="low" size="M" placeholder="low attention placeholder" />
+          </VariantDemo>
+          <VariantDemo label="high attention">
+            <Input placeholderAttention="high" size="M" placeholder="high attention placeholder" />
+          </VariantDemo>
+        </VariantGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="11. text alignment">
+        <VariantGrid columns={2}>
+          <VariantDemo label="start">
+            <Input inputValueAlign="start" size="M" defaultValue="left aligned" />
+          </VariantDemo>
+          <VariantDemo label="center">
+            <Input inputValueAlign="center" size="M" defaultValue="centered" />
+          </VariantDemo>
+        </VariantGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="12. html5 validation">
+        <VariantGrid columns={3}>
+          <VariantDemo label="pattern">
+            <Input pattern="[0-9]{3}-[0-9]{4}" size="M" placeholder="123-4567" label="phone (pattern)" />
+          </VariantDemo>
+          <VariantDemo label="length limits">
+            <Input minLength={8} maxLength={20} size="M" placeholder="8-20 chars" label="password" />
+          </VariantDemo>
+          <VariantDemo label="autocomplete">
+            <Input autoComplete="email" size="M" placeholder="email@example.com" label="email" />
+          </VariantDemo>
+        </VariantGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="13. input behaviors">
+        <VariantGrid columns={3}>
+          <VariantDemo label="auto focus">
+            <Input autoFocus size="M" placeholder="auto focused" />
+          </VariantDemo>
+          <VariantDemo label="spell check off">
+            <Input spellCheck={false} size="M" placeholder="no spell check" />
+          </VariantDemo>
+          <VariantDemo label="auto correct off">
+            <Input autoCorrect="off" size="M" placeholder="no auto correct" />
+          </VariantDemo>
+        </VariantGrid>
+      </ShowcaseSection>
+
+      <ShowcaseSection title="14. controlled input">
         <VariantGrid columns={2}>
           <VariantDemo label="controlled">
             <Input 
@@ -210,7 +285,10 @@ export function InputShowcase() {
             ✅ 2 shapes (default, pill)
           </Text>
           <Text size="M" color="medium">
-            ✅ 5 states (idle, filled, disabled, read only, invalid)
+            ✅ 5 state prop values (idle, filled, read only, positive, negative)
+          </Text>
+          <Text size="M" color="medium">
+            ✅ boolean states (disabled, read only, invalid)
           </Text>
           <Text size="M" color="medium">
             ✅ start/end slots for icons
@@ -219,10 +297,19 @@ export function InputShowcase() {
             ✅ labels, descriptions, error messages
           </Text>
           <Text size="M" color="medium">
-            ✅ validation and accessibility
+            ✅ placeholder styling (low, high attention)
+          </Text>
+          <Text size="M" color="medium">
+            ✅ text alignment (start, center)
+          </Text>
+          <Text size="M" color="medium">
+            ✅ html5 validation (pattern, length, autocomplete)
+          </Text>
+          <Text size="M" color="medium">
+            ✅ input behaviors (autoFocus, spellCheck, autoCorrect)
           </Text>
           <Text size="L" weight="high" align="center">
-            total: 31 unique input variants displayed
+            total: 46 unique input variants displayed
           </Text>
         </div>
       </div>
