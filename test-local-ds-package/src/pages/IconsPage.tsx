@@ -3,6 +3,7 @@ import { useParams, Link as RouterLink } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { icons, iconCategories, getIconsByCategory, getIconImportPath, getIconUsageCode, IconMeta } from '../config/icons';
 import { Text, SearchField, Badge, Button, Card, CardBody } from '@marcelinodzn/ds-react';
+import IconRenderer from '../components/IconRenderer';
 
 function IconsPage() {
   const { category } = useParams();
@@ -97,20 +98,10 @@ function IconsPage() {
           {filteredIcons.map(icon => (
             <Button key={icon.name} onPress={() => setSelectedIcon(icon)}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '8px' }}>
-                <svg 
-                  width={iconSize} 
-                  height={iconSize} 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <polyline points="21,15 16,10 5,21" />
-                </svg>
+                <IconRenderer 
+                  name={icon.name}
+                  size={iconSize}
+                />
                 <Text style={{ fontSize: '11px', textAlign: 'center', wordBreak: 'break-word' }}>
                   {icon.name.toLowerCase()}
                 </Text>
@@ -139,18 +130,10 @@ function IconsPage() {
             <CardBody>
               <div style={{ padding: '32px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100px', height: '100px', margin: '0 auto 24px', backgroundColor: '#f8f9fa', borderRadius: '12px' }}>
-                  <svg 
-                    width={64} 
-                    height={64} 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2"
-                  >
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                    <circle cx="8.5" cy="8.5" r="1.5" />
-                    <polyline points="21,15 16,10 5,21" />
-                  </svg>
+                  <IconRenderer 
+                    name={selectedIcon.name}
+                    size={64}
+                  />
                 </div>
                 
                 <h2 style={{ fontSize: '24px', fontWeight: 600, textAlign: 'center', marginBottom: '12px' }}>
@@ -196,18 +179,10 @@ function IconsPage() {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
                     {[16, 20, 24, 32, 48].map(size => (
                       <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '8px', minWidth: '60px' }}>
-                        <svg 
-                          width={size} 
-                          height={size} 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          strokeWidth="2"
-                        >
-                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                          <circle cx="8.5" cy="8.5" r="1.5" />
-                          <polyline points="21,15 16,10 5,21" />
-                        </svg>
+                        <IconRenderer 
+                          name={selectedIcon.name}
+                          size={size}
+                        />
                         <Text>{size}px</Text>
                       </div>
                     ))}
