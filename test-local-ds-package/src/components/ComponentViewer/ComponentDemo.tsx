@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ComponentMeta, PropDefinition } from '../../config/components';
 import CodeSnippet from './CodeSnippet';
+import LivePreview from './LivePreview';
+import VariantGallery from './VariantGallery';
 import { Text, Card, CardBody, Badge, Checkbox } from '@marcelinodzn/ds-react';
 
 interface ComponentDemoProps {
@@ -128,7 +130,12 @@ function ComponentDemo({ component }: ComponentDemoProps) {
             <CardBody>
               <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8f9fa', borderRadius: '8px', padding: '24px' }}>
-                  <Text>component preview placeholder</Text>
+                  <LivePreview 
+                    componentName={component.name} 
+                    props={propValues}
+                  >
+                    {(propValues.children as string) || component.name}
+                  </LivePreview>
                 </div>
                 <CodeSnippet code={generatedCode} />
               </div>
@@ -166,6 +173,10 @@ function ComponentDemo({ component }: ComponentDemoProps) {
             {example.description && <Text style={{ marginTop: '8px' }}>{example.description}</Text>}
           </div>
         ))}
+      </div>
+
+      <div style={{ marginBottom: '48px' }}>
+        <VariantGallery component={component} />
       </div>
 
       <div style={{ marginBottom: '48px' }}>

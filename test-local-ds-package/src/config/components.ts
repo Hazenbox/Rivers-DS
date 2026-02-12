@@ -1,6 +1,6 @@
 export interface PropDefinition {
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'enum' | 'function' | 'object' | 'ReactNode';
+  type: 'string' | 'number' | 'boolean' | 'enum' | 'function' | 'object' | 'ReactNode' | 'array';
   required?: boolean;
   defaultValue?: string | number | boolean;
   options?: string[];
@@ -40,61 +40,53 @@ export const components: ComponentMeta[] = [
     name: 'Button',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Primary interactive element for actions. Supports multiple variants, sizes, and states.',
+    description: 'Primary interactive element for actions. Supports multiple sizes, appearances, and attention levels.',
     props: [
-      { name: 'variant', type: 'enum', options: ['primary', 'secondary', 'tertiary', 'ghost', 'destructive'], defaultValue: 'primary', description: 'Visual style variant' },
-      { name: 'size', type: 'enum', options: ['sm', 'md', 'lg'], defaultValue: 'md', description: 'Button size' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L', 'XL'], defaultValue: 'M', description: 'Button size variant' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual prominence level' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'secondary', 'neutral', 'positive', 'warning', 'negative'], defaultValue: 'auto', description: 'Color theme variant' },
+      { name: 'contained', type: 'boolean', defaultValue: true, description: 'Whether button has background fill' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the button' },
-      { name: 'isLoading', type: 'boolean', defaultValue: false, description: 'Shows loading state' },
-      { name: 'leftIcon', type: 'ReactNode', description: 'Icon on the left side' },
-      { name: 'rightIcon', type: 'ReactNode', description: 'Icon on the right side' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Button content' },
-      { name: 'onPress', type: 'function', description: 'Click handler' },
+      { name: 'children', type: 'ReactNode', description: 'Button content' },
+      { name: 'onPress', type: 'function', description: 'Press handler' },
     ],
     examples: [
-      { name: 'Basic', code: '<Button>click me</Button>' },
-      { name: 'Variants', code: '<Button variant="primary">primary</Button>\n<Button variant="secondary">secondary</Button>\n<Button variant="tertiary">tertiary</Button>\n<Button variant="ghost">ghost</Button>\n<Button variant="destructive">destructive</Button>' },
-      { name: 'Sizes', code: '<Button size="sm">small</Button>\n<Button size="md">medium</Button>\n<Button size="lg">large</Button>' },
-      { name: 'Loading', code: '<Button isLoading>loading...</Button>' },
+      { name: 'All Sizes', code: '<Button size="XS">XS</Button>\n<Button size="S">S</Button>\n<Button size="M">M</Button>\n<Button size="L">L</Button>\n<Button size="XL">XL</Button>' },
+      { name: 'All Appearances', code: '<Button appearance="primary">primary</Button>\n<Button appearance="secondary">secondary</Button>\n<Button appearance="positive">positive</Button>\n<Button appearance="warning">warning</Button>\n<Button appearance="negative">negative</Button>' },
     ],
   },
   {
     name: 'Input',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Text input field with label, description, and error states.',
+    description: 'Text input field with validation and various states.',
     props: [
       { name: 'label', type: 'string', description: 'Input label' },
       { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'description', type: 'string', description: 'Helper text below input' },
-      { name: 'errorMessage', type: 'string', description: 'Error message to display' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual attention level' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the input' },
       { name: 'isRequired', type: 'boolean', defaultValue: false, description: 'Marks field as required' },
-      { name: 'type', type: 'enum', options: ['text', 'email', 'password', 'number', 'tel', 'url'], defaultValue: 'text', description: 'Input type' },
       { name: 'value', type: 'string', description: 'Controlled value' },
       { name: 'onChange', type: 'function', description: 'Change handler' },
     ],
     examples: [
       { name: 'Basic', code: '<Input label="email" placeholder="enter your email" />' },
-      { name: 'With Description', code: '<Input label="username" description="must be unique" />' },
-      { name: 'With Error', code: '<Input label="password" errorMessage="password is required" />' },
     ],
   },
   {
-    name: 'TextField',
+    name: 'SearchField',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Enhanced text input with built-in validation and formatting options.',
+    description: 'Search input field with search icon and clear functionality.',
     props: [
       { name: 'label', type: 'string', description: 'Field label' },
       { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'description', type: 'string', description: 'Helper text' },
-      { name: 'errorMessage', type: 'string', description: 'Error message' },
+      { name: 'value', type: 'string', description: 'Controlled value' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the field' },
-      { name: 'isRequired', type: 'boolean', defaultValue: false, description: 'Required field' },
     ],
     examples: [
-      { name: 'Basic', code: '<TextField label="name" placeholder="enter name" />' },
+      { name: 'Basic', code: '<SearchField label="search" placeholder="search..." />' },
     ],
   },
   {
@@ -105,85 +97,54 @@ export const components: ComponentMeta[] = [
     props: [
       { name: 'label', type: 'string', description: 'Textarea label' },
       { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'description', type: 'string', description: 'Helper text' },
-      { name: 'errorMessage', type: 'string', description: 'Error message' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the textarea' },
-      { name: 'rows', type: 'number', defaultValue: 3, description: 'Number of visible rows' },
+      { name: 'value', type: 'string', description: 'Controlled value' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
     ],
     examples: [
       { name: 'Basic', code: '<TextArea label="description" placeholder="enter description..." />' },
     ],
   },
   {
-    name: 'Select',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Dropdown selection component with single or multiple selection.',
-    props: [
-      { name: 'label', type: 'string', description: 'Select label' },
-      { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'description', type: 'string', description: 'Helper text' },
-      { name: 'errorMessage', type: 'string', description: 'Error message' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the select' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'SelectItem children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Select label="country">\n  <SelectItem key="us">united states</SelectItem>\n  <SelectItem key="uk">united kingdom</SelectItem>\n  <SelectItem key="ca">canada</SelectItem>\n</Select>' },
-    ],
-  },
-  {
-    name: 'SelectItem',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Individual option item for Select component.',
-    props: [
-      { name: 'key', type: 'string', required: true, description: 'Unique key for the item' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Item content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<SelectItem key="option1">option 1</SelectItem>' },
-    ],
-  },
-  {
     name: 'Checkbox',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Checkbox input for boolean or multiple selections.',
+    description: 'Checkbox input for binary choices.',
     props: [
-      { name: 'isSelected', type: 'boolean', description: 'Controlled selected state' },
-      { name: 'defaultSelected', type: 'boolean', defaultValue: false, description: 'Default selected state' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Checkbox size' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'positive', 'warning', 'negative'], defaultValue: 'auto', description: 'Color scheme' },
+      { name: 'label', type: 'string', description: 'Checkbox label' },
+      { name: 'isSelected', type: 'boolean', defaultValue: false, description: 'Checked state' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the checkbox' },
-      { name: 'isIndeterminate', type: 'boolean', defaultValue: false, description: 'Indeterminate state' },
-      { name: 'children', type: 'ReactNode', description: 'Checkbox label' },
       { name: 'onChange', type: 'function', description: 'Change handler' },
     ],
     examples: [
-      { name: 'Basic', code: '<Checkbox>accept terms and conditions</Checkbox>' },
-      { name: 'Controlled', code: '<Checkbox isSelected={checked} onChange={setChecked}>newsletter</Checkbox>' },
+      { name: 'All Sizes', code: '<Checkbox size="S" label="small" />\n<Checkbox size="M" label="medium" />\n<Checkbox size="L" label="large" />' },
+      { name: 'All Appearances', code: '<Checkbox appearance="primary" label="primary" />\n<Checkbox appearance="positive" label="positive" />\n<Checkbox appearance="warning" label="warning" />\n<Checkbox appearance="negative" label="negative" />' },
     ],
   },
   {
-    name: 'CheckboxGroup',
+    name: 'Switch',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Group of checkboxes with shared state management.',
+    description: 'Toggle switch for on/off states.',
     props: [
-      { name: 'label', type: 'string', description: 'Group label' },
-      { name: 'description', type: 'string', description: 'Helper text' },
-      { name: 'errorMessage', type: 'string', description: 'Error message' },
-      { name: 'value', type: 'object', description: 'Controlled value array' },
-      { name: 'defaultValue', type: 'object', description: 'Default value array' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Checkbox children' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Switch size' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'positive', 'warning', 'negative'], defaultValue: 'auto', description: 'Color scheme' },
+      { name: 'label', type: 'string', description: 'Switch label' },
+      { name: 'isSelected', type: 'boolean', defaultValue: false, description: 'Toggle state' },
+      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the switch' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
     ],
     examples: [
-      { name: 'Basic', code: '<CheckboxGroup label="interests">\n  <Checkbox value="sports">sports</Checkbox>\n  <Checkbox value="music">music</Checkbox>\n  <Checkbox value="art">art</Checkbox>\n</CheckboxGroup>' },
+      { name: 'All Sizes', code: '<Switch size="S" label="small" />\n<Switch size="M" label="medium" />\n<Switch size="L" label="large" />' },
     ],
   },
   {
     name: 'Radio',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Radio input for single selection from options.',
+    description: 'Radio button for single selection within a group.',
     props: [
       { name: 'value', type: 'string', required: true, description: 'Radio value' },
       { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the radio' },
@@ -197,247 +158,93 @@ export const components: ComponentMeta[] = [
     name: 'RadioGroup',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Group of radio buttons with single selection.',
+    description: 'Container for radio buttons.',
     props: [
       { name: 'label', type: 'string', description: 'Group label' },
-      { name: 'description', type: 'string', description: 'Helper text' },
-      { name: 'errorMessage', type: 'string', description: 'Error message' },
-      { name: 'value', type: 'string', description: 'Controlled value' },
-      { name: 'defaultValue', type: 'string', description: 'Default value' },
-      { name: 'orientation', type: 'enum', options: ['horizontal', 'vertical'], defaultValue: 'vertical', description: 'Layout orientation' },
+      { name: 'value', type: 'string', description: 'Selected value' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Radio children' },
     ],
     examples: [
-      { name: 'Basic', code: '<RadioGroup label="size">\n  <Radio value="sm">small</Radio>\n  <Radio value="md">medium</Radio>\n  <Radio value="lg">large</Radio>\n</RadioGroup>' },
+      { name: 'Basic', code: '<RadioGroup label="choose option">\n  <Radio value="1">option 1</Radio>\n  <Radio value="2">option 2</Radio>\n</RadioGroup>' },
     ],
   },
   {
-    name: 'Switch',
+    name: 'Stepper',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Toggle switch for on/off states.',
+    description: 'Number stepper with increment/decrement buttons.',
     props: [
-      { name: 'isSelected', type: 'boolean', description: 'Controlled selected state' },
-      { name: 'defaultSelected', type: 'boolean', defaultValue: false, description: 'Default selected state' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the switch' },
-      { name: 'children', type: 'ReactNode', description: 'Switch label' },
-      { name: 'onChange', type: 'function', description: 'Change handler' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Switch>enable notifications</Switch>' },
-      { name: 'Controlled', code: '<Switch isSelected={enabled} onChange={setEnabled}>dark mode</Switch>' },
-    ],
-  },
-  {
-    name: 'Slider',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Range slider for selecting numeric values.',
-    props: [
-      { name: 'label', type: 'string', description: 'Slider label' },
-      { name: 'minValue', type: 'number', defaultValue: 0, description: 'Minimum value' },
-      { name: 'maxValue', type: 'number', defaultValue: 100, description: 'Maximum value' },
-      { name: 'step', type: 'number', defaultValue: 1, description: 'Step increment' },
-      { name: 'value', type: 'number', description: 'Controlled value' },
-      { name: 'defaultValue', type: 'number', description: 'Default value' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the slider' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Slider label="volume" defaultValue={50} />' },
-      { name: 'Range', code: '<Slider label="price range" minValue={0} maxValue={1000} step={10} />' },
-    ],
-  },
-  {
-    name: 'NumberField',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Numeric input with increment/decrement controls.',
-    props: [
-      { name: 'label', type: 'string', description: 'Field label' },
+      { name: 'value', type: 'number', description: 'Current value' },
       { name: 'minValue', type: 'number', description: 'Minimum value' },
       { name: 'maxValue', type: 'number', description: 'Maximum value' },
       { name: 'step', type: 'number', defaultValue: 1, description: 'Step increment' },
-      { name: 'value', type: 'number', description: 'Controlled value' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the field' },
+      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the stepper' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
     ],
     examples: [
-      { name: 'Basic', code: '<NumberField label="quantity" defaultValue={1} minValue={0} maxValue={10} />' },
+      { name: 'Basic', code: '<Stepper minValue={0} maxValue={10} />' },
     ],
   },
   {
-    name: 'SearchField',
+    name: 'SegmentedControl',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Search input with clear button and search icon.',
+    description: 'Segmented control for mutually exclusive options.',
     props: [
-      { name: 'label', type: 'string', description: 'Search label' },
-      { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'value', type: 'string', description: 'Controlled value' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the field' },
-      { name: 'onSubmit', type: 'function', description: 'Submit handler' },
-      { name: 'onClear', type: 'function', description: 'Clear handler' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Control size' },
+      { name: 'value', type: 'string', description: 'Selected value' },
+      { name: 'onChange', type: 'function', description: 'Change handler' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'SegmentedControlItem children' },
     ],
     examples: [
-      { name: 'Basic', code: '<SearchField label="search" placeholder="search..." />' },
+      { name: 'Basic', code: '<SegmentedControl>\n  <SegmentedControlItem>day</SegmentedControlItem>\n  <SegmentedControlItem>week</SegmentedControlItem>\n  <SegmentedControlItem>month</SegmentedControlItem>\n</SegmentedControl>' },
     ],
   },
   {
-    name: 'DatePicker',
+    name: 'SegmentedControlItem',
     category: 'Form',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Date selection with calendar popup.',
+    description: 'Individual item in segmented control.',
     props: [
-      { name: 'label', type: 'string', description: 'Field label' },
-      { name: 'value', type: 'object', description: 'Controlled date value' },
-      { name: 'minValue', type: 'object', description: 'Minimum selectable date' },
-      { name: 'maxValue', type: 'object', description: 'Maximum selectable date' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the picker' },
-      { name: 'granularity', type: 'enum', options: ['day', 'hour', 'minute', 'second'], defaultValue: 'day', description: 'Date precision' },
+      { name: 'children', type: 'ReactNode', description: 'Item content' },
     ],
     examples: [
-      { name: 'Basic', code: '<DatePicker label="date of birth" />' },
-    ],
-  },
-  {
-    name: 'DateRangePicker',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Date range selection with dual calendars.',
-    props: [
-      { name: 'label', type: 'string', description: 'Field label' },
-      { name: 'value', type: 'object', description: 'Controlled date range value' },
-      { name: 'minValue', type: 'object', description: 'Minimum selectable date' },
-      { name: 'maxValue', type: 'object', description: 'Maximum selectable date' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the picker' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DateRangePicker label="trip dates" />' },
-    ],
-  },
-  {
-    name: 'TimeField',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Time input with hours, minutes, and optional seconds.',
-    props: [
-      { name: 'label', type: 'string', description: 'Field label' },
-      { name: 'value', type: 'object', description: 'Controlled time value' },
-      { name: 'hourCycle', type: 'enum', options: ['12', '24'], description: 'Hour cycle format' },
-      { name: 'granularity', type: 'enum', options: ['hour', 'minute', 'second'], defaultValue: 'minute', description: 'Time precision' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the field' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TimeField label="meeting time" />' },
-    ],
-  },
-  {
-    name: 'Calendar',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Standalone calendar for date selection.',
-    props: [
-      { name: 'value', type: 'object', description: 'Controlled date value' },
-      { name: 'minValue', type: 'object', description: 'Minimum selectable date' },
-      { name: 'maxValue', type: 'object', description: 'Maximum selectable date' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the calendar' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Calendar />' },
-    ],
-  },
-  {
-    name: 'RangeCalendar',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Calendar for selecting date ranges.',
-    props: [
-      { name: 'value', type: 'object', description: 'Controlled date range value' },
-      { name: 'minValue', type: 'object', description: 'Minimum selectable date' },
-      { name: 'maxValue', type: 'object', description: 'Maximum selectable date' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the calendar' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<RangeCalendar />' },
-    ],
-  },
-  {
-    name: 'Form',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Form container with validation and submission handling.',
-    props: [
-      { name: 'onSubmit', type: 'function', description: 'Form submit handler' },
-      { name: 'validationErrors', type: 'object', description: 'Validation error messages' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Form content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Form onSubmit={handleSubmit}>\n  <TextField label="name" name="name" />\n  <Button type="submit">submit</Button>\n</Form>' },
-    ],
-  },
-  {
-    name: 'FileTrigger',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'File upload trigger with customizable button.',
-    props: [
-      { name: 'acceptedFileTypes', type: 'object', description: 'Accepted MIME types' },
-      { name: 'allowsMultiple', type: 'boolean', defaultValue: false, description: 'Allow multiple files' },
-      { name: 'onSelect', type: 'function', description: 'File selection handler' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Trigger content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<FileTrigger onSelect={handleFiles}>\n  <Button>upload file</Button>\n</FileTrigger>' },
-    ],
-  },
-  {
-    name: 'DropZone',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Drag and drop file upload area.',
-    props: [
-      { name: 'onDrop', type: 'function', description: 'Drop handler' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Drop zone content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DropZone onDrop={handleDrop}>\n  <Text>drag files here</Text>\n</DropZone>' },
+      { name: 'Basic', code: '<SegmentedControlItem>option</SegmentedControlItem>' },
     ],
   },
 
   // Navigation Components
   {
-    name: 'HeaderNavigation',
-    category: 'Navigation',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Top navigation header with logo, links, and actions.',
-    props: [
-      { name: 'logo', type: 'ReactNode', description: 'Logo element' },
-      { name: 'children', type: 'ReactNode', description: 'Navigation items' },
-      { name: 'actions', type: 'ReactNode', description: 'Right-side actions' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<HeaderNavigation logo={<Logo />}>\n  <NavItem href="/">home</NavItem>\n  <NavItem href="/about">about</NavItem>\n</HeaderNavigation>' },
-    ],
-  },
-  {
     name: 'Tabs',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Tabbed navigation for switching between views.',
+    description: 'Tab navigation component with panels.',
     props: [
-      { name: 'selectedKey', type: 'string', description: 'Controlled selected tab' },
-      { name: 'defaultSelectedKey', type: 'string', description: 'Default selected tab' },
-      { name: 'orientation', type: 'enum', options: ['horizontal', 'vertical'], defaultValue: 'horizontal', description: 'Tab orientation' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tab and TabPanel children' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'TabList and TabPanel children' },
     ],
     examples: [
       { name: 'Basic', code: '<Tabs>\n  <TabList>\n    <Tab id="tab1">tab 1</Tab>\n    <Tab id="tab2">tab 2</Tab>\n  </TabList>\n  <TabPanel id="tab1">content 1</TabPanel>\n  <TabPanel id="tab2">content 2</TabPanel>\n</Tabs>' },
     ],
   },
   {
+    name: 'Tab',
+    category: 'Navigation',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Individual tab item.',
+    props: [
+      { name: 'id', type: 'string', required: true, description: 'Tab identifier' },
+      { name: 'children', type: 'ReactNode', description: 'Tab label' },
+    ],
+    examples: [
+      { name: 'Basic', code: '<Tab id="tab1">tab label</Tab>' },
+    ],
+  },
+  {
     name: 'TabList',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Container for Tab items.',
+    description: 'Container for tab items.',
     props: [
       { name: 'children', type: 'ReactNode', required: true, description: 'Tab children' },
     ],
@@ -446,111 +253,91 @@ export const components: ComponentMeta[] = [
     ],
   },
   {
-    name: 'Tab',
-    category: 'Navigation',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Individual tab button.',
-    props: [
-      { name: 'id', type: 'string', required: true, description: 'Tab identifier' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the tab' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tab content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Tab id="overview">overview</Tab>' },
-    ],
-  },
-  {
     name: 'TabPanel',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
     description: 'Content panel for a tab.',
     props: [
-      { name: 'id', type: 'string', required: true, description: 'Panel identifier (matches Tab id)' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Panel content' },
+      { name: 'id', type: 'string', required: true, description: 'Panel identifier matching tab id' },
+      { name: 'children', type: 'ReactNode', description: 'Panel content' },
     ],
     examples: [
-      { name: 'Basic', code: '<TabPanel id="overview">overview content</TabPanel>' },
+      { name: 'Basic', code: '<TabPanel id="tab1">panel content</TabPanel>' },
     ],
   },
   {
-    name: 'Breadcrumbs',
+    name: 'HeaderNavigation',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Breadcrumb navigation for hierarchical pages.',
+    description: 'Header navigation component for top-level navigation.',
     props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Breadcrumb items' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables all items' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'HeaderNavigationList children' },
     ],
     examples: [
-      { name: 'Basic', code: '<Breadcrumbs>\n  <Breadcrumb href="/">home</Breadcrumb>\n  <Breadcrumb href="/products">products</Breadcrumb>\n  <Breadcrumb>details</Breadcrumb>\n</Breadcrumbs>' },
+      { name: 'Basic', code: '<HeaderNavigation>\n  <HeaderNavigationList>\n    <HeaderNavigationItem>home</HeaderNavigationItem>\n    <HeaderNavigationItem>products</HeaderNavigationItem>\n  </HeaderNavigationList>\n</HeaderNavigation>' },
     ],
   },
   {
-    name: 'Breadcrumb',
+    name: 'HeaderNavigationList',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Individual breadcrumb item.',
+    description: 'List container for header navigation items.',
     props: [
-      { name: 'href', type: 'string', description: 'Link URL' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Item content' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'HeaderNavigationItem children' },
     ],
     examples: [
-      { name: 'Basic', code: '<Breadcrumb href="/">home</Breadcrumb>' },
+      { name: 'Basic', code: '<HeaderNavigationList>\n  <HeaderNavigationItem>item</HeaderNavigationItem>\n</HeaderNavigationList>' },
     ],
   },
   {
-    name: 'Link',
+    name: 'HeaderNavigationItem',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Styled anchor link component.',
+    description: 'Individual item in header navigation.',
     props: [
-      { name: 'href', type: 'string', description: 'Link URL' },
-      { name: 'target', type: 'enum', options: ['_self', '_blank'], defaultValue: '_self', description: 'Link target' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the link' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Link content' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Item size' },
+      { name: 'emphasis', type: 'enum', options: ['default', 'high'], defaultValue: 'default', description: 'Visual emphasis' },
+      { name: 'children', type: 'ReactNode', description: 'Item content' },
     ],
     examples: [
-      { name: 'Basic', code: '<Link href="/about">learn more</Link>' },
-      { name: 'External', code: '<Link href="https://example.com" target="_blank">external link</Link>' },
+      { name: 'Basic', code: '<HeaderNavigationItem>home</HeaderNavigationItem>' },
     ],
   },
   {
-    name: 'Menu',
+    name: 'WebHeaderNavigation',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Dropdown menu with action items.',
+    description: 'Web-specific header navigation with enhanced features.',
     props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'MenuItem children' },
-      { name: 'onAction', type: 'function', description: 'Action handler' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'Navigation items' },
     ],
     examples: [
-      { name: 'Basic', code: '<MenuTrigger>\n  <Button>options</Button>\n  <Menu>\n    <MenuItem id="edit">edit</MenuItem>\n    <MenuItem id="delete">delete</MenuItem>\n  </Menu>\n</MenuTrigger>' },
+      { name: 'Basic', code: '<WebHeaderNavigation>\n  <HeaderNavigationItem>home</HeaderNavigationItem>\n</WebHeaderNavigation>' },
     ],
   },
   {
-    name: 'MenuTrigger',
+    name: 'BottomNavigation',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Trigger wrapper for Menu component.',
+    description: 'Bottom navigation bar for mobile interfaces.',
     props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Trigger and Menu' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'BottomNavigationItem children' },
     ],
     examples: [
-      { name: 'Basic', code: '<MenuTrigger>\n  <Button>menu</Button>\n  <Menu>...</Menu>\n</MenuTrigger>' },
+      { name: 'Basic', code: '<BottomNavigation>\n  <BottomNavigationItem>home</BottomNavigationItem>\n  <BottomNavigationItem>search</BottomNavigationItem>\n</BottomNavigation>' },
     ],
   },
   {
-    name: 'MenuItem',
+    name: 'BottomNavigationItem',
     category: 'Navigation',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Individual menu item.',
+    description: 'Individual item in bottom navigation.',
     props: [
-      { name: 'id', type: 'string', required: true, description: 'Item identifier' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the item' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Item content' },
+      { name: 'children', type: 'ReactNode', description: 'Item content' },
+      { name: 'isSelected', type: 'boolean', defaultValue: false, description: 'Selected state' },
     ],
     examples: [
-      { name: 'Basic', code: '<MenuItem id="save">save</MenuItem>' },
+      { name: 'Basic', code: '<BottomNavigationItem>home</BottomNavigationItem>' },
     ],
   },
 
@@ -559,19 +346,23 @@ export const components: ComponentMeta[] = [
     name: 'Card',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Container card with optional header and footer.',
+    description: 'Container card with header, body, and footer sections.',
     props: [
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Card size' },
+      { name: 'appearance', type: 'enum', options: ['neutral', 'primary', 'secondary', 'auto'], defaultValue: 'auto', description: 'Color scheme' },
+      { name: 'elevation', type: 'enum', options: ['none', 'low', 'medium', 'high'], defaultValue: 'low', description: 'Shadow elevation' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Card content' },
     ],
     examples: [
-      { name: 'Basic', code: '<Card>\n  <CardHeader>title</CardHeader>\n  <CardBody>content</CardBody>\n  <CardFooter>footer</CardFooter>\n</Card>' },
+      { name: 'With Body', code: '<Card>\n  <CardBody>Card content</CardBody>\n</Card>' },
+      { name: 'Complete', code: '<Card>\n  <CardHeader>header</CardHeader>\n  <CardBody>body content</CardBody>\n  <CardFooter>footer</CardFooter>\n</Card>' },
     ],
   },
   {
     name: 'CardHeader',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Header section of a Card.',
+    description: 'Header section of a card.',
     props: [
       { name: 'children', type: 'ReactNode', required: true, description: 'Header content' },
     ],
@@ -583,444 +374,308 @@ export const components: ComponentMeta[] = [
     name: 'CardBody',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Body section of a Card.',
+    description: 'Main content section of a card.',
     props: [
       { name: 'children', type: 'ReactNode', required: true, description: 'Body content' },
     ],
     examples: [
-      { name: 'Basic', code: '<CardBody>card content</CardBody>' },
+      { name: 'Basic', code: '<CardBody>main content</CardBody>' },
     ],
   },
   {
     name: 'CardFooter',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Footer section of a Card.',
+    description: 'Footer section of a card.',
     props: [
       { name: 'children', type: 'ReactNode', required: true, description: 'Footer content' },
     ],
     examples: [
-      { name: 'Basic', code: '<CardFooter><Button>action</Button></CardFooter>' },
+      { name: 'Basic', code: '<CardFooter>footer actions</CardFooter>' },
     ],
   },
   {
-    name: 'Separator',
+    name: 'Divider',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
     description: 'Visual divider between content sections.',
     props: [
       { name: 'orientation', type: 'enum', options: ['horizontal', 'vertical'], defaultValue: 'horizontal', description: 'Divider orientation' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual prominence' },
     ],
     examples: [
-      { name: 'Basic', code: '<Separator />' },
-      { name: 'Vertical', code: '<Separator orientation="vertical" />' },
+      { name: 'Horizontal', code: '<Divider />' },
+      { name: 'Vertical', code: '<Divider orientation="vertical" />' },
     ],
   },
   {
-    name: 'GridList',
+    name: 'StructuredList',
     category: 'Layout',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Grid layout for list items with selection support.',
+    description: 'Structured list layout component.',
     props: [
-      { name: 'selectionMode', type: 'enum', options: ['none', 'single', 'multiple'], defaultValue: 'none', description: 'Selection mode' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'GridListItem children' },
+      { name: 'layout', type: 'enum', options: ['default', 'comfortable', 'compact'], defaultValue: 'default', description: 'List layout variant' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'List items' },
     ],
     examples: [
-      { name: 'Basic', code: '<GridList selectionMode="multiple">\n  <GridListItem>item 1</GridListItem>\n  <GridListItem>item 2</GridListItem>\n</GridList>' },
+      { name: 'Basic', code: '<StructuredList>\n  <ListItem>item 1</ListItem>\n  <ListItem>item 2</ListItem>\n</StructuredList>' },
     ],
   },
-  {
-    name: 'GridListItem',
-    category: 'Layout',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Individual item in a GridList.',
-    props: [
-      { name: 'id', type: 'string', description: 'Item identifier' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Item content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<GridListItem id="item1">content</GridListItem>' },
-    ],
-  },
-  {
-    name: 'ListBox',
-    category: 'Layout',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Selectable list with keyboard navigation.',
-    props: [
-      { name: 'selectionMode', type: 'enum', options: ['none', 'single', 'multiple'], defaultValue: 'single', description: 'Selection mode' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'ListBoxItem children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<ListBox>\n  <ListBoxItem id="1">option 1</ListBoxItem>\n  <ListBoxItem id="2">option 2</ListBoxItem>\n</ListBox>' },
-    ],
-  },
-  {
-    name: 'ListBoxItem',
-    category: 'Layout',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Individual item in a ListBox.',
-    props: [
-      { name: 'id', type: 'string', required: true, description: 'Item identifier' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Item content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<ListBoxItem id="item1">item</ListBoxItem>' },
-    ],
-  },
-  {
-    name: 'Table',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Data table with sorting and selection.',
-    props: [
-      { name: 'selectionMode', type: 'enum', options: ['none', 'single', 'multiple'], defaultValue: 'none', description: 'Row selection mode' },
-      { name: 'sortDescriptor', type: 'object', description: 'Sort configuration' },
-      { name: 'onSortChange', type: 'function', description: 'Sort change handler' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Table children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Table>\n  <TableHeader>\n    <Column>name</Column>\n    <Column>email</Column>\n  </TableHeader>\n  <TableBody>\n    <Row><Cell>john</Cell><Cell>john@example.com</Cell></Row>\n  </TableBody>\n</Table>' },
-    ],
-  },
-  {
-    name: 'TableHeader',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Header section of a Table.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Column children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TableHeader><Column>name</Column></TableHeader>' },
-    ],
-  },
-  {
-    name: 'TableBody',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Body section of a Table.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Row children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TableBody><Row>...</Row></TableBody>' },
-    ],
-  },
-  {
-    name: 'Column',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Table column header.',
-    props: [
-      { name: 'id', type: 'string', description: 'Column identifier' },
-      { name: 'allowsSorting', type: 'boolean', defaultValue: false, description: 'Enable sorting' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Column header content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Column allowsSorting>name</Column>' },
-    ],
-  },
-  {
-    name: 'Row',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Table row.',
-    props: [
-      { name: 'id', type: 'string', description: 'Row identifier' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Cell children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Row><Cell>data</Cell></Row>' },
-    ],
-  },
-  {
-    name: 'Cell',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Table cell.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Cell content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Cell>value</Cell>' },
-    ],
-  },
-  {
-    name: 'TagGroup',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Group of removable tags.',
-    props: [
-      { name: 'label', type: 'string', description: 'Group label' },
-      { name: 'onRemove', type: 'function', description: 'Remove handler' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tag children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TagGroup label="tags" onRemove={handleRemove}>\n  <TagList>\n    <Tag id="1">tag 1</Tag>\n    <Tag id="2">tag 2</Tag>\n  </TagList>\n</TagGroup>' },
-    ],
-  },
-  {
-    name: 'TagList',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Container for Tag items.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tag children' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TagList><Tag id="1">tag</Tag></TagList>' },
-    ],
-  },
-  {
-    name: 'Tag',
-    category: 'Data Display',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Individual tag item.',
-    props: [
-      { name: 'id', type: 'string', required: true, description: 'Tag identifier' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tag content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Tag id="react">react</Tag>' },
-    ],
-  },
+
+  // Data Display Components
   {
     name: 'Badge',
     category: 'Data Display',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Status badge or label.',
+    description: 'Badge component for status, labels, and counts.',
     props: [
-      { name: 'variant', type: 'enum', options: ['default', 'success', 'warning', 'error', 'info'], defaultValue: 'default', description: 'Badge variant' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L', 'XL', '2XL'], defaultValue: 'M', description: 'Badge size' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual prominence' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'secondary', 'sparkle', 'neutral', 'informative', 'positive', 'warning', 'negative'], defaultValue: 'auto', description: 'Color scheme' },
       { name: 'children', type: 'ReactNode', required: true, description: 'Badge content' },
     ],
     examples: [
-      { name: 'Basic', code: '<Badge>new</Badge>' },
-      { name: 'Variants', code: '<Badge variant="success">active</Badge>\n<Badge variant="warning">pending</Badge>\n<Badge variant="error">failed</Badge>' },
+      { name: 'All Sizes', code: '<Badge size="XS">XS</Badge>\n<Badge size="S">S</Badge>\n<Badge size="M">M</Badge>\n<Badge size="L">L</Badge>\n<Badge size="XL">XL</Badge>\n<Badge size="2XL">2XL</Badge>' },
+      { name: 'All Appearances', code: '<Badge appearance="primary">primary</Badge>\n<Badge appearance="secondary">secondary</Badge>\n<Badge appearance="positive">positive</Badge>\n<Badge appearance="warning">warning</Badge>\n<Badge appearance="negative">negative</Badge>' },
     ],
   },
   {
-    name: 'ProgressBar',
-    category: 'Feedback',
+    name: 'Chip',
+    category: 'Data Display',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Linear progress indicator.',
+    description: 'Chip component for tags, filters, and selections.',
     props: [
-      { name: 'label', type: 'string', description: 'Progress label' },
-      { name: 'value', type: 'number', description: 'Current progress (0-100)' },
-      { name: 'minValue', type: 'number', defaultValue: 0, description: 'Minimum value' },
-      { name: 'maxValue', type: 'number', defaultValue: 100, description: 'Maximum value' },
-      { name: 'isIndeterminate', type: 'boolean', defaultValue: false, description: 'Show indeterminate state' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L'], defaultValue: 'M', description: 'Chip size' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual prominence' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'secondary', 'sparkle', 'neutral', 'informative', 'positive', 'warning', 'negative'], defaultValue: 'auto', description: 'Color scheme' },
+      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the chip' },
+      { name: 'children', type: 'ReactNode', required: true, description: 'Chip content' },
     ],
     examples: [
-      { name: 'Basic', code: '<ProgressBar label="loading" value={60} />' },
-      { name: 'Indeterminate', code: '<ProgressBar label="processing" isIndeterminate />' },
+      { name: 'All Sizes', code: '<Chip size="XS">XS</Chip>\n<Chip size="S">S</Chip>\n<Chip size="M">M</Chip>\n<Chip size="L">L</Chip>' },
     ],
   },
   {
-    name: 'Meter',
-    category: 'Feedback',
+    name: 'Avatar',
+    category: 'Data Display',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Meter indicator for displaying quantities.',
+    description: 'Avatar component for user profiles and images.',
     props: [
-      { name: 'label', type: 'string', description: 'Meter label' },
-      { name: 'value', type: 'number', required: true, description: 'Current value' },
-      { name: 'minValue', type: 'number', defaultValue: 0, description: 'Minimum value' },
-      { name: 'maxValue', type: 'number', defaultValue: 100, description: 'Maximum value' },
+      { name: 'size', type: 'enum', options: ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'fill'], defaultValue: 'M', description: 'Avatar size' },
+      { name: 'attention', type: 'enum', options: ['high', 'medium'], defaultValue: 'medium', description: 'Visual prominence' },
+      { name: 'src', type: 'string', description: 'Image source URL' },
+      { name: 'alt', type: 'string', description: 'Alternative text' },
     ],
     examples: [
-      { name: 'Basic', code: '<Meter label="storage" value={75} />' },
+      { name: 'All Sizes', code: '<Avatar size="2XS" />\n<Avatar size="XS" />\n<Avatar size="S" />\n<Avatar size="M" />\n<Avatar size="L" />\n<Avatar size="XL" />\n<Avatar size="2XL" />\n<Avatar size="3XL" />\n<Avatar size="4XL" />' },
+    ],
+  },
+  {
+    name: 'ListItem',
+    category: 'Data Display',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Individual item in lists.',
+    props: [
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Item size' },
+      { name: 'appearance', type: 'enum', options: ['default', 'prominent'], defaultValue: 'default', description: 'Visual style' },
+      { name: 'children', type: 'ReactNode', description: 'Item content' },
+    ],
+    examples: [
+      { name: 'Basic', code: '<ListItem>list item</ListItem>' },
+    ],
+  },
+  {
+    name: 'CarouselIndicator',
+    category: 'Data Display',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Pagination indicator for carousels.',
+    props: [
+      { name: 'total', type: 'number', required: true, description: 'Total number of slides' },
+      { name: 'activeIndex', type: 'number', defaultValue: 0, description: 'Currently active slide index' },
+      { name: 'type', type: 'enum', options: ['dots', 'lines'], defaultValue: 'dots', description: 'Indicator style' },
+    ],
+    examples: [
+      { name: 'Dots', code: '<CarouselIndicator total={5} activeIndex={2} type="dots" />' },
     ],
   },
 
-  // Overlay Components
-  {
-    name: 'Modal',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Modal dialog overlay.',
-    props: [
-      { name: 'isOpen', type: 'boolean', description: 'Controlled open state' },
-      { name: 'onOpenChange', type: 'function', description: 'Open state change handler' },
-      { name: 'isDismissable', type: 'boolean', defaultValue: true, description: 'Allow dismiss on outside click' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Modal content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DialogTrigger>\n  <Button>open modal</Button>\n  <Modal>\n    <Dialog>\n      <Heading>modal title</Heading>\n      <Content>modal content</Content>\n    </Dialog>\n  </Modal>\n</DialogTrigger>' },
-    ],
-  },
-  {
-    name: 'Dialog',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Dialog content container.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Dialog content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Dialog>\n  <Heading>title</Heading>\n  <Content>content</Content>\n</Dialog>' },
-    ],
-  },
-  {
-    name: 'DialogTrigger',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Trigger wrapper for Dialog/Modal.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Trigger and Modal/Popover' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DialogTrigger>\n  <Button>open</Button>\n  <Modal>...</Modal>\n</DialogTrigger>' },
-    ],
-  },
-  {
-    name: 'AlertDialog',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Alert dialog for confirmations.',
-    props: [
-      { name: 'title', type: 'string', required: true, description: 'Alert title' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Alert content' },
-      { name: 'variant', type: 'enum', options: ['default', 'destructive'], defaultValue: 'default', description: 'Alert variant' },
-      { name: 'actionLabel', type: 'string', description: 'Primary action label' },
-      { name: 'cancelLabel', type: 'string', description: 'Cancel label' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DialogTrigger>\n  <Button>delete</Button>\n  <Modal>\n    <AlertDialog\n      title="confirm delete"\n      variant="destructive"\n      actionLabel="delete"\n      cancelLabel="cancel"\n    >\n      this action cannot be undone.\n    </AlertDialog>\n  </Modal>\n</DialogTrigger>' },
-    ],
-  },
-  {
-    name: 'Popover',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Floating popover content.',
-    props: [
-      { name: 'placement', type: 'enum', options: ['top', 'bottom', 'left', 'right'], defaultValue: 'bottom', description: 'Popover placement' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Popover content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<DialogTrigger>\n  <Button>info</Button>\n  <Popover>\n    <Dialog>popover content</Dialog>\n  </Popover>\n</DialogTrigger>' },
-    ],
-  },
-  {
-    name: 'Tooltip',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Tooltip for additional information.',
-    props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Tooltip content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TooltipTrigger>\n  <Button>hover me</Button>\n  <Tooltip>helpful information</Tooltip>\n</TooltipTrigger>' },
-    ],
-  },
-  {
-    name: 'TooltipTrigger',
-    category: 'Overlay',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Trigger wrapper for Tooltip.',
-    props: [
-      { name: 'delay', type: 'number', defaultValue: 500, description: 'Show delay in ms' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Trigger and Tooltip' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<TooltipTrigger>\n  <Button>?</Button>\n  <Tooltip>help text</Tooltip>\n</TooltipTrigger>' },
-    ],
-  },
-
-  // Typography
+  // Typography Components
   {
     name: 'Text',
     category: 'Typography',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Text component with semantic variants.',
+    description: 'Base text component with size and weight variants.',
     props: [
-      { name: 'slot', type: 'enum', options: ['description', 'label'], description: 'Text slot type' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Text content' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L', 'XL', '2XL'], defaultValue: 'M', description: 'Text size' },
+      { name: 'weight', type: 'enum', options: ['regular', 'medium', 'semibold', 'bold'], defaultValue: 'regular', description: 'Font weight' },
+      { name: 'align', type: 'enum', options: ['left', 'center', 'right'], defaultValue: 'left', description: 'Text alignment' },
+      { name: 'children', type: 'ReactNode', description: 'Text content' },
     ],
     examples: [
-      { name: 'Basic', code: '<Text>regular text</Text>' },
-      { name: 'Description', code: '<Text slot="description">helper text</Text>' },
+      { name: 'All Sizes', code: '<Text size="XS">XS text</Text>\n<Text size="S">S text</Text>\n<Text size="M">M text</Text>\n<Text size="L">L text</Text>\n<Text size="XL">XL text</Text>\n<Text size="2XL">2XL text</Text>' },
     ],
   },
   {
-    name: 'Heading',
+    name: 'Display',
     category: 'Typography',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Heading component with level variants.',
+    description: 'Display text for large, prominent headings.',
     props: [
-      { name: 'level', type: 'enum', options: ['1', '2', '3', '4', '5', '6'], defaultValue: '2', description: 'Heading level' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Heading content' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Display size' },
+      { name: 'align', type: 'enum', options: ['left', 'center', 'right'], defaultValue: 'left', description: 'Text alignment' },
+      { name: 'children', type: 'ReactNode', description: 'Display content' },
     ],
     examples: [
-      { name: 'Basic', code: '<Heading level={1}>page title</Heading>' },
+      { name: 'All Sizes', code: '<Display size="S">small display</Display>\n<Display size="M">medium display</Display>\n<Display size="L">large display</Display>' },
+    ],
+  },
+  {
+    name: 'Headline',
+    category: 'Typography',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Headline text for section headings.',
+    props: [
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L', 'XL'], defaultValue: 'M', description: 'Headline size' },
+      { name: 'weight', type: 'enum', options: ['regular', 'medium', 'semibold', 'bold'], defaultValue: 'bold', description: 'Font weight' },
+      { name: 'align', type: 'enum', options: ['left', 'center', 'right'], defaultValue: 'left', description: 'Text alignment' },
+      { name: 'children', type: 'ReactNode', description: 'Headline content' },
+    ],
+    examples: [
+      { name: 'All Sizes', code: '<Headline size="XS">XS headline</Headline>\n<Headline size="S">S headline</Headline>\n<Headline size="M">M headline</Headline>\n<Headline size="L">L headline</Headline>\n<Headline size="XL">XL headline</Headline>' },
+    ],
+  },
+  {
+    name: 'Title',
+    category: 'Typography',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Title text for subsections.',
+    props: [
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L'], defaultValue: 'M', description: 'Title size' },
+      { name: 'weight', type: 'enum', options: ['regular', 'medium', 'semibold', 'bold'], defaultValue: 'semibold', description: 'Font weight' },
+      { name: 'align', type: 'enum', options: ['left', 'center', 'right'], defaultValue: 'left', description: 'Text alignment' },
+      { name: 'children', type: 'ReactNode', description: 'Title content' },
+    ],
+    examples: [
+      { name: 'All Sizes', code: '<Title size="XS">XS title</Title>\n<Title size="S">S title</Title>\n<Title size="M">M title</Title>\n<Title size="L">L title</Title>' },
     ],
   },
   {
     name: 'Label',
     category: 'Typography',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Form field label.',
+    description: 'Label text for form fields and UI elements.',
     props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Label content' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L'], defaultValue: 'M', description: 'Label size' },
+      { name: 'weight', type: 'enum', options: ['regular', 'medium', 'semibold', 'bold'], defaultValue: 'medium', description: 'Font weight' },
+      { name: 'children', type: 'ReactNode', description: 'Label content' },
     ],
     examples: [
       { name: 'Basic', code: '<Label>field label</Label>' },
     ],
   },
+
+  // Media Components
   {
-    name: 'Group',
+    name: 'Icon',
+    category: 'Media',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Icon component from the Jio icon library.',
+    props: [
+      { name: 'name', type: 'string', required: true, description: 'Icon name from icon library' },
+      { name: 'size', type: 'enum', options: ['XS', 'S', 'M', 'L', 'XL'], defaultValue: 'M', description: 'Icon size' },
+      { name: 'appearance', type: 'enum', options: ['auto', 'primary', 'secondary', 'neutral'], defaultValue: 'auto', description: 'Icon color scheme' },
+      { name: 'attention', type: 'enum', options: ['low', 'medium', 'high'], defaultValue: 'medium', description: 'Visual prominence' },
+    ],
+    examples: [
+      { name: 'Basic', code: '<Icon name="Heart" />' },
+      { name: 'All Sizes', code: '<Icon name="Heart" size="XS" />\n<Icon name="Heart" size="S" />\n<Icon name="Heart" size="M" />\n<Icon name="Heart" size="L" />\n<Icon name="Heart" size="XL" />' },
+    ],
+  },
+  {
+    name: 'Image',
+    category: 'Media',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Image component with loading states and aspect ratios.',
+    props: [
+      { name: 'src', type: 'string', required: true, description: 'Image source URL' },
+      { name: 'alt', type: 'string', required: true, description: 'Alternative text' },
+      { name: 'aspectRatio', type: 'enum', options: ['1/1', '16/9', '4/3', '3/2'], defaultValue: '16/9', description: 'Image aspect ratio' },
+      { name: 'fit', type: 'enum', options: ['cover', 'contain', 'fill'], defaultValue: 'cover', description: 'Object fit' },
+    ],
+    examples: [
+      { name: 'Basic', code: '<Image src="https://via.placeholder.com/300" alt="placeholder" />' },
+    ],
+  },
+  {
+    name: 'Logo',
+    category: 'Media',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Logo component with size variants.',
+    props: [
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Logo size' },
+      { name: 'appearance', type: 'enum', options: ['default', 'monochrome'], defaultValue: 'default', description: 'Logo appearance' },
+    ],
+    examples: [
+      { name: 'All Sizes', code: '<Logo size="S" />\n<Logo size="M" />\n<Logo size="L" />' },
+    ],
+  },
+  {
+    name: 'JioLogo',
+    category: 'Media',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Jio brand logo component.',
+    props: [
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Logo size' },
+    ],
+    examples: [
+      { name: 'All Sizes', code: '<JioLogo size="S" />\n<JioLogo size="M" />\n<JioLogo size="L" />' },
+    ],
+  },
+  {
+    name: 'Avatar',
+    category: 'Data Display',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Avatar component for user profiles with extensive size options.',
+    props: [
+      { name: 'size', type: 'enum', options: ['2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', 'fill'], defaultValue: 'M', description: 'Avatar size' },
+      { name: 'attention', type: 'enum', options: ['high', 'medium'], defaultValue: 'medium', description: 'Visual prominence' },
+      { name: 'src', type: 'string', description: 'Image source URL' },
+      { name: 'alt', type: 'string', description: 'Alternative text' },
+    ],
+    examples: [
+      { name: 'All Sizes', code: '<Avatar size="2XS" />\n<Avatar size="XS" />\n<Avatar size="S" />\n<Avatar size="M" />\n<Avatar size="L" />\n<Avatar size="XL" />\n<Avatar size="2XL" />\n<Avatar size="3XL" />\n<Avatar size="4XL" />' },
+    ],
+  },
+
+  // Feedback Components
+  {
+    name: 'Toast',
+    category: 'Feedback',
+    importPath: "@marcelinodzn/ds-react",
+    description: 'Toast notification component.',
+    props: [
+      { name: 'appearance', type: 'enum', options: ['informative', 'positive', 'warning', 'negative'], defaultValue: 'informative', description: 'Toast type' },
+      { name: 'size', type: 'enum', options: ['S', 'M', 'L'], defaultValue: 'M', description: 'Toast size' },
+      { name: 'children', type: 'ReactNode', description: 'Toast message' },
+    ],
+    examples: [
+      { name: 'Basic', code: '<Toast appearance="positive">success message</Toast>' },
+    ],
+  },
+
+  // Utility Components
+  {
+    name: 'AccountsRail',
     category: 'Utility',
     importPath: "@marcelinodzn/ds-react",
-    description: 'Group related elements together.',
+    description: 'Account rail component for displaying account information.',
     props: [
-      { name: 'children', type: 'ReactNode', required: true, description: 'Group content' },
+      { name: 'accounts', type: 'array', required: true, description: 'Array of account data' },
+      { name: 'activeIndex', type: 'number', defaultValue: 0, description: 'Currently active account index' },
+      { name: 'onAccountChange', type: 'function', description: 'Account change callback' },
     ],
     examples: [
-      { name: 'Basic', code: '<Group>\n  <Button>one</Button>\n  <Button>two</Button>\n</Group>' },
-    ],
-  },
-  {
-    name: 'Toolbar',
-    category: 'Utility',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Toolbar container for action buttons.',
-    props: [
-      { name: 'orientation', type: 'enum', options: ['horizontal', 'vertical'], defaultValue: 'horizontal', description: 'Toolbar orientation' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Toolbar content' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<Toolbar>\n  <Button>save</Button>\n  <Button>cancel</Button>\n</Toolbar>' },
-    ],
-  },
-  {
-    name: 'ToggleButton',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Toggle button with pressed state.',
-    props: [
-      { name: 'isSelected', type: 'boolean', description: 'Controlled selected state' },
-      { name: 'defaultSelected', type: 'boolean', defaultValue: false, description: 'Default selected state' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the button' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'Button content' },
-      { name: 'onChange', type: 'function', description: 'Change handler' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<ToggleButton>bold</ToggleButton>' },
-    ],
-  },
-  {
-    name: 'ComboBox',
-    category: 'Form',
-    importPath: "@marcelinodzn/ds-react",
-    description: 'Combobox with autocomplete functionality.',
-    props: [
-      { name: 'label', type: 'string', description: 'Field label' },
-      { name: 'placeholder', type: 'string', description: 'Placeholder text' },
-      { name: 'children', type: 'ReactNode', required: true, description: 'ListBoxItem children' },
-      { name: 'isDisabled', type: 'boolean', defaultValue: false, description: 'Disables the combobox' },
-    ],
-    examples: [
-      { name: 'Basic', code: '<ComboBox label="country">\n  <ListBoxItem id="us">united states</ListBoxItem>\n  <ListBoxItem id="uk">united kingdom</ListBoxItem>\n</ComboBox>' },
+      { name: 'Basic', code: '<AccountsRail accounts={[{id: "1", type: "financial", balance: "₹2,450", balanceLabel: "Total Balance"}]} />' },
     ],
   },
 ];
