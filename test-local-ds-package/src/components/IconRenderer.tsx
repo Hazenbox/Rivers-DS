@@ -1,4 +1,5 @@
-import { DynamicIcon } from '@marcelinodzn/ds-react/icons';
+import { useDynamicIcon } from '@marcelinodzn/ds-react/icons';
+import { useEffect, useState } from 'react';
 
 interface IconRendererProps {
   name: string;
@@ -28,16 +29,37 @@ function PlaceholderIcon({ size = 24 }: { size?: number }) {
 }
 
 export function IconRenderer({ name, size = 24, className, style }: IconRendererProps) {
-  return (
-    <DynamicIcon 
-      name={name}
-      width={size}
-      height={size}
-      className={className}
-      style={style}
-      fallback={<PlaceholderIcon size={size} />}
-    />
-  );
+  const { icon: IconComponent, loading, error } = useDynamicIcon(name);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    if (error) {
+      setHasError(true);
+      console.warn(`Failed to load icon: ${name}`, error);
+    }
+  }, [error, name]);
+
+  if (loading) {
+    return <PlaceholderIcon size={size} />;
+  }
+
+  if (hasError || !IconComponent) {
+    return <PlaceholderIcon size={size} />;
+  }
+
+  try {
+    return (
+      <IconComponent 
+        width={size}
+        height={size}
+        className={className}
+        style={style}
+      />
+    );
+  } catch (err) {
+    console.error(`Error rendering icon ${name}:`, err);
+    return <PlaceholderIcon size={size} />;
+  }
 }
 
 export default IconRenderer;
