@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { ComponentMeta, PropDefinition } from '../../config/components';
 import CodeSnippet from './CodeSnippet';
-import './ComponentDemo.css';
+import { Text, Card, CardBody, Badge, Checkbox } from '@marcelinodzn/ds-react';
 
 interface ComponentDemoProps {
   component: ComponentMeta;
@@ -18,9 +18,6 @@ function ComponentDemo({ component }: ComponentDemoProps) {
     });
     return initial;
   });
-
-  const [activeExample, setActiveExample] = useState(0);
-  const [copied, setCopied] = useState(false);
 
   const handlePropChange = (propName: string, value: unknown) => {
     setPropValues(prev => ({ ...prev, [propName]: value }));
@@ -56,26 +53,17 @@ function ComponentDemo({ component }: ComponentDemoProps) {
 
   const importStatement = `import { ${component.name} } from '${component.importPath}';`;
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const renderPropInput = (prop: PropDefinition) => {
     const value = propValues[prop.name];
 
     switch (prop.type) {
       case 'boolean':
         return (
-          <label className="demo-prop-checkbox">
-            <input
-              type="checkbox"
-              checked={!!value}
-              onChange={e => handlePropChange(prop.name, e.target.checked)}
-            />
-            <span className="demo-prop-checkbox-label">{value ? 'true' : 'false'}</span>
-          </label>
+          <Checkbox 
+            isSelected={!!value}
+            onChange={checked => handlePropChange(prop.name, checked)}
+            label={value ? 'true' : 'false'}
+          />
         );
 
       case 'enum':
@@ -83,7 +71,7 @@ function ComponentDemo({ component }: ComponentDemoProps) {
           <select
             value={String(value ?? '')}
             onChange={e => handlePropChange(prop.name, e.target.value)}
-            className="demo-prop-select"
+            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #e2e4e8' }}
           >
             <option value="">select...</option>
             {prop.options?.map(opt => (
@@ -93,160 +81,124 @@ function ComponentDemo({ component }: ComponentDemoProps) {
         );
 
       case 'number':
-        return (
-          <input
-            type="number"
-            value={value as number ?? ''}
-            onChange={e => handlePropChange(prop.name, e.target.value ? Number(e.target.value) : undefined)}
-            className="demo-prop-input"
-            placeholder="0"
-          />
-        );
-
       case 'string':
       case 'ReactNode':
         return (
           <input
-            type="text"
+            type={prop.type === 'number' ? 'number' : 'text'}
             value={String(value ?? '')}
-            onChange={e => handlePropChange(prop.name, e.target.value)}
-            className="demo-prop-input"
+            onChange={e => handlePropChange(prop.name, prop.type === 'number' ? Number(e.target.value) : e.target.value)}
             placeholder={prop.name === 'children' ? 'content' : `enter ${prop.name}...`}
+            style={{ padding: '8px', borderRadius: '4px', border: '1px solid #e2e4e8', width: '100%' }}
           />
         );
 
       default:
-        return (
-          <span className="demo-prop-readonly">{prop.type}</span>
-        );
+        return <Text>{prop.type}</Text>;
     }
   };
 
   return (
-    <div className="component-demo">
-      <div className="demo-breadcrumb">
-        <Link to="/components">components</Link>
-        <span>/</span>
-        <span>{component.name.toLowerCase()}</span>
+    <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
+        <RouterLink to="/components" style={{ textDecoration: 'none', color: '#6366f1' }}>
+          <Text>components</Text>
+        </RouterLink>
+        <Text>/</Text>
+        <Text>{component.name.toLowerCase()}</Text>
       </div>
 
-      <div className="demo-header">
-        <div className="demo-title-row">
-          <h1 className="demo-title">{component.name.toLowerCase()}</h1>
-          <span className="demo-category">{component.category.toLowerCase()}</span>
+      <div style={{ marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+          <h1 style={{ fontSize: '32px', fontWeight: 700, margin: 0 }}>{component.name.toLowerCase()}</h1>
+          <Badge>{component.category.toLowerCase()}</Badge>
         </div>
-        <p className="demo-description">{component.description}</p>
+        <Text>{component.description}</Text>
       </div>
 
-      <section className="demo-section">
-        <h2 className="demo-section-title">import</h2>
-        <CodeSnippet code={importStatement} onCopy={() => handleCopy(importStatement)} />
-      </section>
+      <div style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '16px' }}>import</h2>
+        <CodeSnippet code={importStatement} />
+      </div>
 
-      <section className="demo-section">
-        <h2 className="demo-section-title">playground</h2>
-        <div className="demo-playground">
-          <div className="demo-preview">
-            <div className="demo-preview-content">
-              <div className="demo-preview-placeholder">
-                component preview would render here with the actual component from @marcelinodzn/ds-react
-              </div>
-              <div className="demo-preview-code">
-                <CodeSnippet code={generatedCode} onCopy={() => handleCopy(generatedCode)} />
-              </div>
-            </div>
-          </div>
-          <div className="demo-props-panel">
-            <h3 className="demo-props-title">props</h3>
-            <div className="demo-props-list">
-              {component.props.map(prop => (
-                <div key={prop.name} className="demo-prop-item">
-                  <div className="demo-prop-header">
-                    <span className="demo-prop-name">
-                      {prop.name}
-                      {prop.required && <span className="demo-prop-required">*</span>}
-                    </span>
-                    <span className="demo-prop-type">{prop.type}</span>
-                  </div>
-                  {renderPropInput(prop)}
-                  <p className="demo-prop-desc">{prop.description}</p>
+      <div style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '16px' }}>playground</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px' }}>
+          <Card>
+            <CardBody>
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div style={{ minHeight: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f8f9fa', borderRadius: '8px', padding: '24px' }}>
+                  <Text>component preview placeholder</Text>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+                <CodeSnippet code={generatedCode} />
+              </div>
+            </CardBody>
+          </Card>
 
-      <section className="demo-section">
-        <h2 className="demo-section-title">examples</h2>
-        <div className="demo-examples">
-          <div className="demo-examples-tabs">
-            {component.examples.map((example, idx) => (
-              <button
-                key={example.name}
-                className={`demo-example-tab ${idx === activeExample ? 'active' : ''}`}
-                onClick={() => setActiveExample(idx)}
-              >
-                {example.name.toLowerCase()}
-              </button>
-            ))}
-          </div>
-          <div className="demo-example-content">
-            <CodeSnippet 
-              code={component.examples[activeExample]?.code || ''} 
-              onCopy={() => handleCopy(component.examples[activeExample]?.code || '')}
-            />
-            {component.examples[activeExample]?.description && (
-              <p className="demo-example-desc">{component.examples[activeExample].description}</p>
-            )}
-          </div>
+          <Card>
+            <CardBody>
+              <div style={{ padding: '20px', maxHeight: '500px', overflowY: 'auto' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>props</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {component.props.map(prop => (
+                    <div key={prop.name} style={{ paddingBottom: '16px', borderBottom: '1px solid #e2e4e8' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <Text>{prop.name}{prop.required && '*'}</Text>
+                        <Badge>{prop.type}</Badge>
+                      </div>
+                      {renderPropInput(prop)}
+                      <Text style={{ fontSize: '12px', marginTop: '4px' }}>{prop.description}</Text>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardBody>
+          </Card>
         </div>
-      </section>
+      </div>
 
-      <section className="demo-section">
-        <h2 className="demo-section-title">props reference</h2>
-        <div className="demo-props-table-wrapper">
-          <table className="demo-props-table">
+      <div style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '16px' }}>examples</h2>
+        {component.examples.map((example) => (
+          <div key={example.name} style={{ marginBottom: '16px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>{example.name.toLowerCase()}</h3>
+            <CodeSnippet code={example.code} />
+            {example.description && <Text style={{ marginTop: '8px' }}>{example.description}</Text>}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ marginBottom: '48px' }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '16px' }}>props reference</h2>
+        <div style={{ marginTop: '16px', overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr>
-                <th>prop</th>
-                <th>type</th>
-                <th>default</th>
-                <th>description</th>
+              <tr style={{ borderBottom: '2px solid #e2e4e8' }}>
+                <th style={{ textAlign: 'left', padding: '12px', fontWeight: 600 }}>prop</th>
+                <th style={{ textAlign: 'left', padding: '12px', fontWeight: 600 }}>type</th>
+                <th style={{ textAlign: 'left', padding: '12px', fontWeight: 600 }}>default</th>
+                <th style={{ textAlign: 'left', padding: '12px', fontWeight: 600 }}>description</th>
               </tr>
             </thead>
             <tbody>
               {component.props.map(prop => (
-                <tr key={prop.name}>
-                  <td>
-                    <code className="demo-prop-code">
-                      {prop.name}
-                      {prop.required && <span className="demo-prop-required">*</span>}
-                    </code>
+                <tr key={prop.name} style={{ borderBottom: '1px solid #e2e4e8' }}>
+                  <td style={{ padding: '12px' }}>
+                    <code>{prop.name}{prop.required && '*'}</code>
                   </td>
-                  <td>
-                    <code className="demo-type-code">
-                      {prop.type === 'enum' ? prop.options?.join(' | ') : prop.type}
-                    </code>
+                  <td style={{ padding: '12px' }}>
+                    <code>{prop.type === 'enum' ? prop.options?.join(' | ') : prop.type}</code>
                   </td>
-                  <td>
-                    {prop.defaultValue !== undefined ? (
-                      <code className="demo-default-code">{String(prop.defaultValue)}</code>
-                    ) : (
-                      <span className="demo-no-default">-</span>
-                    )}
+                  <td style={{ padding: '12px' }}>
+                    {prop.defaultValue !== undefined ? <code>{String(prop.defaultValue)}</code> : <Text>-</Text>}
                   </td>
-                  <td>{prop.description}</td>
+                  <td style={{ padding: '12px' }}>{prop.description}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </section>
-
-      {copied && (
-        <div className="demo-toast">copied to clipboard</div>
-      )}
+      </div>
     </div>
   );
 }

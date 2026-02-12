@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Header.css';
+import { Button, Text } from '@marcelinodzn/ds-react';
 
 interface HeaderProps {
   theme: 'light' | 'dark';
@@ -47,11 +47,24 @@ function Header({ theme, onToggleTheme, onToggleSidebar, sidebarOpen }: HeaderPr
   };
 
   return (
-    <header className="header">
-      <div className="header-left">
-        <button 
-          className="header-menu-btn" 
-          onClick={onToggleSidebar}
+    <header style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '60px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 20px',
+      borderBottom: '1px solid #e2e4e8',
+      backgroundColor: '#ffffff',
+      zIndex: 100
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <Button 
+          contained={false}
+          onPress={onToggleSidebar}
           aria-label={sidebarOpen ? 'close sidebar' : 'open sidebar'}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -65,33 +78,44 @@ function Header({ theme, onToggleTheme, onToggleSidebar, sidebarOpen }: HeaderPr
               </>
             )}
           </svg>
-        </button>
-        <a href="/" className="header-logo">
-          <span className="header-logo-icon">DS</span>
-          <span className="header-logo-text">component viewer</span>
+        </Button>
+        <a href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '32px',
+            height: '32px',
+            background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+            color: 'white',
+            fontWeight: 700,
+            fontSize: '12px',
+            borderRadius: '8px'
+          }}>DS</div>
+          <Text>component viewer</Text>
         </a>
       </div>
 
-      <div className="header-center">
-        <button 
-          className="header-search-trigger"
-          onClick={() => setSearchOpen(true)}
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', maxWidth: '500px', margin: '0 auto' }}>
+        <Button 
+          onPress={() => setSearchOpen(true)}
+          style={{ width: '100%', maxWidth: '400px' }}
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <span>search...</span>
-          <kbd>
-            <span className="kbd-meta">⌘</span>K
-          </kbd>
-        </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
+              <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            <Text>search...</Text>
+            <span style={{ marginLeft: 'auto', fontSize: '12px' }}>⌘K</span>
+          </div>
+        </Button>
       </div>
 
-      <div className="header-right">
-        <button 
-          className="header-theme-btn"
-          onClick={onToggleTheme}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <Button 
+          contained={false}
+          onPress={onToggleTheme}
           aria-label={`switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
           {theme === 'light' ? (
@@ -104,22 +128,43 @@ function Header({ theme, onToggleTheme, onToggleSidebar, sidebarOpen }: HeaderPr
               <path d="M17.5 11.5C17.5 15.366 14.366 18.5 10.5 18.5C6.634 18.5 3.5 15.366 3.5 11.5C3.5 7.634 6.634 4.5 10.5 4.5C10.834 4.5 11.16 4.526 11.48 4.574C10.282 5.802 9.5 7.516 9.5 9.5C9.5 13.366 12.634 16.5 16.5 16.5C16.838 16.5 17.172 16.474 17.5 16.426V11.5Z" stroke="currentColor" strokeWidth="1.5"/>
             </svg>
           )}
-        </button>
-        <a 
-          href="https://www.npmjs.com/package/@marcelinodzn/ds-react" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="header-link"
-        >
-          npm
+        </Button>
+        <a href="https://www.npmjs.com/package/@marcelinodzn/ds-react" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <Text>npm</Text>
         </a>
       </div>
 
       {searchOpen && (
-        <div className="search-modal-overlay" onClick={() => setSearchOpen(false)}>
-          <div className="search-modal" onClick={e => e.stopPropagation()}>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          paddingTop: '100px',
+          zIndex: 200
+        }} onClick={() => setSearchOpen(false)}>
+          <div style={{
+            width: '100%',
+            maxWidth: '560px',
+            backgroundColor: '#ffffff',
+            border: '1px solid #e2e4e8',
+            borderRadius: '12px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            overflow: 'hidden'
+          }} onClick={e => e.stopPropagation()}>
             <form onSubmit={handleSearch}>
-              <div className="search-modal-input-wrapper">
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '16px 20px',
+                borderBottom: '1px solid #e2e4e8'
+              }}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="1.5"/>
                   <path d="M14 14L18 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -130,14 +175,26 @@ function Header({ theme, onToggleTheme, onToggleSidebar, sidebarOpen }: HeaderPr
                   placeholder="search components, tokens, icons..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="search-modal-input"
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    background: 'none',
+                    fontSize: '16px',
+                    outline: 'none'
+                  }}
                 />
-                <kbd className="search-modal-kbd">esc</kbd>
+                <Text>esc</Text>
               </div>
             </form>
-            <div className="search-modal-footer">
-              <span>navigate with arrow keys</span>
-              <span>press enter to search</span>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '12px 20px',
+              backgroundColor: '#f8f9fa',
+              fontSize: '12px'
+            }}>
+              <Text>navigate with arrow keys</Text>
+              <Text>press enter to search</Text>
             </div>
           </div>
         </div>

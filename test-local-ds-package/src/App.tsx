@@ -6,7 +6,6 @@ import Home from './pages/Home'
 import ComponentPage from './pages/ComponentPage'
 import TokensPage from './pages/TokensPage'
 import IconsPage from './pages/IconsPage'
-import './App.css'
 
 function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -17,6 +16,8 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
+    document.body.style.margin = '0'
+    document.body.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     localStorage.setItem('theme', theme)
   }, [theme])
 
@@ -25,16 +26,22 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <Header 
         theme={theme} 
         onToggleTheme={toggleTheme}
         onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
         sidebarOpen={sidebarOpen}
       />
-      <div className="app-body">
+      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className={`main-content ${sidebarOpen ? '' : 'sidebar-closed'}`}>
+        <main style={{ 
+          flex: 1, 
+          overflow: 'auto', 
+          padding: '32px',
+          marginLeft: sidebarOpen ? '280px' : '0',
+          transition: 'margin-left 0.3s ease'
+        }}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/components" element={<ComponentPage />} />

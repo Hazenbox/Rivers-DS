@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { componentCategories } from '../../config/components';
 import { allTokenGroups } from '../../config/tokens';
 import { iconCategories } from '../../config/icons';
-import './Sidebar.css';
+import { Button, Text } from '@marcelinodzn/ds-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -79,61 +79,104 @@ function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   return (
     <>
-      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <nav className="sidebar-nav">
+      <aside style={{
+        position: 'fixed',
+        top: '60px',
+        left: 0,
+        bottom: 0,
+        width: '280px',
+        backgroundColor: '#ffffff',
+        borderRight: '1px solid #e2e4e8',
+        display: 'flex',
+        flexDirection: 'column',
+        zIndex: 50,
+        overflowY: 'auto',
+        transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+        transition: 'transform 0.3s ease'
+      }}>
+        <nav style={{ flex: 1, padding: '16px 12px' }}>
           <NavLink 
             to="/" 
-            className={({ isActive }) => `sidebar-home-link ${isActive ? 'active' : ''}`}
+            style={({ isActive }) => ({
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 12px',
+              marginBottom: '8px',
+              textDecoration: 'none',
+              borderRadius: '8px',
+              backgroundColor: isActive ? '#eef2ff' : 'transparent',
+              color: isActive ? '#6366f1' : '#4a4a68'
+            })}
             onClick={() => window.innerWidth < 768 && onClose()}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M2 6L8 2L14 6V13C14 13.5523 13.5523 14 13 14H3C2.44772 14 2 13.5523 2 13V6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M6 14V9H10V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            home
+            <Text>home</Text>
           </NavLink>
 
           {navSections.map(section => (
-            <div key={section.title} className="sidebar-section">
-              <button
-                className={`sidebar-section-header ${expandedSections.includes(section.title) ? 'expanded' : ''}`}
-                onClick={() => toggleSection(section.title)}
+            <div key={section.title} style={{ marginBottom: '4px' }}>
+              <Button
+                contained={false}
+                onPress={() => toggleSection(section.title)}
+                style={{ width: '100%', justifyContent: 'space-between', textTransform: 'uppercase', fontSize: '13px', fontWeight: 600 }}
               >
-                <span>{section.title}</span>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="sidebar-chevron">
+                <Text>{section.title}</Text>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{
+                  transform: expandedSections.includes(section.title) ? 'rotate(180deg)' : 'rotate(0deg)',
+                  transition: 'transform 0.2s'
+                }}>
                   <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-              </button>
+              </Button>
               {expandedSections.includes(section.title) && (
-                <ul className="sidebar-section-items">
+                <div style={{ padding: '4px 0 8px 0' }}>
                   {section.items.map(item => (
-                    <li key={item.path}>
-                      <NavLink
-                        to={item.path}
-                        className={() => `sidebar-link ${isActiveLink(item.path) ? 'active' : ''}`}
-                        onClick={() => window.innerWidth < 768 && onClose()}
-                      >
-                        {item.name}
-                      </NavLink>
-                    </li>
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      style={() => ({
+                        display: 'block',
+                        padding: '8px 12px 8px 24px',
+                        textDecoration: 'none',
+                        borderRadius: '6px',
+                        backgroundColor: isActiveLink(item.path) ? '#eef2ff' : 'transparent',
+                        color: isActiveLink(item.path) ? '#6366f1' : '#4a4a68'
+                      })}
+                      onClick={() => window.innerWidth < 768 && onClose()}
+                    >
+                      <Text>{item.name}</Text>
+                    </NavLink>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           ))}
         </nav>
 
-        <div className="sidebar-footer">
-          <div className="sidebar-footer-info">
-            <span>@marcelinodzn/ds-react</span>
-            <span className="sidebar-version">latest</span>
+        <div style={{ padding: '16px', borderTop: '1px solid #e2e4e8' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text>@marcelinodzn/ds-react</Text>
+            <Text>latest</Text>
           </div>
         </div>
       </aside>
 
       {isOpen && (
         <div 
-          className="sidebar-overlay" 
+          style={{
+            position: 'fixed',
+            top: '60px',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 40,
+            display: window.innerWidth < 768 ? 'block' : 'none'
+          }}
           onClick={onClose}
           aria-hidden="true"
         />

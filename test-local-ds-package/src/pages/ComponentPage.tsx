@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link as RouterLink } from 'react-router-dom';
 import { components, componentCategories, getComponentByName, getComponentsByCategory, ComponentMeta } from '../config/components';
 import ComponentDemo from '../components/ComponentViewer/ComponentDemo';
-import './ComponentPage.css';
+import { Text, SearchField, Badge, Card, CardBody } from '@marcelinodzn/ds-react';
 
 function ComponentPage() {
   const { name } = useParams();
@@ -47,78 +47,77 @@ function ComponentPage() {
   }
 
   return (
-    <div className="component-page">
-      <div className="component-page-header">
-        <h1 className="component-page-title">
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>
           {categoryFilter ? `${categoryFilter.toLowerCase()} components` : 'all components'}
         </h1>
-        <p className="component-page-desc">
+        <Text>
           {categoryFilter 
             ? `Browse ${filteredComponents.length} ${categoryFilter.toLowerCase()} components.`
             : `Browse all ${components.length} components in the design system.`
           }
-        </p>
+        </Text>
       </div>
 
-      <div className="component-page-controls">
-        <div className="component-search-wrapper">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <input
-            type="text"
-            placeholder="search components..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="component-search-input"
-          />
-        </div>
-        <div className="component-category-filters">
-          <Link 
-            to="/components" 
-            className={`component-category-btn ${!categoryFilter ? 'active' : ''}`}
-          >
-            all
-          </Link>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+        <SearchField 
+          label="search"
+          placeholder="search components..."
+          value={searchQuery}
+          onChange={setSearchQuery}
+          style={{ maxWidth: '400px' }}
+        />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <RouterLink to="/components" style={{ textDecoration: 'none' }}>
+            <Badge>{!categoryFilter ? 'all' : 'all'}</Badge>
+          </RouterLink>
           {componentCategories.map(category => (
-            <Link
+            <RouterLink
               key={category}
               to={`/components?category=${encodeURIComponent(category)}`}
-              className={`component-category-btn ${categoryFilter === category ? 'active' : ''}`}
+              style={{ textDecoration: 'none' }}
             >
-              {category.toLowerCase()}
-            </Link>
+              <Badge>{category.toLowerCase()}</Badge>
+            </RouterLink>
           ))}
         </div>
       </div>
 
       {filteredComponents.length === 0 ? (
-        <div className="component-empty">
-          <p>no components found matching "{searchQuery}"</p>
+        <div style={{ textAlign: 'center', padding: '64px 20px' }}>
+          <Text>no components found matching "{searchQuery}"</Text>
         </div>
       ) : (
-        <div className="component-groups">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
           {Object.entries(groupedComponents).map(([category, comps]) => (
-            <div key={category} className="component-group">
-              <h2 className="component-group-title">{category.toLowerCase()}</h2>
-              <div className="component-grid">
+            <div key={category}>
+              <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '16px', paddingBottom: '8px', borderBottom: '1px solid #e2e4e8' }}>
+                {category.toLowerCase()}
+              </h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
                 {comps.map(comp => (
-                  <Link 
+                  <RouterLink 
                     key={comp.name} 
                     to={`/components/${comp.name.toLowerCase()}`}
-                    className="component-card"
+                    style={{ textDecoration: 'none' }}
                   >
-                    <div className="component-card-header">
-                      <span className="component-card-name">{comp.name.toLowerCase()}</span>
-                      <span className="component-card-category">{comp.category.toLowerCase()}</span>
-                    </div>
-                    <p className="component-card-desc">{comp.description}</p>
-                    <div className="component-card-meta">
-                      <span>{comp.props.length} props</span>
-                      <span>{comp.examples.length} examples</span>
-                    </div>
-                  </Link>
+                    <Card>
+                      <CardBody>
+                        <div style={{ padding: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                            <h4 style={{ fontSize: '18px', fontWeight: 600, margin: 0 }}>{comp.name.toLowerCase()}</h4>
+                            <Badge>{comp.category.toLowerCase()}</Badge>
+                          </div>
+                          <Text>{comp.description}</Text>
+                          <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }}>
+                            <Text>{comp.props.length} props</Text>
+                            <Text>{comp.examples.length} examples</Text>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  </RouterLink>
                 ))}
               </div>
             </div>

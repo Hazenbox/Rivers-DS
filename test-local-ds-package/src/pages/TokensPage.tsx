@@ -1,32 +1,13 @@
 import { useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import { allTokenGroups, getTokenGroupByName, TokenGroup, TokenCategory, Token } from '../config/tokens';
-import './TokensPage.css';
+import { Text, SearchField, Badge, Card, CardBody, Button } from '@marcelinodzn/ds-react';
 
 function TokensPage() {
   const { category } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
-  const [copiedToken, setCopiedToken] = useState<string | null>(null);
 
   const selectedGroup = category ? getTokenGroupByName(category) : null;
-
-  const handleCopyToken = (token: Token, type: 'name' | 'value' | 'css') => {
-    let text = '';
-    switch (type) {
-      case 'name':
-        text = token.name;
-        break;
-      case 'value':
-        text = token.value;
-        break;
-      case 'css':
-        text = token.cssVariable ? `var(${token.cssVariable})` : token.value;
-        break;
-    }
-    navigator.clipboard.writeText(text);
-    setCopiedToken(token.name);
-    setTimeout(() => setCopiedToken(null), 2000);
-  };
 
   const filteredGroups = useMemo(() => {
     if (!searchQuery) return selectedGroup ? [selectedGroup] : allTokenGroups;
@@ -63,14 +44,32 @@ function TokensPage() {
     );
   }, [filteredGroups]);
 
+  const handleCopyToken = (token: Token, type: 'name' | 'value' | 'css') => {
+    let text = '';
+    switch (type) {
+      case 'name':
+        text = token.name;
+        break;
+      case 'value':
+        text = token.value;
+        break;
+      case 'css':
+        text = token.cssVariable ? `var(${token.cssVariable})` : token.value;
+        break;
+    }
+    navigator.clipboard.writeText(text);
+  };
+
   const renderTokenPreview = (token: Token, groupName: string) => {
     if (groupName === 'Colors') {
       return (
-        <div 
-          className="token-color-preview" 
-          style={{ backgroundColor: token.value }}
-          title={token.value}
-        />
+        <div style={{ 
+          width: '48px', 
+          height: '48px', 
+          backgroundColor: token.value,
+          borderRadius: '8px',
+          border: '1px solid #e2e4e8'
+        }} />
       );
     }
     
@@ -78,164 +77,108 @@ function TokensPage() {
       const numericValue = parseInt(token.value);
       if (!isNaN(numericValue) && numericValue > 0 && numericValue <= 100) {
         return (
-          <div className="token-spacing-preview">
-            <div 
-              className="token-spacing-bar" 
-              style={{ width: `${Math.min(numericValue, 100)}px` }}
-            />
+          <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', backgroundColor: '#f8f9fa', borderRadius: '6px', padding: '4px' }}>
+            <div style={{ height: '100%', width: `${Math.min(numericValue, 100)}px`, backgroundColor: '#6366f1', borderRadius: '4px', minWidth: '4px' }} />
           </div>
         );
       }
     }
 
-    if (groupName === 'Typography') {
-      if (token.name.includes('Text/') && !token.name.includes('Text/High') && !token.name.includes('Text/Medium') && !token.name.includes('Text/Low')) {
-        return (
-          <span 
-            className="token-typography-preview" 
-            style={{ fontSize: token.value }}
-          >
-            Aa
-          </span>
-        );
-      }
-      if (token.name.includes('Weight/')) {
-        return (
-          <span 
-            className="token-typography-preview" 
-            style={{ fontWeight: token.value }}
-          >
-            Aa
-          </span>
-        );
-      }
+    if (groupName === 'Typography' && token.name.includes('Text/')) {
+      return <span style={{ fontSize: token.value }}>Aa</span>;
     }
 
     if (groupName === 'Shape') {
-      return (
-        <div 
-          className="token-shape-preview" 
-          style={{ borderRadius: token.value }}
-        />
-      );
-    }
-
-    if (groupName === 'Surface' && token.name.includes('Shadow')) {
-      return (
-        <div 
-          className="token-shadow-preview" 
-          style={{ boxShadow: token.value }}
-        />
-      );
+      return <div style={{ width: '48px', height: '48px', backgroundColor: '#6366f1', opacity: 0.3, borderRadius: token.value }} />;
     }
 
     return null;
   };
 
   return (
-    <div className="tokens-page">
-      <div className="tokens-page-header">
-        <h1 className="tokens-page-title">
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>
           {selectedGroup ? `${selectedGroup.name.toLowerCase()} tokens` : 'design tokens'}
         </h1>
-        <p className="tokens-page-desc">
+        <Text>
           {selectedGroup 
             ? selectedGroup.description 
             : `Browse all ${totalTokens} design tokens organized by category.`
           }
-        </p>
+        </Text>
       </div>
 
-      <div className="tokens-page-controls">
-        <div className="tokens-search-wrapper">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <input
-            type="text"
-            placeholder="search tokens..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="tokens-search-input"
-          />
-        </div>
-        <div className="tokens-category-filters">
-          <Link 
-            to="/tokens" 
-            className={`tokens-category-btn ${!category ? 'active' : ''}`}
-          >
-            all
-          </Link>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '32px' }}>
+        <SearchField
+          label="search"
+          placeholder="search tokens..."
+          value={searchQuery}
+          onChange={setSearchQuery}
+          style={{ maxWidth: '400px' }}
+        />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          <RouterLink to="/tokens" style={{ textDecoration: 'none' }}>
+            <Badge>all</Badge>
+          </RouterLink>
           {allTokenGroups.map(group => (
-            <Link
+            <RouterLink
               key={group.name}
               to={`/tokens/${group.name.toLowerCase()}`}
-              className={`tokens-category-btn ${category === group.name.toLowerCase() ? 'active' : ''}`}
+              style={{ textDecoration: 'none' }}
             >
-              {group.name.toLowerCase()}
-            </Link>
+              <Badge>{group.name.toLowerCase()}</Badge>
+            </RouterLink>
           ))}
         </div>
       </div>
 
       {filteredGroups.length === 0 ? (
-        <div className="tokens-empty">
-          <p>no tokens found matching "{searchQuery}"</p>
+        <div style={{ textAlign: 'center', padding: '64px 20px' }}>
+          <Text>no tokens found matching "{searchQuery}"</Text>
         </div>
       ) : (
-        <div className="tokens-groups">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
           {filteredGroups.map(group => (
-            <div key={group.name} className="tokens-group">
+            <div key={group.name}>
               {!selectedGroup && (
-                <h2 className="tokens-group-title">{group.name.toLowerCase()}</h2>
+                <h2 style={{ fontSize: '24px', fontWeight: 600, marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #e2e4e8' }}>
+                  {group.name.toLowerCase()}
+                </h2>
               )}
               
               {group.categories.map(cat => (
-                <div key={cat.name} className="tokens-category">
-                  <h3 className="tokens-category-title">{cat.name.toLowerCase()}</h3>
-                  <p className="tokens-category-desc">{cat.description}</p>
+                <div key={cat.name} style={{ marginBottom: '32px' }}>
+                  <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>{cat.name.toLowerCase()}</h3>
+                  <Text>{cat.description}</Text>
                   
-                  <div className="tokens-grid">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '12px', marginTop: '16px' }}>
                     {cat.tokens.map(token => (
-                      <div key={token.name} className="token-card">
-                        <div className="token-card-preview">
-                          {renderTokenPreview(token, group.name)}
-                        </div>
-                        <div className="token-card-content">
-                          <button 
-                            className="token-card-name"
-                            onClick={() => handleCopyToken(token, 'name')}
-                            title="click to copy token name"
-                          >
-                            {token.name}
-                            {copiedToken === token.name && (
-                              <span className="token-copied">copied!</span>
-                            )}
-                          </button>
-                          <div className="token-card-values">
-                            <button 
-                              className="token-value"
-                              onClick={() => handleCopyToken(token, 'value')}
-                              title="click to copy value"
-                            >
-                              {token.value}
-                            </button>
-                            {token.cssVariable && (
-                              <button 
-                                className="token-css-var"
-                                onClick={() => handleCopyToken(token, 'css')}
-                                title="click to copy css variable"
-                              >
-                                {token.cssVariable}
-                              </button>
-                            )}
+                      <Card key={token.name}>
+                        <CardBody>
+                          <div style={{ display: 'flex', gap: '12px', padding: '8px' }}>
+                            <div style={{ flexShrink: 0, width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              {renderTokenPreview(token, group.name)}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <Button contained={false} size="S" onPress={() => handleCopyToken(token, 'name')}>
+                                <Text>{token.name}</Text>
+                              </Button>
+                              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px' }}>
+                                <Button size="S" onPress={() => handleCopyToken(token, 'value')}>
+                                  <code style={{ fontSize: '11px' }}>{token.value}</code>
+                                </Button>
+                                {token.cssVariable && (
+                                  <Button size="S" onPress={() => handleCopyToken(token, 'css')}>
+                                    <code style={{ fontSize: '11px' }}>{token.cssVariable}</code>
+                                  </Button>
+                                )}
+                              </div>
+                              {token.description && <Text style={{ fontSize: '12px', marginTop: '4px' }}>{token.description}</Text>}
+                            </div>
                           </div>
-                          {token.description && (
-                            <p className="token-card-desc">{token.description}</p>
-                          )}
-                        </div>
-                      </div>
+                        </CardBody>
+                      </Card>
                     ))}
                   </div>
                 </div>
@@ -243,10 +186,6 @@ function TokensPage() {
             </div>
           ))}
         </div>
-      )}
-
-      {copiedToken && (
-        <div className="tokens-toast">copied to clipboard</div>
       )}
     </div>
   );

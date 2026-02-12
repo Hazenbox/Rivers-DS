@@ -1,14 +1,13 @@
 import { useState, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import Fuse from 'fuse.js';
 import { icons, iconCategories, getIconsByCategory, getIconImportPath, getIconUsageCode, IconMeta } from '../config/icons';
-import './IconsPage.css';
+import { Text, SearchField, Badge, Button, Card, CardBody } from '@marcelinodzn/ds-react';
 
 function IconsPage() {
   const { category } = useParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIcon, setSelectedIcon] = useState<IconMeta | null>(null);
-  const [copiedField, setCopiedField] = useState<string | null>(null);
   const [iconSize, setIconSize] = useState(24);
 
   const decodedCategory = category ? decodeURIComponent(category) : null;
@@ -37,117 +36,67 @@ function IconsPage() {
     return result;
   }, [decodedCategory, searchQuery, fuse]);
 
-  const handleCopy = (text: string, field: string) => {
+  const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    setTimeout(() => setCopiedField(null), 2000);
-  };
-
-  const handleIconClick = (icon: IconMeta) => {
-    setSelectedIcon(icon);
-  };
-
-  const closeIconDetail = () => {
-    setSelectedIcon(null);
   };
 
   return (
-    <div className="icons-page">
-      <div className="icons-page-header">
-        <h1 className="icons-page-title">
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '32px', fontWeight: 700, marginBottom: '8px' }}>
           {decodedCategory ? `${decodedCategory.toLowerCase()} icons` : 'icon library'}
         </h1>
-        <p className="icons-page-desc">
+        <Text>
           {decodedCategory 
             ? `Browse ${filteredIcons.length} icons in the ${decodedCategory.toLowerCase()} category.`
             : `Browse all ${icons.length}+ icons in the design system. Click any icon for details and code.`
           }
-        </p>
+        </Text>
       </div>
 
-      <div className="icons-page-controls">
-        <div className="icons-search-wrapper">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <input
-            type="text"
-            placeholder="search icons..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="icons-search-input"
-          />
-          {searchQuery && (
-            <button 
-              className="icons-search-clear"
-              onClick={() => setSearchQuery('')}
-            >
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M10 4L4 10M4 4L10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              </svg>
-            </button>
-          )}
-        </div>
-
-        <div className="icons-size-control">
-          <span className="icons-size-label">size:</span>
-          <button 
-            className={`icons-size-btn ${iconSize === 16 ? 'active' : ''}`}
-            onClick={() => setIconSize(16)}
-          >
-            16
-          </button>
-          <button 
-            className={`icons-size-btn ${iconSize === 24 ? 'active' : ''}`}
-            onClick={() => setIconSize(24)}
-          >
-            24
-          </button>
-          <button 
-            className={`icons-size-btn ${iconSize === 32 ? 'active' : ''}`}
-            onClick={() => setIconSize(32)}
-          >
-            32
-          </button>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
+        <SearchField
+          label="search"
+          placeholder="search icons..."
+          value={searchQuery}
+          onChange={setSearchQuery}
+          style={{ flex: 1, maxWidth: '400px' }}
+        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Text>size:</Text>
+          <Button size="S" appearance={iconSize === 16 ? 'primary' : undefined} onPress={() => setIconSize(16)}>16</Button>
+          <Button size="S" appearance={iconSize === 24 ? 'primary' : undefined} onPress={() => setIconSize(24)}>24</Button>
+          <Button size="S" appearance={iconSize === 32 ? 'primary' : undefined} onPress={() => setIconSize(32)}>32</Button>
         </div>
       </div>
 
-      <div className="icons-category-filters">
-        <Link 
-          to="/icons" 
-          className={`icons-category-btn ${!decodedCategory ? 'active' : ''}`}
-        >
-          all
-        </Link>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+        <RouterLink to="/icons" style={{ textDecoration: 'none' }}>
+          <Badge>all</Badge>
+        </RouterLink>
         {iconCategories.map(cat => (
-          <Link
+          <RouterLink
             key={cat}
             to={`/icons/${encodeURIComponent(cat)}`}
-            className={`icons-category-btn ${decodedCategory === cat ? 'active' : ''}`}
+            style={{ textDecoration: 'none' }}
           >
-            {cat.toLowerCase()}
-          </Link>
+            <Badge>{cat.toLowerCase()}</Badge>
+          </RouterLink>
         ))}
       </div>
 
       {filteredIcons.length === 0 ? (
-        <div className="icons-empty">
-          <p>no icons found matching "{searchQuery}"</p>
-          <button onClick={() => setSearchQuery('')} className="icons-empty-btn">
+        <div style={{ textAlign: 'center', padding: '64px 20px' }}>
+          <Text>no icons found matching "{searchQuery}"</Text>
+          <Button onPress={() => setSearchQuery('')} style={{ marginTop: '16px' }}>
             clear search
-          </button>
+          </Button>
         </div>
       ) : (
-        <div className="icons-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '8px' }}>
           {filteredIcons.map(icon => (
-            <button
-              key={icon.name}
-              className={`icon-card ${selectedIcon?.name === icon.name ? 'selected' : ''}`}
-              onClick={() => handleIconClick(icon)}
-              title={icon.name}
-            >
-              <div className="icon-card-preview" style={{ fontSize: iconSize }}>
+            <Button key={icon.name} onPress={() => setSelectedIcon(icon)}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '8px' }}>
                 <svg 
                   width={iconSize} 
                   height={iconSize} 
@@ -158,102 +107,115 @@ function IconsPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  {/* Placeholder icon - in real app, render actual icon component */}
                   <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
                   <circle cx="8.5" cy="8.5" r="1.5" />
                   <polyline points="21,15 16,10 5,21" />
                 </svg>
+                <Text style={{ fontSize: '11px', textAlign: 'center', wordBreak: 'break-word' }}>
+                  {icon.name.toLowerCase()}
+                </Text>
               </div>
-              <span className="icon-card-name">{icon.name.toLowerCase()}</span>
-            </button>
+            </Button>
           ))}
         </div>
       )}
 
       {selectedIcon && (
-        <div className="icon-detail-overlay" onClick={closeIconDetail}>
-          <div className="icon-detail-modal" onClick={e => e.stopPropagation()}>
-            <button className="icon-detail-close" onClick={closeIconDetail}>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </button>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 200,
+          padding: '20px'
+        }} onClick={() => setSelectedIcon(null)}>
+          <div style={{ maxWidth: '600px', width: '100%' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+            <Card>
+            <CardBody>
+              <div style={{ padding: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100px', height: '100px', margin: '0 auto 24px', backgroundColor: '#f8f9fa', borderRadius: '12px' }}>
+                  <svg 
+                    width={64} 
+                    height={64} 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21,15 16,10 5,21" />
+                  </svg>
+                </div>
+                
+                <h2 style={{ fontSize: '24px', fontWeight: 600, textAlign: 'center', marginBottom: '12px' }}>
+                  {selectedIcon.name}
+                </h2>
+                
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '6px', marginBottom: '24px' }}>
+                  {selectedIcon.keywords.map(keyword => (
+                    <Badge key={keyword}>{keyword}</Badge>
+                  ))}
+                </div>
 
-            <div className="icon-detail-preview">
-              <svg 
-                width={64} 
-                height={64} 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21,15 16,10 5,21" />
-              </svg>
-            </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>import</h3>
+                  <Card>
+                    <CardBody>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                        <code style={{ fontSize: '12px', flex: 1 }}>{getIconImportPath(selectedIcon.name)}</code>
+                        <Button size="S" onPress={() => handleCopy(getIconImportPath(selectedIcon.name))}>
+                          copy
+                        </Button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
 
-            <h2 className="icon-detail-name">{selectedIcon.name}</h2>
-            
-            <div className="icon-detail-keywords">
-              {selectedIcon.keywords.map(keyword => (
-                <span key={keyword} className="icon-detail-keyword">{keyword}</span>
-              ))}
-            </div>
+                <div style={{ marginBottom: '20px' }}>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>usage</h3>
+                  <Card>
+                    <CardBody>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                        <code style={{ fontSize: '12px', flex: 1 }}>{getIconUsageCode(selectedIcon.name)}</code>
+                        <Button size="S" onPress={() => handleCopy(getIconUsageCode(selectedIcon.name))}>
+                          copy
+                        </Button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
 
-            <div className="icon-detail-section">
-              <h3 className="icon-detail-section-title">import</h3>
-              <div className="icon-detail-code-block">
-                <code>{getIconImportPath(selectedIcon.name)}</code>
-                <button 
-                  className="icon-detail-copy"
-                  onClick={() => handleCopy(getIconImportPath(selectedIcon.name), 'import')}
-                >
-                  {copiedField === 'import' ? 'copied!' : 'copy'}
-                </button>
-              </div>
-            </div>
-
-            <div className="icon-detail-section">
-              <h3 className="icon-detail-section-title">usage</h3>
-              <div className="icon-detail-code-block">
-                <code>{getIconUsageCode(selectedIcon.name)}</code>
-                <button 
-                  className="icon-detail-copy"
-                  onClick={() => handleCopy(getIconUsageCode(selectedIcon.name), 'usage')}
-                >
-                  {copiedField === 'usage' ? 'copied!' : 'copy'}
-                </button>
-              </div>
-            </div>
-
-            <div className="icon-detail-sizes">
-              <h3 className="icon-detail-section-title">sizes</h3>
-              <div className="icon-detail-sizes-grid">
-                {[16, 20, 24, 32, 48].map(size => (
-                  <div key={size} className="icon-detail-size-item">
-                    <svg 
-                      width={size} 
-                      height={size} 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                      <circle cx="8.5" cy="8.5" r="1.5" />
-                      <polyline points="21,15 16,10 5,21" />
-                    </svg>
-                    <span>{size}px</span>
+                <div>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>sizes</h3>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+                    {[16, 20, 24, 32, 48].map(size => (
+                      <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', padding: '12px', backgroundColor: '#f8f9fa', borderRadius: '8px', minWidth: '60px' }}>
+                        <svg 
+                          width={size} 
+                          height={size} 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2"
+                        >
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                          <circle cx="8.5" cy="8.5" r="1.5" />
+                          <polyline points="21,15 16,10 5,21" />
+                        </svg>
+                        <Text>{size}px</Text>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
-            </div>
+            </CardBody>
+          </Card>
           </div>
         </div>
       )}
