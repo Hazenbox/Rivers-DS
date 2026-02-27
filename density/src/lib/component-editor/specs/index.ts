@@ -2,6 +2,12 @@
  * COMPONENT SPECIFICATIONS INDEX
  * 
  * Central export and registration for all component specifications.
+ * 
+ * This module provides specifications for shadcn/ui components including:
+ * - Slot definitions
+ * - Token assignments
+ * - Variant configurations
+ * - State specifications
  */
 
 import { registerComponents } from "../registry";
