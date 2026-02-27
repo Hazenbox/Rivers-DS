@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-density="default" suppressHydrationWarning>
-      <body className="antialiased">
+      <body className="antialiased font-sans">
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>
