@@ -1,14 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, ChevronDown, ChevronRight } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   LivePreview,
   TokenPropertyEditor,
@@ -23,7 +18,6 @@ import { cn } from "@/lib/utils";
 
 export default function ComponentEditorPage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(["primitive", "composite", "overlay"]);
   
   const selectedComponent = useEditorStore((state) => state.selectedComponent);
   const selectComponent = useEditorStore((state) => state.selectComponent);
@@ -52,14 +46,6 @@ export default function ComponentEditorPage() {
     
     return filtered;
   }, [componentsByCategory, searchQuery]);
-
-  const toggleCategory = (category: string) => {
-    setExpandedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
-    );
-  };
 
   const categoryLabels: Record<string, string> = {
     primitive: "Primitives",
@@ -90,42 +76,29 @@ export default function ComponentEditorPage() {
             </div>
           </div>
           
-          {/* Component List */}
+          {/* Component List - Flat with category headers */}
           <ScrollArea className="flex-1">
             <div className="py-2">
               {Object.entries(filteredComponents).map(([category, components]) => (
-                <Collapsible
-                  key={category}
-                  open={expandedCategories.includes(category)}
-                  onOpenChange={() => toggleCategory(category)}
-                >
-                  <CollapsibleTrigger className="flex items-center gap-1 w-full px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                    {expandedCategories.includes(category) ? (
-                      <ChevronDown className="size-4" />
-                    ) : (
-                      <ChevronRight className="size-4" />
-                    )}
+                <div key={category}>
+                  <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wide">
                     {categoryLabels[category] || category}
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <div className="ml-2">
-                      {components.map((spec) => (
-                        <button
-                          key={spec.name}
-                          onClick={() => selectComponent(spec.name)}
-                          className={cn(
-                            "w-full text-left px-4 py-1.5 text-sm transition-colors",
-                            selectedComponent === spec.name
-                              ? "bg-accent text-accent-foreground font-medium"
-                              : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                          )}
-                        >
-                          {spec.name}
-                        </button>
-                      ))}
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
+                  </div>
+                  {components.map((spec) => (
+                    <button
+                      key={spec.name}
+                      onClick={() => selectComponent(spec.name)}
+                      className={cn(
+                        "w-full text-left px-3 py-1.5 text-sm transition-colors",
+                        selectedComponent === spec.name
+                          ? "bg-accent text-accent-foreground font-medium"
+                          : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                      )}
+                    >
+                      {spec.name}
+                    </button>
+                  ))}
+                </div>
               ))}
             </div>
           </ScrollArea>

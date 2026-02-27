@@ -33,12 +33,12 @@ interface LivePreviewProps {
 // ============================================
 
 export function LivePreview({ componentName, className }: LivePreviewProps) {
-  const [simulatedState] = React.useState<InteractionState>("default");
   const [darkMode] = React.useState(false);
 
   const {
     selectedVariant,
     selectedSize,
+    selectedState,
     context,
     customTokens,
     componentOverrides,
@@ -64,9 +64,9 @@ export function LivePreview({ componentName, className }: LivePreviewProps) {
     return resolveComponentTokens(componentName, config, {
       variant: selectedVariant || undefined,
       size: selectedSize || undefined,
-      states: [simulatedState],
+      states: [selectedState],
     });
-  }, [spec, componentName, selectedVariant, selectedSize, simulatedState, context, darkMode, customTokens, componentOverrides]);
+  }, [spec, componentName, selectedVariant, selectedSize, selectedState, context, darkMode, customTokens, componentOverrides]);
 
   // Generate CSS custom properties
   const cssVariables = React.useMemo(() => {
@@ -98,7 +98,7 @@ export function LivePreview({ componentName, className }: LivePreviewProps) {
             componentName={componentName}
             variant={selectedVariant || spec.variants[0]?.value}
             size={selectedSize || spec.sizes[0]?.value}
-            state={simulatedState}
+            state={selectedState}
           />
         </div>
       </div>

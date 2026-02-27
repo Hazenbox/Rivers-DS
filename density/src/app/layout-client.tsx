@@ -30,7 +30,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
         <FontProvider>
           <ColorProvider>
             <div className="min-h-screen flex flex-col">
-              <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+              <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
                 <div className="flex items-center justify-between h-[var(--control-height-lg)] px-[var(--inset-lg)]">
                   <nav className="flex items-center gap-[var(--inline-gap)]">
                     <span className="font-bold mr-[var(--inset-md)]">Density Lab</span>
