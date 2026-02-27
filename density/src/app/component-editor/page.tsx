@@ -1,18 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, ChevronDown, ChevronRight, RotateCcw, Shuffle } from "lucide-react";
+import { Search, ChevronDown, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,7 +15,6 @@ import {
 } from "@/components/component-editor";
 import {
   useEditorStore,
-  getAllComponents,
   getComponentsGroupedByCategory,
   getComponent,
   type ComponentSpec,
@@ -86,16 +76,16 @@ export default function ComponentEditorPage() {
       {/* Main Content - Three Column Layout */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar - Component List */}
-        <aside className="w-[240px] border-r flex flex-col bg-muted/30">
+        <aside className="w-[240px] flex flex-col">
           {/* Search */}
-          <div className="p-3 border-b">
+          <div className="p-3">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 h-8 text-sm bg-background"
+                className="pl-8 h-8 text-sm"
               />
             </div>
           </div>
@@ -142,10 +132,12 @@ export default function ComponentEditorPage() {
         </aside>
 
         {/* Center - Live Preview */}
-        <main className="flex-1 flex flex-col overflow-hidden bg-background">
+        <main className="flex-1 flex flex-col overflow-hidden">
           {selectedComponent && selectedSpec ? (
             <div className="flex-1 p-8 overflow-auto">
-              <LivePreview componentName={selectedComponent} />
+              <div className="border rounded-lg p-6 min-h-[200px]">
+                <LivePreview componentName={selectedComponent} />
+              </div>
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center text-muted-foreground">
@@ -155,31 +147,11 @@ export default function ComponentEditorPage() {
         </main>
 
         {/* Right Sidebar - Token Properties */}
-        <aside className="w-[280px] border-l flex flex-col bg-muted/30">
+        <aside className="w-[280px] flex flex-col">
           <ScrollArea className="flex-1">
-            <div className="p-4 space-y-6">
-              {/* Settings Section */}
-              <div className="space-y-4">
-                <SettingRow label="Preset" value="Custom" />
-                <SettingRow label="Component Library" value="Radix UI" />
-                <SettingRow label="Style" value="Nova" />
-                <SettingRow label="Base Color" value="Neutral" />
-                <SettingRow label="Theme" value="Neutral" />
-                <SettingRow label="Icon Library" value="Lucide" />
-                <SettingRow label="Font" value="Inter" />
-                <SettingRow label="Radius" value="Default" />
-                <SettingRow label="Menu Color" value="Default" />
-                <SettingRow label="Menu Accent" value="Subtle" />
-              </div>
-
-              <Separator />
-
-              {/* Token Editor */}
+            <div className="p-4">
               {selectedComponent ? (
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Token Overrides</h3>
-                  <TokenPropertyEditor componentName={selectedComponent} />
-                </div>
+                <TokenPropertyEditor componentName={selectedComponent} />
               ) : (
                 <p className="text-sm text-muted-foreground">
                   Select a component to edit tokens
@@ -187,35 +159,8 @@ export default function ComponentEditorPage() {
               )}
             </div>
           </ScrollArea>
-
-          {/* Bottom Actions */}
-          <div className="border-t p-3 space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Shuffle</span>
-              <div className="flex items-center gap-2">
-                <span className="font-medium">Try Random</span>
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded">R</kbd>
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Reset</span>
-              <div className="flex items-center gap-2">
-                <span className="font-medium">Start Over</span>
-                <RotateCcw className="size-4" />
-              </div>
-            </div>
-          </div>
         </aside>
       </div>
-    </div>
-  );
-}
-
-function SettingRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
     </div>
   );
 }
