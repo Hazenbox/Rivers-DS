@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   DensityProvider,
-  DensityToggle,
   DisplaySettingsPanel,
   MetricsPanel,
   RadiusProvider,
@@ -50,7 +49,6 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
                     ))}
                   </nav>
                   <div className="flex items-center gap-2">
-                    <DensityToggle />
                     <DisplaySettingsPanel />
                   </div>
                 </div>
