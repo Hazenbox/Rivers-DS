@@ -12,6 +12,7 @@
 // ============================================
 
 export type UIFontPreset = 
+  | "geist"
   | "inter" 
   | "roboto" 
   | "open-sans" 
@@ -20,6 +21,7 @@ export type UIFontPreset =
   | "system";
 
 export type CodeFontPreset = 
+  | "geist-mono"
   | "jetbrains-mono" 
   | "fira-code" 
   | "source-code-pro" 
@@ -73,6 +75,7 @@ export const letterSpacings: Record<LetterSpacing, string> = {
 // ============================================
 
 export const uiFontStacks: Record<UIFontPreset, string> = {
+  "geist": "var(--font-geist), system-ui, sans-serif",
   "inter": "var(--font-inter), system-ui, sans-serif",
   "roboto": "var(--font-roboto), system-ui, sans-serif",
   "open-sans": "var(--font-open-sans), system-ui, sans-serif",
@@ -82,6 +85,7 @@ export const uiFontStacks: Record<UIFontPreset, string> = {
 };
 
 export const codeFontStacks: Record<CodeFontPreset, string> = {
+  "geist-mono": "var(--font-geist-mono), ui-monospace, monospace",
   "jetbrains-mono": "var(--font-jetbrains-mono), ui-monospace, monospace",
   "fira-code": "var(--font-fira-code), ui-monospace, monospace",
   "source-code-pro": "var(--font-source-code-pro), ui-monospace, monospace",
@@ -101,6 +105,12 @@ export const displayFontStacks: Record<DisplayFontPreset, string> = {
 // ============================================
 
 export const uiFontOptions = [
+  { 
+    value: "geist" as const, 
+    label: "Geist (Default)", 
+    description: "shadcn default",
+    category: "Default",
+  },
   { 
     value: "inter" as const, 
     label: "Inter", 
@@ -140,6 +150,12 @@ export const uiFontOptions = [
 ];
 
 export const codeFontOptions = [
+  { 
+    value: "geist-mono" as const, 
+    label: "Geist Mono (Default)", 
+    description: "shadcn default",
+    hasLigatures: false,
+  },
   { 
     value: "jetbrains-mono" as const, 
     label: "JetBrains Mono", 
@@ -203,8 +219,8 @@ export const displayFontOptions = [
 // DEFAULT VALUES
 // ============================================
 
-export const defaultUIFont: UIFontPreset = "inter";
-export const defaultCodeFont: CodeFontPreset = "jetbrains-mono";
+export const defaultUIFont: UIFontPreset = "geist";
+export const defaultCodeFont: CodeFontPreset = "geist-mono";
 export const defaultDisplayFont: DisplayFontPreset = "same-as-ui";
 
 // ============================================

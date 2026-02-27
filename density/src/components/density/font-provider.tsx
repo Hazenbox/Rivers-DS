@@ -39,8 +39,8 @@ interface FontProviderProps {
   storageDisplayKey?: string;
 }
 
-const validUIFonts: UIFontPreset[] = ["inter", "roboto", "open-sans", "nunito", "lexend", "system"];
-const validCodeFonts: CodeFontPreset[] = ["jetbrains-mono", "fira-code", "source-code-pro", "roboto-mono", "system"];
+const validUIFonts: UIFontPreset[] = ["geist", "inter", "roboto", "open-sans", "nunito", "lexend", "system"];
+const validCodeFonts: CodeFontPreset[] = ["geist-mono", "jetbrains-mono", "fira-code", "source-code-pro", "roboto-mono", "system"];
 const validDisplayFonts: DisplayFontPreset[] = ["same-as-ui", "playfair", "montserrat", "raleway"];
 
 export function FontProvider({

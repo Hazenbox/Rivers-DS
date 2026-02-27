@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import {
   Inter,
   Roboto,
@@ -15,6 +16,19 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { RootLayoutClient } from "./layout-client";
+
+// Default shadcn fonts
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
 
 // UI/Body Fonts
 const inter = Inter({
@@ -94,6 +108,8 @@ const raleway = Raleway({
 
 // Combine all font variables
 const fontVariables = [
+  geist.variable,
+  geistMono.variable,
   inter.variable,
   roboto.variable,
   openSans.variable,
@@ -123,8 +139,8 @@ export default function RootLayout({
       lang="en"
       data-density="default"
       data-radius-mode="density"
-      data-ui-font="inter"
-      data-code-font="jetbrains-mono"
+      data-ui-font="geist"
+      data-code-font="geist-mono"
       data-display-font="same-as-ui"
       className={fontVariables}
       suppressHydrationWarning
