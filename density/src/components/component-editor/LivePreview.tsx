@@ -118,15 +118,35 @@ interface PreviewContentProps {
 }
 
 function PreviewContent({ componentName, variant, size, state }: PreviewContentProps) {
+  // State-based styling classes
+  const getStateClasses = (baseState: InteractionState) => {
+    switch (baseState) {
+      case "hover":
+        return "brightness-95 scale-[1.02]";
+      case "focus-visible":
+        return "ring-2 ring-ring ring-offset-2";
+      case "active":
+        return "scale-95 brightness-90";
+      case "loading":
+        return "opacity-70 cursor-wait";
+      default:
+        return "";
+    }
+  };
+
   // Render Button preview
   if (componentName === "Button") {
     return (
       <Button
         variant={variant as "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" | undefined}
         size={size as "default" | "sm" | "lg" | "icon" | undefined}
-        disabled={state === "disabled"}
+        disabled={state === "disabled" || state === "loading"}
+        className={cn(
+          "transition-all",
+          getStateClasses(state)
+        )}
       >
-        Button
+        {state === "loading" ? "Loading..." : "Button"}
       </Button>
     );
   }
@@ -134,7 +154,13 @@ function PreviewContent({ componentName, variant, size, state }: PreviewContentP
   // Render Badge preview
   if (componentName === "Badge") {
     return (
-      <Badge variant={variant as "default" | "secondary" | "destructive" | "outline" | undefined}>
+      <Badge 
+        variant={variant as "default" | "secondary" | "destructive" | "outline" | undefined}
+        className={cn(
+          "transition-all",
+          getStateClasses(state)
+        )}
+      >
         Badge
       </Badge>
     );
@@ -142,8 +168,12 @@ function PreviewContent({ componentName, variant, size, state }: PreviewContentP
 
   // Generic placeholder for other components
   return (
-    <div className="text-sm text-muted-foreground">
-      {componentName}
+    <div className={cn(
+      "text-sm text-muted-foreground p-4 border rounded transition-all",
+      getStateClasses(state),
+      state === "disabled" && "opacity-50"
+    )}>
+      {componentName} ({state})
     </div>
   );
 }
