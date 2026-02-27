@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   LivePreview,
@@ -14,7 +13,20 @@ import {
   getComponent,
   type ComponentSpec,
 } from "@/lib/component-editor";
-import { cn } from "@/lib/utils";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarInset,
+} from "@/components/ui/sidebar";
 
 export default function ComponentEditorPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,80 +70,71 @@ export default function ComponentEditorPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-var(--control-height-lg))] flex flex-col bg-background overflow-hidden">
-      {/* Main Content - Three Column Layout */}
-      <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* Left Sidebar - Component List */}
-        <aside className="w-[240px] flex flex-col min-h-0">
-          {/* Search */}
-          <div className="p-3">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 h-8 text-sm"
-              />
-            </div>
-          </div>
-          
-          {/* Component List - Flat with category headers */}
-          <ScrollArea className="flex-1">
-            <div className="py-2">
-              {Object.entries(filteredComponents).map(([category, components]) => (
-                <div key={category}>
-                  <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                    {categoryLabels[category] || category}
-                  </div>
+    <SidebarProvider defaultOpen>
+      <Sidebar collapsible="none" className="border-r">
+        <SidebarHeader>
+          <SidebarInput
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </SidebarHeader>
+        <SidebarContent>
+          {Object.entries(filteredComponents).map(([category, components]) => (
+            <SidebarGroup key={category}>
+              <SidebarGroupLabel>
+                {categoryLabels[category] || category}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
                   {components.map((spec) => (
-                    <button
-                      key={spec.name}
-                      onClick={() => selectComponent(spec.name)}
-                      className={cn(
-                        "w-full text-left px-3 py-1.5 text-sm transition-colors",
-                        selectedComponent === spec.name
-                          ? "bg-accent text-accent-foreground font-medium"
-                          : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                      )}
-                    >
-                      {spec.name}
-                    </button>
+                    <SidebarMenuItem key={spec.name}>
+                      <SidebarMenuButton
+                        isActive={selectedComponent === spec.name}
+                        onClick={() => selectComponent(spec.name)}
+                      >
+                        <span>{spec.name}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
                   ))}
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-        </aside>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          ))}
+        </SidebarContent>
+      </Sidebar>
 
-        {/* Center - Live Preview */}
-        <main className="flex-1 flex flex-col min-h-0 p-6 overflow-hidden">
-          {selectedComponent && selectedSpec ? (
-            <div className="flex-1 min-h-0 border rounded-lg overflow-hidden">
-              <LivePreview componentName={selectedComponent} />
-            </div>
-          ) : (
-            <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              <p>Select a component to preview</p>
-            </div>
-          )}
-        </main>
+      <SidebarInset className="flex flex-col h-[calc(100vh-var(--control-height-lg))]">
+        <div className="flex-1 flex min-h-0 overflow-hidden">
+          {/* Center - Live Preview */}
+          <main className="flex-1 flex flex-col min-h-0 p-6 overflow-hidden">
+            {selectedComponent && selectedSpec ? (
+              <div className="flex-1 min-h-0 border rounded-lg overflow-hidden">
+                <LivePreview componentName={selectedComponent} />
+              </div>
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-muted-foreground">
+                <p>Select a component to preview</p>
+              </div>
+            )}
+          </main>
 
-        {/* Right Sidebar - Token Properties */}
-        <aside className="w-[360px] flex flex-col min-h-0">
-          <ScrollArea className="flex-1 min-h-0">
-            <div className="p-4">
-              {selectedComponent ? (
-                <TokenPropertyEditor componentName={selectedComponent} />
-              ) : (
-                <p className="text-sm text-muted-foreground">
-                  Select a component to edit tokens
-                </p>
-              )}
-            </div>
-          </ScrollArea>
-        </aside>
-      </div>
-    </div>
+          {/* Right Sidebar - Token Properties */}
+          <aside className="w-[360px] flex flex-col min-h-0 border-l">
+            <ScrollArea className="flex-1 min-h-0">
+              <div className="p-4">
+                {selectedComponent ? (
+                  <TokenPropertyEditor componentName={selectedComponent} />
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Select a component to edit tokens
+                  </p>
+                )}
+              </div>
+            </ScrollArea>
+          </aside>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
