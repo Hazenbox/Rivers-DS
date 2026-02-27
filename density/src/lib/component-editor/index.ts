@@ -45,6 +45,9 @@ export * from "./slots";
 // Resolver
 export * from "./resolver";
 
+// Store
+export * from "./store";
+
 // Specifications
 export {
   allComponentSpecs,
