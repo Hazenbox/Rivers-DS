@@ -132,12 +132,10 @@ export default function ComponentEditorPage() {
         </aside>
 
         {/* Center - Live Preview */}
-        <main className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 flex flex-col overflow-hidden p-6">
           {selectedComponent && selectedSpec ? (
-            <div className="flex-1 p-8 overflow-auto">
-              <div className="border rounded-lg p-6 min-h-[200px]">
-                <LivePreview componentName={selectedComponent} />
-              </div>
+            <div className="flex-1 border rounded-lg">
+              <LivePreview componentName={selectedComponent} />
             </div>
           ) : (
             <div className="flex-1 flex items-center justify-center text-muted-foreground">
