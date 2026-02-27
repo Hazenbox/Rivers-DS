@@ -28,6 +28,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
@@ -125,42 +126,44 @@ export function TokenPropertyEditor({
   })).filter((group) => group.properties.length > 0);
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
-      {/* State Selector */}
-      <div className="flex items-center gap-2">
-        <Label className="text-xs text-muted-foreground">State</Label>
-        <div className="flex gap-1">
-          {availableStates.map((state) => (
-            <Button
-              key={state}
-              variant={selectedState === state ? "default" : "outline"}
-              size="sm"
-              className="h-7 px-2 text-xs"
-              onClick={() => selectState(state)}
-            >
-              {state}
-            </Button>
+    <TooltipProvider>
+      <div className={cn("flex flex-col gap-4", className)}>
+        {/* State Selector */}
+        <div className="flex items-center gap-2">
+          <Label className="text-xs text-muted-foreground">State</Label>
+          <div className="flex gap-1">
+            {availableStates.map((state) => (
+              <Button
+                key={state}
+                variant={selectedState === state ? "default" : "outline"}
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => selectState(state)}
+              >
+                {state}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Slot Groups */}
+        <div className="space-y-2">
+          {filteredGroups.map((group) => (
+            <SlotGroupPanel
+              key={group.slotId}
+              group={group}
+              componentName={componentName}
+              selectedState={selectedState}
+              overrides={overrides}
+              isExpanded={expandedSlots.includes(group.slotId)}
+              onToggle={() => toggleSlotExpanded(group.slotId)}
+              onSetOverride={setTokenOverride}
+              onRemoveOverride={removeTokenOverride}
+            />
           ))}
         </div>
       </div>
-
-      {/* Slot Groups */}
-      <div className="space-y-2">
-        {filteredGroups.map((group) => (
-          <SlotGroupPanel
-            key={group.slotId}
-            group={group}
-            componentName={componentName}
-            selectedState={selectedState}
-            overrides={overrides}
-            isExpanded={expandedSlots.includes(group.slotId)}
-            onToggle={() => toggleSlotExpanded(group.slotId)}
-            onSetOverride={setTokenOverride}
-            onRemoveOverride={removeTokenOverride}
-          />
-        ))}
-      </div>
-    </div>
+    </TooltipProvider>
   );
 }
 
