@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-density="default" suppressHydrationWarning>
+    <html lang="en" data-density="default" data-radius-mode="density" suppressHydrationWarning>
       <body className="antialiased font-sans">
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>

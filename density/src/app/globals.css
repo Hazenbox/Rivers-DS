@@ -39,14 +39,19 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   
-  /* Density-aware radius (uses CSS variables that change per density mode) */
-  --radius-sm: var(--density-radius-sm);
-  --radius-md: var(--density-radius-md);
-  --radius-lg: var(--density-radius-lg);
-  --radius-xl: var(--density-radius-xl);
-  --radius-2xl: calc(var(--density-radius-xl) + 4px);
-  --radius-3xl: calc(var(--density-radius-xl) + 8px);
-  --radius-4xl: calc(var(--density-radius-xl) + 12px);
+  /* Semantic radius tokens (Tailwind's rounded-* classes use these) */
+  --radius-none: var(--semantic-radius-none);
+  --radius-sm: var(--semantic-radius-sm);
+  --radius-md: var(--semantic-radius-md);
+  --radius-lg: var(--semantic-radius-lg);
+  --radius-xl: var(--semantic-radius-xl);
+  --radius-2xl: calc(var(--semantic-radius-xl) + 4px);
+  --radius-3xl: calc(var(--semantic-radius-xl) + 8px);
+  --radius-full: var(--semantic-radius-full);
+  
+  /* Nested radius helpers (inner = outer - padding) */
+  --radius-inner-lg: max(0px, calc(var(--semantic-radius-lg) - var(--inset-md)));
+  --radius-inner-xl: max(0px, calc(var(--semantic-radius-xl) - var(--inset-lg)));
   
   /* Density spacing tokens exposed to Tailwind */
   --spacing-control: var(--control-height);
@@ -146,11 +151,19 @@
   --text-margin-after-h3: 12px;
   --text-margin-after-p: 16px;
   
-  /* Border Radius (density-aware) */
+  /* Border Radius (density-aware base values) */
   --density-radius-sm: 4px;
   --density-radius-md: 6px;
   --density-radius-lg: 8px;
   --density-radius-xl: 12px;
+  
+  /* Semantic Radius (default: tied to density) */
+  --semantic-radius-none: 0;
+  --semantic-radius-sm: var(--density-radius-sm);
+  --semantic-radius-md: var(--density-radius-md);
+  --semantic-radius-lg: var(--density-radius-lg);
+  --semantic-radius-xl: var(--density-radius-xl);
+  --semantic-radius-full: 9999px;
   
   /* Icon Sizes */
   --icon-size-sm: 14px;
@@ -228,6 +241,51 @@
   --icon-size-sm: 16px;
   --icon-size: 18px;
   --icon-size-lg: 20px;
+}
+
+/* ========================================
+   RADIUS PRESETS (CUSTOM MODE)
+   Applied when data-radius-mode="custom"
+   ======================================== */
+
+/* Sharp preset - Professional, data-focused */
+[data-radius-mode="custom"][data-radius="sharp"] {
+  --semantic-radius-none: 0;
+  --semantic-radius-sm: 0;
+  --semantic-radius-md: 2px;
+  --semantic-radius-lg: 4px;
+  --semantic-radius-xl: 6px;
+  --semantic-radius-full: 9999px;
+}
+
+/* Subtle preset - Balanced, enterprise */
+[data-radius-mode="custom"][data-radius="subtle"] {
+  --semantic-radius-none: 0;
+  --semantic-radius-sm: 2px;
+  --semantic-radius-md: 4px;
+  --semantic-radius-lg: 6px;
+  --semantic-radius-xl: 8px;
+  --semantic-radius-full: 9999px;
+}
+
+/* Rounded preset - Friendly, modern */
+[data-radius-mode="custom"][data-radius="rounded"] {
+  --semantic-radius-none: 0;
+  --semantic-radius-sm: 4px;
+  --semantic-radius-md: 8px;
+  --semantic-radius-lg: 12px;
+  --semantic-radius-xl: 16px;
+  --semantic-radius-full: 9999px;
+}
+
+/* Pill preset - Playful, marketing */
+[data-radius-mode="custom"][data-radius="pill"] {
+  --semantic-radius-none: 0;
+  --semantic-radius-sm: 8px;
+  --semantic-radius-md: 12px;
+  --semantic-radius-lg: 16px;
+  --semantic-radius-xl: 24px;
+  --semantic-radius-full: 9999px;
 }
 
 .dark {

@@ -2,15 +2,29 @@
 
 import * as React from "react";
 import { useDensity } from "./density-provider";
+import { useRadius } from "./radius-provider";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { Rows3, Rows4, Square } from "lucide-react";
-import { type Density, densityOptions } from "@/lib/tokens";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Rows3, Rows4, Square, Settings2, ChevronDown } from "lucide-react";
+import {
+  type Density,
+  type RadiusPreset,
+  densityOptions,
+  radiusPresetOptions,
+} from "@/lib/tokens";
+import { RadiusControls } from "./radius-controls";
 
 const densityIcons: Record<Density, React.ElementType> = {
   compact: Rows4,
@@ -84,5 +98,120 @@ export function DensityToggle() {
         );
       })}
     </div>
+  );
+}
+
+function RadiusPresetIcon({ preset, size = 14 }: { preset: RadiusPreset; size?: number }) {
+  const radiusMap: Record<RadiusPreset, number> = {
+    sharp: 0,
+    subtle: 2,
+    rounded: 4,
+    pill: size / 2,
+  };
+
+  return (
+    <div
+      className="border-2 border-current"
+      style={{
+        width: size,
+        height: size,
+        borderRadius: radiusMap[preset],
+      }}
+    />
+  );
+}
+
+export function DensityAndRadiusPanel() {
+  const { density, setDensity } = useDensity();
+  const { radiusMode, setRadiusMode, radiusPreset, setRadiusPreset } = useRadius();
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm" className="gap-2">
+          <Settings2 className="h-4 w-4" />
+          <span className="hidden sm:inline">Display</span>
+          <ChevronDown className="h-3 w-3 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-80">
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Density
+            </h4>
+            <div className="flex rounded-md border" role="group">
+              {densityOptions.map((option) => {
+                const Icon = densityIcons[option.value];
+                const isActive = density === option.value;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => setDensity(option.value)}
+                    className={`
+                      flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm transition-colors cursor-pointer
+                      first:rounded-l-md last:rounded-r-md
+                      ${isActive ? "bg-primary text-primary-foreground" : "hover:bg-muted"}
+                    `}
+                    aria-pressed={isActive}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{option.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              Border Radius
+            </h4>
+            <div className="flex rounded-md border" role="group">
+              <button
+                onClick={() => setRadiusMode("density")}
+                className={`
+                  flex items-center justify-center gap-1.5 px-3 py-2 text-sm transition-colors cursor-pointer
+                  rounded-l-md
+                  ${radiusMode === "density" ? "bg-primary text-primary-foreground" : "hover:bg-muted"}
+                `}
+                aria-pressed={radiusMode === "density"}
+                title="Auto (ties to density)"
+              >
+                Auto
+              </button>
+              {radiusPresetOptions.map((option, index) => {
+                const isActive = radiusMode === "custom" && radiusPreset === option.value;
+                const isLast = index === radiusPresetOptions.length - 1;
+                return (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      setRadiusMode("custom");
+                      setRadiusPreset(option.value);
+                    }}
+                    className={`
+                      flex-1 flex items-center justify-center gap-1.5 px-2 py-2 text-sm transition-colors cursor-pointer
+                      ${isLast ? "rounded-r-md" : ""}
+                      ${isActive ? "bg-primary text-primary-foreground" : "hover:bg-muted"}
+                    `}
+                    aria-pressed={isActive}
+                    title={option.label}
+                  >
+                    <RadiusPresetIcon preset={option.value} size={16} />
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {radiusMode === "density"
+                ? "Radius scales with density (sharp in compact, rounded in spacious)"
+                : `Using ${radiusPresetOptions.find(o => o.value === radiusPreset)?.label} preset`
+              }
+            </p>
+          </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

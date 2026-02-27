@@ -81,7 +81,7 @@ export default function Home() {
         <CardContent>
           <Stack gap="md">
             <p>{currentDensity.description}</p>
-            <div className="bg-muted rounded-[var(--density-radius-md)] p-[var(--inset-md)]">
+            <div className="bg-muted rounded-md p-[var(--inset-md)]">
               <div className="text-xs text-muted-foreground mb-[var(--inset-xs)]">
                 Best for:
               </div>
@@ -109,7 +109,7 @@ export default function Home() {
           ].map((item) => (
             <div
               key={item.label}
-              className="bg-muted rounded-[var(--density-radius-md)] p-[var(--inset-md)]"
+              className="bg-muted rounded-md p-[var(--inset-md)]"
             >
               <div className="text-xs text-muted-foreground">{item.label}</div>
               <div className="font-mono font-medium">{item.value}</div>
