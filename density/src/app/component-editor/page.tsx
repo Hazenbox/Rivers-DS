@@ -72,11 +72,11 @@ export default function ComponentEditorPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <div className="h-screen max-h-screen flex flex-col bg-background overflow-hidden">
       {/* Main Content - Three Column Layout */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex min-h-0">
         {/* Left Sidebar - Component List */}
-        <aside className="w-[240px] flex flex-col">
+        <aside className="w-[240px] flex flex-col min-h-0">
           {/* Search */}
           <div className="p-3">
             <div className="relative">
@@ -132,7 +132,7 @@ export default function ComponentEditorPage() {
         </aside>
 
         {/* Center - Live Preview */}
-        <main className="flex-1 flex flex-col overflow-hidden p-6">
+        <main className="flex-1 flex flex-col min-h-0 p-6">
           {selectedComponent && selectedSpec ? (
             <div className="flex-1 border rounded-lg">
               <LivePreview componentName={selectedComponent} />
@@ -145,8 +145,8 @@ export default function ComponentEditorPage() {
         </main>
 
         {/* Right Sidebar - Token Properties */}
-        <aside className="w-[280px] flex flex-col">
-          <ScrollArea className="flex-1">
+        <aside className="w-[360px] flex flex-col min-h-0">
+          <ScrollArea className="flex-1 min-h-0">
             <div className="p-4">
               {selectedComponent ? (
                 <TokenPropertyEditor componentName={selectedComponent} />

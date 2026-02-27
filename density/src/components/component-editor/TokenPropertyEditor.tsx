@@ -8,31 +8,17 @@
  */
 
 import * as React from "react";
-import { ChevronDown, ChevronRight, Paintbrush, Type, Square, Layers, Maximize2, Info } from "lucide-react";
+import { Paintbrush, Type, Square, Layers, Maximize2, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import {
   useEditorStore,
@@ -89,10 +75,8 @@ export function TokenPropertyEditor({
     selectedVariant,
     selectedSize,
     selectedState,
-    expandedSlots,
     componentOverrides,
     selectState,
-    toggleSlotExpanded,
     setTokenOverride,
     removeTokenOverride,
   } = useEditorStore();
@@ -127,27 +111,24 @@ export function TokenPropertyEditor({
 
   return (
     <TooltipProvider>
-      <div className={cn("flex flex-col gap-4", className)}>
+      <div className={cn("flex flex-col gap-6", className)}>
         {/* State Selector */}
-        <div className="flex items-center gap-2">
-          <Label className="text-xs text-muted-foreground">State</Label>
-          <div className="flex gap-1">
-            {availableStates.map((state) => (
-              <Button
-                key={state}
-                variant={selectedState === state ? "default" : "outline"}
-                size="sm"
-                className="h-7 px-2 text-xs"
-                onClick={() => selectState(state)}
-              >
-                {state}
-              </Button>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-1">
+          {availableStates.map((state) => (
+            <Button
+              key={state}
+              variant={selectedState === state ? "default" : "ghost"}
+              size="sm"
+              className="h-6 px-2 text-xs"
+              onClick={() => selectState(state)}
+            >
+              {state}
+            </Button>
+          ))}
         </div>
 
-        {/* Slot Groups */}
-        <div className="space-y-2">
+        {/* Slot Groups - Flat list */}
+        <div className="space-y-6">
           {filteredGroups.map((group) => (
             <SlotGroupPanel
               key={group.slotId}
@@ -155,8 +136,6 @@ export function TokenPropertyEditor({
               componentName={componentName}
               selectedState={selectedState}
               overrides={overrides}
-              isExpanded={expandedSlots.includes(group.slotId)}
-              onToggle={() => toggleSlotExpanded(group.slotId)}
               onSetOverride={setTokenOverride}
               onRemoveOverride={removeTokenOverride}
             />
@@ -176,8 +155,6 @@ interface SlotGroupPanelProps {
   componentName: string;
   selectedState: InteractionState;
   overrides: Record<string, TokenReference>;
-  isExpanded: boolean;
-  onToggle: () => void;
   onSetOverride: (component: string, key: string, token: TokenReference) => void;
   onRemoveOverride: (component: string, key: string) => void;
 }
@@ -187,72 +164,41 @@ function SlotGroupPanel({
   componentName,
   selectedState,
   overrides,
-  isExpanded,
-  onToggle,
   onSetOverride,
   onRemoveOverride,
 }: SlotGroupPanelProps) {
   // Group properties by category
   const categorizedProperties = groupByCategory(group.properties);
 
-  // Count overrides in this slot
-  const overrideCount = group.properties.filter((prop) => {
-    const key = createPropertyKey(prop.name, group.slotId, selectedState);
-    return key in overrides;
-  }).length;
-
   return (
-    <Collapsible open={isExpanded} onOpenChange={onToggle}>
-      <CollapsibleTrigger asChild>
-        <Button
-          variant="ghost"
-          className="w-full justify-between px-2 h-9"
-        >
-          <div className="flex items-center gap-2">
-            {isExpanded ? (
-              <ChevronDown className="size-4" />
-            ) : (
-              <ChevronRight className="size-4" />
-            )}
-            <span className="font-medium text-sm">{group.slotName}</span>
-            <span className="text-xs text-muted-foreground">
-              ({group.properties.length})
-            </span>
+    <div className="space-y-4">
+      {/* Slot Header */}
+      <div className="text-sm font-medium">{group.slotName}</div>
+      
+      {/* Properties by Category */}
+      {Object.entries(categorizedProperties).map(([category, props]) => (
+        <div key={category} className="space-y-2">
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground uppercase tracking-wide">
+            {categoryIcons[category as TokenCategory]}
+            <span>{category}</span>
           </div>
-          {overrideCount > 0 && (
-            <Badge variant="secondary" className="text-xs">
-              {overrideCount} overrides
-            </Badge>
-          )}
-        </Button>
-      </CollapsibleTrigger>
-      <CollapsibleContent>
-        <div className="pl-6 pr-2 py-2 space-y-4">
-          {Object.entries(categorizedProperties).map(([category, props]) => (
-            <div key={category} className="space-y-2">
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium uppercase tracking-wider">
-                {categoryIcons[category as TokenCategory]}
-                <span>{category}</span>
-              </div>
-              <div className="space-y-2">
-                {props.map((prop) => (
-                  <PropertyEditor
-                    key={prop.name}
-                    property={prop}
-                    componentName={componentName}
-                    slotId={group.slotId}
-                    selectedState={selectedState}
-                    override={overrides[createPropertyKey(prop.name, group.slotId, selectedState)]}
-                    onSetOverride={onSetOverride}
-                    onRemoveOverride={onRemoveOverride}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
+          <div className="space-y-1.5">
+            {props.map((prop) => (
+              <PropertyEditor
+                key={prop.name}
+                property={prop}
+                componentName={componentName}
+                slotId={group.slotId}
+                selectedState={selectedState}
+                override={overrides[createPropertyKey(prop.name, group.slotId, selectedState)]}
+                onSetOverride={onSetOverride}
+                onRemoveOverride={onRemoveOverride}
+              />
+            ))}
+          </div>
         </div>
-      </CollapsibleContent>
-    </Collapsible>
+      ))}
+    </div>
   );
 }
 
@@ -309,11 +255,11 @@ function PropertyEditor({
     : tokenRefToString(property.defaultToken);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-2 items-center">
-      <div className="flex items-center gap-2">
-        <Label className="text-xs w-24 truncate" title={property.name}>
-          {formatPropertyName(property.name)}
-        </Label>
+    <div className="flex items-center gap-2">
+      <Label className="text-xs text-muted-foreground font-normal w-28 shrink-0 truncate" title={property.name}>
+        {formatPropertyName(property.name)}
+      </Label>
+      <div className="flex-1 flex items-center gap-1">
         {property.category === "color" ? (
           <ColorInput
             value={currentValue}
@@ -330,13 +276,11 @@ function PropertyEditor({
             )}
           />
         )}
-      </div>
-      <div className="flex items-center gap-1">
         {hasOverride && (
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 px-2 text-xs"
+            className="h-7 px-1.5 text-xs shrink-0"
             onClick={() => onRemoveOverride(componentName, propertyKey)}
           >
             Reset
@@ -345,7 +289,7 @@ function PropertyEditor({
         {property.description && (
           <Tooltip>
             <TooltipTrigger asChild>
-              <Info className="size-3.5 text-muted-foreground" />
+              <Info className="size-3 text-muted-foreground shrink-0" />
             </TooltipTrigger>
             <TooltipContent side="right">
               <p className="text-xs max-w-48">{property.description}</p>
