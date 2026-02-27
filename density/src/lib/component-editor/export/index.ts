@@ -27,3 +27,27 @@ export {
   generateCodeConnectConfigs,
   exportForFigmaTokensPlugin,
 } from "./figma-export";
+
+// Figma Plugin Export (DS-Bridge)
+export {
+  type FigmaPluginExport,
+  type FigmaPluginVariableCollection,
+  type FigmaPluginVariable,
+  type FigmaPluginComponent,
+  type FigmaPluginComponentVariant,
+  type FigmaPluginSlot,
+  type FigmaPluginTextStyle,
+  type FigmaPluginEffectStyle,
+  type FigmaPluginCodeConnect,
+  type FigmaVariableScope,
+  type FigmaVariableType,
+  isValidFigmaPluginExport,
+  validateFigmaPluginExport,
+} from "./figma-plugin-schema";
+
+export {
+  type ExportOptions as FigmaPluginExportOptions,
+  exportForFigmaPlugin,
+  exportForFigmaPluginAsJSON,
+  downloadFigmaPluginExport,
+} from "./figma-plugin-export";

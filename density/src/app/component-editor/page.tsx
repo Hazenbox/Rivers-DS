@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search } from "lucide-react";
+import { Search, Download } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 import {
   LivePreview,
   TokenPropertyEditor,
@@ -12,6 +13,7 @@ import {
   getComponentsGroupedByCategory,
   getComponent,
   type ComponentSpec,
+  downloadFigmaPluginExport,
 } from "@/lib/component-editor";
 import {
   Sidebar,
@@ -69,6 +71,10 @@ export default function ComponentEditorPage() {
     "data-display": "Data Display",
   };
 
+  const handleExportForFigma = () => {
+    downloadFigmaPluginExport();
+  };
+
   return (
     <SidebarProvider defaultOpen>
       <Sidebar collapsible="none" className="bg-transparent">
@@ -78,6 +84,15 @@ export default function ComponentEditorPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full mt-2"
+            onClick={handleExportForFigma}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export for Figma
+          </Button>
         </SidebarHeader>
         <SidebarContent>
           {Object.entries(filteredComponents).map(([category, components]) => (
