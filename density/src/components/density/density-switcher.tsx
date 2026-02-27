@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Rows3, Rows4, Square, Settings2, ChevronDown, Type } from "lucide-react";
+import { Rows3, Rows4, Square, Settings2, ChevronDown, Type, Palette } from "lucide-react";
 import {
   type Density,
   type RadiusPreset,
@@ -32,6 +32,7 @@ import {
 } from "@/lib/tokens";
 import { RadiusControls } from "./radius-controls";
 import { FontControls } from "./font-controls";
+import { ColorControls } from "./color-controls";
 
 const densityIcons: Record<Density, React.ElementType> = {
   compact: Rows4,
@@ -321,6 +322,19 @@ export function DisplaySettingsPanel() {
                 </h4>
               </div>
               <FontControls />
+            </div>
+
+            <Separator />
+
+            {/* Colors Section */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Palette className="h-4 w-4 text-muted-foreground" />
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Colors
+                </h4>
+              </div>
+              <ColorControls />
             </div>
           </div>
         </ScrollArea>

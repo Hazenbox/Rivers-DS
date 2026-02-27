@@ -142,6 +142,8 @@ export default function RootLayout({
       data-ui-font="geist"
       data-code-font="geist-mono"
       data-display-font="same-as-ui"
+      data-color-preset="neutral"
+      data-neutral-scale="gray"
       className={fontVariables}
       suppressHydrationWarning
     >
