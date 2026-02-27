@@ -51,6 +51,26 @@ export * from "./store";
 // Export
 export * from "./export";
 
+// Figma Integration
+export {
+  type FigmaSyncConfig,
+  type FigmaDesignContext,
+  type FigmaVariableDef,
+  type FigmaCodeConnectMapping,
+  type FigmaSyncResult,
+  parseFigmaUrl,
+  createFigmaSyncConfig,
+  type DesignTokenMapping,
+  type PropertyTypeMapping,
+  mapFigmaVariablesToTokens,
+  mapTokensToFigmaVariables,
+  createPropertyTypeMapping,
+  inferTokenCategoryFromFigmaType,
+  type CodeConnectSuggestion,
+  generateCodeConnectConfigs as generateFigmaCodeConnectConfigs,
+  mapComponentToCodeConnect,
+} from "./figma";
+
 // Specifications
 export {
   allComponentSpecs,
