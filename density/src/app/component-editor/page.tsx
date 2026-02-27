@@ -71,7 +71,7 @@ export default function ComponentEditorPage() {
 
   return (
     <SidebarProvider defaultOpen>
-      <Sidebar collapsible="none" className="border-r">
+      <Sidebar collapsible="none" className="bg-transparent">
         <SidebarHeader>
           <SidebarInput
             placeholder="Search..."
@@ -120,7 +120,7 @@ export default function ComponentEditorPage() {
           </main>
 
           {/* Right Sidebar - Token Properties */}
-          <aside className="w-[360px] flex flex-col min-h-0 border-l">
+          <aside className="w-[360px] flex flex-col min-h-0">
             <ScrollArea className="flex-1 min-h-0">
               <div className="p-4">
                 {selectedComponent ? (

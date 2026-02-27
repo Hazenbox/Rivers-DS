@@ -8,7 +8,7 @@
  */
 
 import * as React from "react";
-import { Paintbrush, Type, Square, Layers, Maximize2, Info } from "lucide-react";
+import { Paintbrush, Type, Square, Layers, Maximize2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -256,9 +256,22 @@ function PropertyEditor({
 
   return (
     <div className="flex items-center gap-2">
-      <Label className="text-xs text-muted-foreground font-normal w-28 shrink-0 truncate" title={property.name}>
-        {formatPropertyName(property.name)}
-      </Label>
+      {property.description ? (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Label className="text-xs text-muted-foreground font-normal w-28 shrink-0 truncate cursor-help" title={property.name}>
+              {formatPropertyName(property.name)}
+            </Label>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p className="text-xs max-w-48">{property.description}</p>
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <Label className="text-xs text-muted-foreground font-normal w-28 shrink-0 truncate" title={property.name}>
+          {formatPropertyName(property.name)}
+        </Label>
+      )}
       <div className="flex-1 flex items-center gap-1">
         {property.category === "color" ? (
           <ColorInput
@@ -285,16 +298,6 @@ function PropertyEditor({
           >
             Reset
           </Button>
-        )}
-        {property.description && (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="size-3 text-muted-foreground shrink-0" />
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p className="text-xs max-w-48">{property.description}</p>
-            </TooltipContent>
-          </Tooltip>
         )}
       </div>
     </div>

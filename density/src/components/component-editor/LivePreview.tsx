@@ -89,7 +89,7 @@ export function LivePreview({ componentName, className }: LivePreviewProps) {
   return (
     <div className={cn("flex flex-col h-full", className)}>
       {/* Preview Area - centered */}
-      <div className="flex-1 flex items-center justify-center overflow-auto">
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
         <div
           className={cn(darkMode && "dark")}
           style={cssVariables}
