@@ -58,9 +58,9 @@ export default function ComponentEditorPage() {
   };
 
   return (
-    <div className="h-screen max-h-screen flex flex-col bg-background overflow-hidden">
+    <div className="h-[calc(100vh-var(--control-height-lg))] flex flex-col bg-background overflow-hidden">
       {/* Main Content - Three Column Layout */}
-      <div className="flex-1 flex min-h-0">
+      <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* Left Sidebar - Component List */}
         <aside className="w-[240px] flex flex-col min-h-0">
           {/* Search */}
@@ -105,9 +105,9 @@ export default function ComponentEditorPage() {
         </aside>
 
         {/* Center - Live Preview */}
-        <main className="flex-1 flex flex-col min-h-0 p-6">
+        <main className="flex-1 flex flex-col min-h-0 p-6 overflow-hidden">
           {selectedComponent && selectedSpec ? (
-            <div className="flex-1 border rounded-lg">
+            <div className="flex-1 min-h-0 border rounded-lg overflow-hidden">
               <LivePreview componentName={selectedComponent} />
             </div>
           ) : (
