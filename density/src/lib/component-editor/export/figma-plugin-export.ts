@@ -688,8 +688,10 @@ function mapTokenPathToVariableName(tokenPath: string): string | null {
 // COMPONENT BUILDING
 // ============================================
 
+const TYPOGRAPHY_FIGMA_FIELDS = new Set(["fontSize", "fontWeight", "lineHeight", "letterSpacing"]);
+
 function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
-  return spec.slots.map((slot: ComponentSlotSpec) => {
+  const slots = spec.slots.map((slot: ComponentSlotSpec) => {
     const isIcon = slot.element === "svg" || slot.id === "icon";
     const isText = slot.element === "span" || slot.element === "p";
 
@@ -740,11 +742,43 @@ function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
     }
 
     if (isText) {
-      figmaSlot.defaults = { text: slot.name };
+      const textMapping = spec.figmaMapping?.find(
+        (m) => m.figmaPropertyType === "TEXT"
+      );
+      const defaultText = (textMapping?.defaultValue as string) || slot.name;
+      figmaSlot.defaults = { text: defaultText };
     }
 
     return figmaSlot;
   });
+
+  // Redistribute typography bindings from FRAME slots to their child TEXT slots.
+  // Figma frames don't support fontSize/fontWeight/lineHeight bindings.
+  for (const slot of slots) {
+    if (slot.type !== "FRAME") continue;
+
+    const typographyBindings: Record<string, string> = {};
+    for (const [field, varName] of Object.entries(slot.variableBindings)) {
+      if (TYPOGRAPHY_FIGMA_FIELDS.has(field)) {
+        typographyBindings[field] = varName;
+      }
+    }
+
+    if (Object.keys(typographyBindings).length === 0) continue;
+
+    // Remove typography bindings from the frame
+    for (const field of Object.keys(typographyBindings)) {
+      delete slot.variableBindings[field];
+    }
+
+    // Find the first TEXT child of this frame and add the bindings there
+    const textChild = slots.find((s) => s.parent === slot.id && s.type === "TEXT");
+    if (textChild) {
+      Object.assign(textChild.variableBindings, typographyBindings);
+    }
+  }
+
+  return slots;
 }
 
 function mapCssToFigmaField(cssProperty: string): string | string[] | null {
