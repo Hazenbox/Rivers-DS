@@ -39,8 +39,8 @@ export {
   type FigmaPluginTextStyle,
   type FigmaPluginEffectStyle,
   type FigmaPluginCodeConnect,
-  type FigmaVariableScope,
-  type FigmaVariableType,
+  type FigmaVariableScope as FigmaPluginVariableScope,
+  type FigmaVariableType as FigmaPluginVariableType,
   isValidFigmaPluginExport,
   validateFigmaPluginExport,
 } from "./figma-plugin-schema";

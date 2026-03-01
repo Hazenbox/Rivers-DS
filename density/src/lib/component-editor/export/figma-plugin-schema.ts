@@ -44,6 +44,9 @@ export interface FigmaPluginExport {
 // ============================================
 
 export interface FigmaPluginVariableCollection {
+  /** Stable identifier for deduplication (e.g., "rivers-ds-density"). Plugin must update in place when id matches. */
+  id: string;
+
   /** Collection name (e.g., "Density", "Colors", "Spacing") */
   name: string;
 
@@ -89,6 +92,9 @@ export type FigmaVariableScope =
 export type FigmaVariableType = "COLOR" | "FLOAT" | "STRING" | "BOOLEAN";
 
 export interface FigmaPluginVariable {
+  /** Stable identifier for deduplication (e.g., "rivers-ds-density/control-height"). Plugin must update in place when id matches. */
+  id: string;
+
   /** Variable name (e.g., "control-height" or "colors/primary") */
   name: string;
 
@@ -376,14 +382,30 @@ export function validateFigmaPluginExport(
     errors.push("At least one variable collection is required");
   }
 
+  const collectionIds = new Set<string>();
   for (const collection of data.variableCollections) {
+    if (!collection.id) {
+      errors.push("Variable collection id is required");
+    } else if (collectionIds.has(collection.id)) {
+      errors.push(`Duplicate collection id: "${collection.id}"`);
+    } else {
+      collectionIds.add(collection.id);
+    }
     if (!collection.name) {
       errors.push("Variable collection name is required");
     }
     if (!collection.modes || collection.modes.length === 0) {
       errors.push(`Collection "${collection.name}" must have at least one mode`);
     }
+    const variableIds = new Set<string>();
     for (const variable of collection.variables) {
+      if (!variable.id) {
+        errors.push("Variable id is required");
+      } else if (variableIds.has(variable.id)) {
+        errors.push(`Duplicate variable id in "${collection.name}": "${variable.id}"`);
+      } else {
+        variableIds.add(variable.id);
+      }
       if (!variable.name) {
         errors.push("Variable name is required");
       }

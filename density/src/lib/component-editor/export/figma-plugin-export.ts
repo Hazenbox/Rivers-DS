@@ -22,7 +22,16 @@ import type {
 import { densityTokens, type Density } from "../../tokens/density";
 import { colorPresets, neutralScales, semanticColors } from "../../tokens/colors";
 import { primitives } from "../../tokens/primitives";
-import { fontWeights, letterSpacings } from "../../tokens/typography";
+import {
+  fontWeights,
+  letterSpacings,
+  uiFontStacks,
+  codeFontStacks,
+  displayFontStacks,
+  defaultUIFont,
+  defaultCodeFont,
+  defaultDisplayFont,
+} from "../../tokens/typography";
 import { getAllSpecs } from "../specs";
 import type { ComponentSpec, ComponentSlotSpec, FigmaPropertyMapping } from "../types";
 
@@ -89,6 +98,7 @@ function buildDensityCollection(): FigmaPluginVariableCollection {
     const figmaName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
 
     variables.push({
+      id: `rivers-ds-density/${figmaName}`,
       name: `density/${figmaName}`,
       type: "FLOAT",
       description: `Density token: ${key}`,
@@ -99,6 +109,7 @@ function buildDensityCollection(): FigmaPluginVariableCollection {
   }
 
   return {
+    id: "rivers-ds-density",
     name: "Density",
     modes: modeLabels,
     variables,
@@ -128,6 +139,7 @@ function buildColorCollection(): FigmaPluginVariableCollection {
   for (const key of colorKeys) {
     const figmaName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
     variables.push({
+      id: `rivers-ds-colors/${figmaName}`,
       name: `colors/${figmaName}`,
       type: "COLOR",
       description: `Color token: ${key}`,
@@ -158,6 +170,7 @@ function buildColorCollection(): FigmaPluginVariableCollection {
   for (const key of neutralKeys) {
     const figmaName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
     variables.push({
+      id: `rivers-ds-colors/${figmaName}`,
       name: `colors/${figmaName}`,
       type: "COLOR",
       description: `Neutral color: ${key}`,
@@ -183,6 +196,7 @@ function buildColorCollection(): FigmaPluginVariableCollection {
   for (const key of semanticKeys) {
     const figmaName = key.replace(/([A-Z])/g, "-$1").toLowerCase();
     variables.push({
+      id: `rivers-ds-colors/${figmaName}`,
       name: `colors/${figmaName}`,
       type: "COLOR",
       description: `Semantic color: ${key}`,
@@ -195,8 +209,8 @@ function buildColorCollection(): FigmaPluginVariableCollection {
     });
   }
 
-  // Destructive colors (from globals.css)
   variables.push({
+    id: "rivers-ds-colors/destructive",
     name: "colors/destructive",
     type: "COLOR",
     description: "Destructive/danger action color",
@@ -209,18 +223,20 @@ function buildColorCollection(): FigmaPluginVariableCollection {
   });
 
   variables.push({
+    id: "rivers-ds-colors/destructive-foreground",
     name: "colors/destructive-foreground",
     type: "COLOR",
     description: "Destructive foreground color",
     valuesByMode: {
-      Light: "oklch(0.985 0 0)", // white
-      Dark: "oklch(0.985 0 0)", // white
+      Light: "oklch(0.985 0 0)",
+      Dark: "oklch(0.985 0 0)",
     },
     scopes: ["TEXT_FILL"],
     codePath: "--destructive-foreground",
   });
 
   return {
+    id: "rivers-ds-colors",
     name: "Colors",
     modes,
     variables,
@@ -243,6 +259,7 @@ function buildSpacingCollection(): FigmaPluginVariableCollection {
     const numericValue = parseFloat(value);
 
     variables.push({
+      id: `rivers-ds-spacing/${figmaKey}`,
       name: `spacing/${figmaKey}`,
       type: "FLOAT",
       description: `Spacing: ${value}`,
@@ -255,6 +272,7 @@ function buildSpacingCollection(): FigmaPluginVariableCollection {
   }
 
   return {
+    id: "rivers-ds-spacing",
     name: "Spacing",
     modes: ["Default"],
     variables,
@@ -282,6 +300,7 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
 
   for (const [key, value] of Object.entries(fontSizeMap)) {
     variables.push({
+      id: `rivers-ds-typography/fontSize-${key}`,
       name: `typography/fontSize-${key}`,
       type: "FLOAT",
       description: `Font size: ${value}px`,
@@ -293,9 +312,9 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
     });
   }
 
-  // Font weights from typography.ts
   for (const [key, value] of Object.entries(fontWeights)) {
     variables.push({
+      id: `rivers-ds-typography/fontWeight-${key}`,
       name: `typography/fontWeight-${key}`,
       type: "FLOAT",
       description: `Font weight: ${value}`,
@@ -307,7 +326,6 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
     });
   }
 
-  // Line heights (common values)
   const lineHeights: Record<string, number> = {
     tight: 1.25,
     normal: 1.5,
@@ -316,6 +334,7 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
 
   for (const [key, value] of Object.entries(lineHeights)) {
     variables.push({
+      id: `rivers-ds-typography/lineHeight-${key}`,
       name: `typography/lineHeight-${key}`,
       type: "FLOAT",
       description: `Line height: ${value}`,
@@ -327,8 +346,6 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
     });
   }
 
-  // Letter spacing from typography.ts (convert em to tracking value)
-  // Figma uses percentage for letter spacing, so -0.05em = -5%
   const letterSpacingMap: Record<string, number> = {
     tighter: -5,
     tight: -2.5,
@@ -339,6 +356,7 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
 
   for (const [key, value] of Object.entries(letterSpacingMap)) {
     variables.push({
+      id: `rivers-ds-typography/letterSpacing-${key}`,
       name: `typography/letterSpacing-${key}`,
       type: "FLOAT",
       description: `Letter spacing: ${letterSpacings[key as keyof typeof letterSpacings]}`,
@@ -351,6 +369,7 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
   }
 
   return {
+    id: "rivers-ds-typography",
     name: "Typography",
     modes: ["Default"],
     variables,
@@ -364,8 +383,8 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
 function buildBorderWidthCollection(): FigmaPluginVariableCollection {
   const variables: FigmaPluginVariable[] = [];
 
-  // From primitives.borderWidth
   variables.push({
+    id: "rivers-ds-border-width/default",
     name: "borderWidth/default",
     type: "FLOAT",
     description: "Default border width: 1px",
@@ -377,6 +396,7 @@ function buildBorderWidthCollection(): FigmaPluginVariableCollection {
   });
 
   variables.push({
+    id: "rivers-ds-border-width/2",
     name: "borderWidth/2",
     type: "FLOAT",
     description: "Border width 2: 2px",
@@ -388,6 +408,7 @@ function buildBorderWidthCollection(): FigmaPluginVariableCollection {
   });
 
   return {
+    id: "rivers-ds-border-width",
     name: "Border Width",
     modes: ["Default"],
     variables,
@@ -410,6 +431,7 @@ function buildOpacityCollection(): FigmaPluginVariableCollection {
 
   for (const [key, { value, description }] of Object.entries(opacityValues)) {
     variables.push({
+      id: `rivers-ds-opacity/${key}`,
       name: `opacity/${key}`,
       type: "FLOAT",
       description,
@@ -422,7 +444,89 @@ function buildOpacityCollection(): FigmaPluginVariableCollection {
   }
 
   return {
+    id: "rivers-ds-opacity",
     name: "Opacity",
+    modes: ["Default"],
+    variables,
+  };
+}
+
+// ============================================
+// FONT FAMILY VARIABLE COLLECTION
+// ============================================
+
+function extractPrimaryFontName(stack: string): string {
+  const first = stack.split(",")[0].trim();
+  if (first.startsWith("var(")) {
+    const varName = first.replace(/^var\(--font-/, "").replace(/\)$/, "");
+    return varName
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+  return first.replace(/['"]/g, "");
+}
+
+function buildFontFamilyCollection(): FigmaPluginVariableCollection {
+  const variables: FigmaPluginVariable[] = [];
+
+  const fontCategories: Array<{
+    key: string;
+    stacks: Record<string, string>;
+    defaultPreset: string;
+    description: string;
+  }> = [
+    {
+      key: "ui",
+      stacks: uiFontStacks,
+      defaultPreset: defaultUIFont,
+      description: "UI / body font family",
+    },
+    {
+      key: "code",
+      stacks: codeFontStacks,
+      defaultPreset: defaultCodeFont,
+      description: "Monospace / code font family",
+    },
+    {
+      key: "display",
+      stacks: displayFontStacks,
+      defaultPreset: defaultDisplayFont,
+      description: "Display / heading font family",
+    },
+  ];
+
+  for (const cat of fontCategories) {
+    const defaultValue = extractPrimaryFontName(cat.stacks[cat.defaultPreset]);
+
+    variables.push({
+      id: `rivers-ds-fonts/${cat.key}`,
+      name: `fonts/${cat.key}`,
+      type: "STRING",
+      description: cat.description,
+      valuesByMode: { Default: defaultValue },
+      scopes: ["FONT_FAMILY"],
+      codePath: `--font-${cat.key}`,
+    });
+
+    for (const [preset, stack] of Object.entries(cat.stacks)) {
+      if (preset === "system" || preset === "same-as-ui") continue;
+      const fontName = extractPrimaryFontName(stack);
+      variables.push({
+        id: `rivers-ds-fonts/${cat.key}-${preset}`,
+        name: `fonts/${cat.key}-${preset}`,
+        type: "STRING",
+        description: `${cat.key} preset: ${fontName}`,
+        valuesByMode: { Default: fontName },
+        scopes: ["FONT_FAMILY"],
+        codePath: `--font-${cat.key}-${preset}`,
+      });
+    }
+  }
+
+  return {
+    id: "rivers-ds-fonts",
+    name: "Fonts",
     modes: ["Default"],
     variables,
   };
@@ -441,7 +545,7 @@ function mapSlotPresetToTokenBindings(
 ): Record<string, string> {
   const presetMappings: Record<
     string,
-    { background: string | null; foreground: string; border: string | null }
+    { background: string | null; foreground: string; border: string | null; fillExplicitNone?: boolean }
   > = {
     "action-primary": {
       background: "colors/primary",
@@ -459,19 +563,21 @@ function mapSlotPresetToTokenBindings(
       border: null,
     },
     "action-outline": {
-      background: null, // transparent
+      background: "colors/background",
       foreground: "colors/foreground",
       border: "colors/border",
     },
     "action-ghost": {
-      background: null, // transparent
+      background: null,
       foreground: "colors/foreground",
       border: null,
+      fillExplicitNone: true,
     },
     "action-link": {
-      background: null, // transparent
+      background: null,
       foreground: "colors/primary",
       border: null,
+      fillExplicitNone: true,
     },
   };
 
@@ -482,6 +588,8 @@ function mapSlotPresetToTokenBindings(
 
   if (mapping.background) {
     bindings["fill"] = mapping.background;
+  } else if (mapping.fillExplicitNone) {
+    bindings["fill"] = "__none__";
   }
   if (mapping.foreground) {
     bindings["textFill"] = mapping.foreground;
@@ -508,16 +616,13 @@ function mapTokenPathToVariableName(tokenPath: string): string | null {
   if (!tokenPath) return null;
 
   // Handle special cases first
-  const specialMappings: Record<string, string> = {
-    // Radius tokens live in Density collection
+  const specialMappings: Record<string, string | null> = {
     "radius.sm": "density/radius-sm",
     "radius.md": "density/radius-md",
     "radius.lg": "density/radius-lg",
     "radius.xl": "density/radius-xl",
-    // Border width
     "border.width": "borderWidth/default",
     "border.width.2": "borderWidth/2",
-    // Shadow tokens are Effect Styles, not variables
     "shadow.xs": null,
     "shadow.sm": null,
     "shadow.md": null,
@@ -585,52 +690,56 @@ function mapTokenPathToVariableName(tokenPath: string): string | null {
 
 function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
   return spec.slots.map((slot: ComponentSlotSpec) => {
+    const isIcon = slot.element === "svg" || slot.id === "icon";
+    const isText = slot.element === "span" || slot.element === "p";
+
     const figmaSlot: FigmaPluginSlot = {
       id: slot.id,
-      type: slot.element === "span" || slot.element === "p" ? "TEXT" : "FRAME",
+      type: isText ? "TEXT" : "FRAME",
       name: slot.name,
       isRoot: slot.isRoot,
       parent: slot.parent,
       layoutMode: slot.isRoot ? "HORIZONTAL" : undefined,
-      primaryAxisSizing: "AUTO",
-      counterAxisSizing: "AUTO",
+      primaryAxisSizing: slot.isRoot ? "AUTO" : (isIcon ? "FIXED" : "AUTO"),
+      counterAxisSizing: slot.isRoot ? "AUTO" : (isIcon ? "FIXED" : "AUTO"),
       primaryAxisAlignItems: "CENTER",
       counterAxisAlignItems: "CENTER",
       variableBindings: {},
       defaults: {},
     };
 
-    // Add variable bindings from tokenable properties
     const slotProperties = spec.tokenableProperties.filter((p) => p.slot === slot.id);
     for (const prop of slotProperties) {
-      if (prop.cssProperty && prop.defaultToken) {
-        // Skip literal tokens - they go to defaults, not bindings
-        if (prop.defaultToken.type === "literal") {
-          continue;
-        }
-
-        // Map CSS property to Figma bindable field(s)
+      if (prop.cssProperty && prop.defaultToken && prop.defaultToken.type === "system") {
         const figmaFields = mapCssToFigmaField(prop.cssProperty);
         if (figmaFields) {
-          // Convert token path to Figma variable name
           const variableName = mapTokenPathToVariableName(prop.defaultToken.path);
           if (variableName) {
-            // Handle both single fields and arrays of fields
             if (Array.isArray(figmaFields)) {
-              // For symmetric properties, bind to all fields
               for (const field of figmaFields) {
-                figmaSlot.variableBindings[variableName] = figmaFields;
+                figmaSlot.variableBindings[field] = variableName;
               }
             } else {
-              figmaSlot.variableBindings[variableName] = figmaFields;
+              figmaSlot.variableBindings[figmaFields] = variableName;
             }
           }
         }
       }
     }
 
-    // Set defaults for text slots
-    if (figmaSlot.type === "TEXT") {
+    if (isIcon) {
+      figmaSlot.defaults = { width: 16, height: 16 };
+      const iconSizeProp = slotProperties.find((p) => p.name === "iconSize");
+      if (iconSizeProp?.defaultToken && iconSizeProp.defaultToken.type === "system") {
+        const varName = mapTokenPathToVariableName(iconSizeProp.defaultToken.path);
+        if (varName) {
+          figmaSlot.variableBindings["width"] = varName;
+          figmaSlot.variableBindings["height"] = varName;
+        }
+      }
+    }
+
+    if (isText) {
       figmaSlot.defaults = { text: slot.name };
     }
 
@@ -692,16 +801,14 @@ function generateVariantCombinations(
 }
 
 function buildComponentVariants(spec: ComponentSpec): FigmaPluginComponentVariant[] {
-  // Build variant properties from spec
   const variantProperties: Record<string, string[]> = {};
 
-  // Map variant values to their labels and slot presets
   const variantToPreset: Record<string, string> = {};
   const variantValueToLabel: Record<string, string> = {};
+  const sizeValueToLabel: Record<string, string> = {};
 
   if (spec.variants.length > 0) {
     variantProperties["Variant"] = spec.variants.map((v) => {
-      // Use Figma mapping if available
       const mapping = spec.figmaMapping?.find(
         (m) => m.codeProperty === "variant" && m.valueMapping
       );
@@ -719,16 +826,39 @@ function buildComponentVariants(spec: ComponentSpec): FigmaPluginComponentVarian
       const mapping = spec.figmaMapping?.find(
         (m) => m.codeProperty === "size" && m.valueMapping
       );
-      return mapping?.valueMapping?.[s.value] || s.label;
+      const label = mapping?.valueMapping?.[s.value] || s.label;
+      sizeValueToLabel[s.value] = label;
+      return label;
     });
   }
 
-  // Add State dimension for interactive components
   if (spec.stateSpec) {
-    variantProperties["State"] = ["Default", "Disabled"];
+    variantProperties["State"] = ["Default", "Hover", "Focus", "Active", "Disabled"];
   }
 
-  // Generate all combinations
+  const sizeTokenOverrideMap = new Map<string, Record<string, string>>();
+  for (const s of spec.sizes) {
+    const label = sizeValueToLabel[s.value] || s.label;
+    if (s.tokenOverrides) {
+      const bindings: Record<string, string> = {};
+      for (const [propName, tokenRef] of Object.entries(s.tokenOverrides)) {
+        if (tokenRef.type !== "system") continue;
+        const cssField = resolveSizeOverrideToFigmaField(propName);
+        const varName = mapTokenPathToVariableName(tokenRef.path);
+        if (cssField && varName) {
+          if (Array.isArray(cssField)) {
+            for (const f of cssField) {
+              bindings[f] = varName;
+            }
+          } else {
+            bindings[cssField] = varName;
+          }
+        }
+      }
+      sizeTokenOverrideMap.set(label, bindings);
+    }
+  }
+
   const combinations = generateVariantCombinations(variantProperties);
 
   return combinations.map((props) => {
@@ -736,26 +866,49 @@ function buildComponentVariants(spec: ComponentSpec): FigmaPluginComponentVarian
       .map(([k, v]) => `${k}=${v}`)
       .join(", ");
 
-    // Get token bindings from slot preset
     const variantLabel = props["Variant"];
     const slotPreset = variantToPreset[variantLabel];
     let tokenBindings: Record<string, string> = {};
 
     if (slotPreset) {
-      tokenBindings = mapSlotPresetToTokenBindings(slotPreset);
+      tokenBindings = { ...mapSlotPresetToTokenBindings(slotPreset) };
     }
 
-    // Add disabled state opacity
-    if (props["State"] === "Disabled") {
+    const sizeLabel = props["Size"];
+    const sizeOverrides = sizeTokenOverrideMap.get(sizeLabel);
+    if (sizeOverrides) {
+      tokenBindings = { ...tokenBindings, ...sizeOverrides };
+    }
+
+    const state = props["State"];
+    if (state === "Disabled") {
       tokenBindings["opacity"] = "opacity/disabled";
+    } else if (state === "Hover") {
+      tokenBindings["_state"] = "hover";
+    } else if (state === "Focus") {
+      tokenBindings["_state"] = "focus";
+    } else if (state === "Active") {
+      tokenBindings["_state"] = "active";
     }
 
-    return {
-      name,
-      properties: props,
-      tokenBindings,
-    };
+    return { name, properties: props, tokenBindings };
   });
+}
+
+function resolveSizeOverrideToFigmaField(propName: string): string | string[] | null {
+  const mapping: Record<string, string | string[]> = {
+    height: "height",
+    width: "width",
+    paddingX: "paddingLeft",
+    paddingY: "paddingTop",
+    fontSize: "fontSize",
+    gap: "itemSpacing",
+    borderRadius: "topLeftRadius",
+  };
+  if (propName === "paddingX") return ["paddingLeft", "paddingRight"];
+  if (propName === "paddingY") return ["paddingTop", "paddingBottom"];
+  if (propName === "borderRadius") return ["topLeftRadius", "topRightRadius", "bottomLeftRadius", "bottomRightRadius"];
+  return mapping[propName] || null;
 }
 
 function buildComponent(spec: ComponentSpec): FigmaPluginComponent {
@@ -779,12 +932,10 @@ function buildComponent(spec: ComponentSpec): FigmaPluginComponent {
     });
   }
 
-  // Add State dimension for interactive components
   if (spec.stateSpec) {
-    variantProperties["State"] = ["Default", "Disabled"];
+    variantProperties["State"] = ["Default", "Hover", "Focus", "Active", "Disabled"];
   }
 
-  // Build component properties from Figma mapping
   const componentProperties = spec.figmaMapping
     ?.filter((m) => m.figmaPropertyType !== "VARIANT")
     .map((m: FigmaPropertyMapping) => ({
@@ -1045,12 +1196,12 @@ export function exportForFigmaPlugin(options: ExportOptions = {}): FigmaPluginEx
     componentNames,
   } = options;
 
-  // Build variable collections
   const variableCollections: FigmaPluginVariableCollection[] = [
     buildDensityCollection(),
     buildColorCollection(),
     buildSpacingCollection(),
     buildTypographyCollection(),
+    buildFontFamilyCollection(),
     buildBorderWidthCollection(),
     buildOpacityCollection(),
   ];
