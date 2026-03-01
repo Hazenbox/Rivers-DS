@@ -58,6 +58,28 @@ function Button({
 }: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
 
+  const content = (
+    <>
+      {iconLeft && <span data-slot="icon-left" className="shrink-0">{iconLeft}</span>}
+      {children}
+      {iconRight && <span data-slot="icon-right" className="shrink-0">{iconRight}</span>}
+    </>
+  )
+
+  if (asChild) {
+    return (
+      <Comp
+        data-slot="button"
+        data-variant={variant}
+        data-size={size}
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+      >
+        {children}
+      </Comp>
+    )
+  }
+
   return (
     <Comp
       data-slot="button"
@@ -66,9 +88,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     >
-      {iconLeft && <span data-slot="icon-left" className="shrink-0">{iconLeft}</span>}
-      {children}
-      {iconRight && <span data-slot="icon-right" className="shrink-0">{iconRight}</span>}
+      {content}
     </Comp>
   )
 }
