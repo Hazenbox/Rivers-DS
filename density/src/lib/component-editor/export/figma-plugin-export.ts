@@ -696,9 +696,17 @@ function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
     const isIcon = slot.element === "svg" || slot.id === "icon" || slot.id === "iconLeft" || slot.id === "iconRight";
     const isText = slot.element === "span" || slot.element === "p";
 
+    // Determine slot type - use ICON for icon slots
+    let slotType: FigmaPluginSlot["type"] = "FRAME";
+    if (isText) {
+      slotType = "TEXT";
+    } else if (isIcon) {
+      slotType = "ICON";
+    }
+
     const figmaSlot: FigmaPluginSlot = {
       id: slot.id,
-      type: isText ? "TEXT" : "FRAME",
+      type: slotType,
       name: slot.name,
       isRoot: slot.isRoot,
       parent: slot.parent,
@@ -731,7 +739,19 @@ function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
     }
 
     if (isIcon) {
-      figmaSlot.defaults = { width: 16, height: 16 };
+      figmaSlot.defaults = { width: 16, height: 16, defaultIcon: "plus" };
+      figmaSlot.iconLibraryNodeId = "78:3451";
+      figmaSlot.isOptional = true;
+      
+      // Link to the corresponding boolean property
+      if (slot.id === "iconLeft") {
+        figmaSlot.linkedBooleanProperty = "Show Left Icon";
+      } else if (slot.id === "iconRight") {
+        figmaSlot.linkedBooleanProperty = "Show Right Icon";
+      } else if (slot.id === "icon") {
+        figmaSlot.linkedBooleanProperty = "Show Icon";
+      }
+      
       // Look for iconSize, iconLeftSize, or iconRightSize properties
       const iconSizeProp = slotProperties.find((p) => 
         p.name === "iconSize" || p.name === "iconLeftSize" || p.name === "iconRightSize"

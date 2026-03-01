@@ -169,7 +169,7 @@ export interface FigmaPluginComponentVariant {
 // SLOTS (Component Structure)
 // ============================================
 
-export type FigmaSlotType = "FRAME" | "TEXT" | "RECTANGLE" | "ELLIPSE" | "VECTOR";
+export type FigmaSlotType = "FRAME" | "TEXT" | "RECTANGLE" | "ELLIPSE" | "VECTOR" | "ICON";
 
 export type FigmaLayoutMode = "HORIZONTAL" | "VERTICAL" | "NONE";
 
@@ -231,6 +231,15 @@ export interface FigmaPluginSlot {
 
   /** Default values when no variable is bound */
   defaults: Record<string, unknown>;
+
+  /** Reference to icon library node in Figma (for ICON type slots) */
+  iconLibraryNodeId?: string;
+
+  /** Whether this slot is optional (can be hidden) */
+  isOptional?: boolean;
+
+  /** Name of boolean property that controls this slot's visibility */
+  linkedBooleanProperty?: string;
 }
 
 // ============================================
