@@ -47,7 +47,9 @@ export {
 
 export {
   type ExportOptions as FigmaPluginExportOptions,
+  type FigmaButtonProps,
   exportForFigmaPlugin,
   exportForFigmaPluginAsJSON,
   downloadFigmaPluginExport,
+  generateButtonCode,
 } from "./figma-plugin-export";

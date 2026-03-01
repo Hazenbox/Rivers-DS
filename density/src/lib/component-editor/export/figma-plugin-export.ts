@@ -34,6 +34,7 @@ import {
 } from "../../tokens/typography";
 import { getAllSpecs } from "../specs";
 import type { ComponentSpec, ComponentSlotSpec, FigmaPropertyMapping } from "../types";
+import { figmaIconToLucide, generateIconImport, buttonSizeToIconSize } from "../figma/icon-mapping";
 
 // ============================================
 // DENSITY VARIABLE COLLECTION
@@ -692,7 +693,7 @@ const TYPOGRAPHY_FIGMA_FIELDS = new Set(["fontSize", "fontWeight", "lineHeight",
 
 function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
   const slots = spec.slots.map((slot: ComponentSlotSpec) => {
-    const isIcon = slot.element === "svg" || slot.id === "icon";
+    const isIcon = slot.element === "svg" || slot.id === "icon" || slot.id === "iconLeft" || slot.id === "iconRight";
     const isText = slot.element === "span" || slot.element === "p";
 
     const figmaSlot: FigmaPluginSlot = {
@@ -731,7 +732,10 @@ function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
 
     if (isIcon) {
       figmaSlot.defaults = { width: 16, height: 16 };
-      const iconSizeProp = slotProperties.find((p) => p.name === "iconSize");
+      // Look for iconSize, iconLeftSize, or iconRightSize properties
+      const iconSizeProp = slotProperties.find((p) => 
+        p.name === "iconSize" || p.name === "iconLeftSize" || p.name === "iconRightSize"
+      );
       if (iconSizeProp?.defaultToken && iconSizeProp.defaultToken.type === "system") {
         const varName = mapTokenPathToVariableName(iconSizeProp.defaultToken.path);
         if (varName) {
@@ -1207,6 +1211,110 @@ function buildEffectStyles(): FigmaPluginEffectStyle[] {
       ],
     },
   ];
+}
+
+// ============================================
+// BUTTON CODE GENERATION WITH ICONS
+// ============================================
+
+export interface FigmaButtonProps {
+  variant: string;
+  size: string;
+  label: string;
+  showLeftIcon: boolean;
+  showRightIcon: boolean;
+  iconLeft?: string;
+  iconRight?: string;
+  disabled?: boolean;
+}
+
+/**
+ * Generate React code for a Button component from Figma properties
+ */
+export function generateButtonCode(props: FigmaButtonProps): string {
+  const {
+    variant,
+    size,
+    label,
+    showLeftIcon,
+    showRightIcon,
+    iconLeft,
+    iconRight,
+    disabled,
+  } = props;
+
+  // Map Figma variant/size to code values
+  const variantMap: Record<string, string> = {
+    Primary: "default",
+    Destructive: "destructive",
+    Outline: "outline",
+    Secondary: "secondary",
+    Ghost: "ghost",
+    Link: "link",
+  };
+
+  const sizeMap: Record<string, string> = {
+    XS: "xs",
+    SM: "sm",
+    MD: "default",
+    LG: "lg",
+    Icon: "icon",
+    "Icon-XS": "icon-xs",
+    "Icon-SM": "icon-sm",
+    "Icon-LG": "icon-lg",
+  };
+
+  const codeVariant = variantMap[variant] || "default";
+  const codeSize = sizeMap[size] || "default";
+
+  // Build icon props
+  const iconLeftCode = showLeftIcon && iconLeft
+    ? `iconLeft={<${figmaIconToLucide(iconLeft) || "Plus"} />}`
+    : "";
+
+  const iconRightCode = showRightIcon && iconRight
+    ? `iconRight={<${figmaIconToLucide(iconRight) || "ChevronRight"} />}`
+    : "";
+
+  // Build props string
+  const propsArray: string[] = [];
+  
+  if (codeVariant !== "default") {
+    propsArray.push(`variant="${codeVariant}"`);
+  }
+  if (codeSize !== "default") {
+    propsArray.push(`size="${codeSize}"`);
+  }
+  if (disabled) {
+    propsArray.push("disabled");
+  }
+  if (iconLeftCode) {
+    propsArray.push(iconLeftCode);
+  }
+  if (iconRightCode) {
+    propsArray.push(iconRightCode);
+  }
+
+  const propsString = propsArray.length > 0 ? ` ${propsArray.join(" ")}` : "";
+
+  // For icon-only buttons, don't include label
+  const isIconOnly = codeSize.startsWith("icon");
+  const content = isIconOnly ? "" : label;
+
+  // Generate import statement
+  const iconNames: string[] = [];
+  if (showLeftIcon && iconLeft) iconNames.push(iconLeft);
+  if (showRightIcon && iconRight) iconNames.push(iconRight);
+  
+  const importStatement = iconNames.length > 0
+    ? `${generateIconImport(iconNames)}\nimport { Button } from "@/components/ui/button"\n\n`
+    : `import { Button } from "@/components/ui/button"\n\n`;
+
+  if (isIconOnly) {
+    return `${importStatement}<Button${propsString} aria-label="${label}" />`;
+  }
+
+  return `${importStatement}<Button${propsString}>${content}</Button>`;
 }
 
 // ============================================

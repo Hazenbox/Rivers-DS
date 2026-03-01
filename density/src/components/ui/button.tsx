@@ -38,16 +38,24 @@ const buttonVariants = cva(
   }
 )
 
+interface ButtonProps
+  extends React.ComponentProps<"button">,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+  iconLeft?: React.ReactNode
+  iconRight?: React.ReactNode
+}
+
 function Button({
   className,
   variant = "default",
   size = "default",
   asChild = false,
+  iconLeft,
+  iconRight,
+  children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
 
   return (
@@ -57,8 +65,13 @@ function Button({
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {iconLeft && <span data-slot="icon-left" className="shrink-0">{iconLeft}</span>}
+      {children}
+      {iconRight && <span data-slot="icon-right" className="shrink-0">{iconRight}</span>}
+    </Comp>
   )
 }
 
 export { Button, buttonVariants }
+export type { ButtonProps }

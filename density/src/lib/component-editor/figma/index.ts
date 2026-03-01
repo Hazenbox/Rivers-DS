@@ -30,3 +30,13 @@ export {
   generateCodeConnectConfigs,
   mapComponentToCodeConnect,
 } from "./code-connect";
+
+export {
+  figmaToLucideMap,
+  figmaIconToLucide,
+  generateIconImport,
+  buttonSizeToIconSize,
+  getIconSizeForButton,
+  kebabToPascal,
+  pascalToKebab,
+} from "./icon-mapping";

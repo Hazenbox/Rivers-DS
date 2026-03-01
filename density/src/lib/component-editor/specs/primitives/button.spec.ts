@@ -22,9 +22,9 @@ export const buttonSpec: ComponentSpec = {
       element: "button",
     },
     {
-      id: "icon",
-      name: "Icon",
-      description: "Optional icon inside button",
+      id: "iconLeft",
+      name: "Left Icon",
+      description: "Optional icon on the left side of the button",
       parent: "root",
       element: "svg",
     },
@@ -34,6 +34,13 @@ export const buttonSpec: ComponentSpec = {
       description: "Button text content",
       parent: "root",
       element: "span",
+    },
+    {
+      id: "iconRight",
+      name: "Right Icon",
+      description: "Optional icon on the right side of the button",
+      parent: "root",
+      element: "svg",
     },
   ],
   
@@ -119,6 +126,33 @@ export const buttonSpec: ComponentSpec = {
       tokenOverrides: {
         height: createSystemRef("spacing.9"),
         width: createSystemRef("spacing.9"),
+        paddingX: createLiteralRef("0"),
+      },
+    },
+    {
+      value: "icon-xs",
+      label: "Icon Extra Small",
+      tokenOverrides: {
+        height: createSystemRef("spacing.6"),
+        width: createSystemRef("spacing.6"),
+        paddingX: createLiteralRef("0"),
+      },
+    },
+    {
+      value: "icon-sm",
+      label: "Icon Small",
+      tokenOverrides: {
+        height: createSystemRef("spacing.8"),
+        width: createSystemRef("spacing.8"),
+        paddingX: createLiteralRef("0"),
+      },
+    },
+    {
+      value: "icon-lg",
+      label: "Icon Large",
+      tokenOverrides: {
+        height: createSystemRef("spacing.10"),
+        width: createSystemRef("spacing.10"),
         paddingX: createLiteralRef("0"),
       },
     },
@@ -296,24 +330,44 @@ export const buttonSpec: ComponentSpec = {
       description: "Focus ring offset",
     },
     
-    // Icon slot
+    // Left Icon slot
     {
-      name: "iconSize",
-      slot: "icon",
+      name: "iconLeftSize",
+      slot: "iconLeft",
       category: "spacing",
       defaultToken: createSystemRef("spacing.4"),
       cssProperty: "width",
       customizable: true,
-      description: "Icon dimensions",
+      description: "Left icon dimensions",
     },
     {
-      name: "iconColor",
-      slot: "icon",
+      name: "iconLeftColor",
+      slot: "iconLeft",
       category: "color",
       defaultToken: createLiteralRef("currentColor"),
       cssProperty: "color",
       customizable: false,
-      description: "Icon color (inherits from foreground)",
+      description: "Left icon color (inherits from foreground)",
+    },
+    
+    // Right Icon slot
+    {
+      name: "iconRightSize",
+      slot: "iconRight",
+      category: "spacing",
+      defaultToken: createSystemRef("spacing.4"),
+      cssProperty: "width",
+      customizable: true,
+      description: "Right icon dimensions",
+    },
+    {
+      name: "iconRightColor",
+      slot: "iconRight",
+      category: "color",
+      defaultToken: createLiteralRef("currentColor"),
+      cssProperty: "color",
+      customizable: false,
+      description: "Right icon color (inherits from foreground)",
     },
   ],
   
@@ -352,6 +406,9 @@ export const buttonSpec: ComponentSpec = {
         default: "MD",
         lg: "LG",
         icon: "Icon",
+        "icon-xs": "Icon-XS",
+        "icon-sm": "Icon-SM",
+        "icon-lg": "Icon-LG",
       },
     },
     {
@@ -366,19 +423,47 @@ export const buttonSpec: ComponentSpec = {
       figmaPropertyName: "Label",
       defaultValue: "Button",
     },
+    {
+      codeProperty: "showLeftIcon",
+      figmaPropertyType: "BOOLEAN",
+      figmaPropertyName: "Show Left Icon",
+      defaultValue: false,
+    },
+    {
+      codeProperty: "showRightIcon",
+      figmaPropertyType: "BOOLEAN",
+      figmaPropertyName: "Show Right Icon",
+      defaultValue: false,
+    },
+    {
+      codeProperty: "iconLeft",
+      figmaPropertyType: "INSTANCE_SWAP",
+      figmaPropertyName: "Left Icon",
+    },
+    {
+      codeProperty: "iconRight",
+      figmaPropertyType: "INSTANCE_SWAP",
+      figmaPropertyName: "Right Icon",
+    },
   ],
   
   compositionRules: [
     {
       type: "recommended",
       description: "Use icon size that matches button height",
-      targets: ["icon", "root"],
+      targets: ["iconLeft", "iconRight", "root"],
     },
     {
       type: "forbidden",
       description: "Icon-only button should not have label",
       targets: ["label"],
-      condition: "size === 'icon'",
+      condition: "size.startsWith('icon')",
+    },
+    {
+      type: "recommended",
+      description: "Icon-only button should use iconLeft for the icon",
+      targets: ["iconLeft"],
+      condition: "size.startsWith('icon')",
     },
   ],
   
