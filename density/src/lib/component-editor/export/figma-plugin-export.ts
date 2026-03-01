@@ -327,10 +327,12 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
     });
   }
 
+  // Line heights as percentages (Figma interprets values > 1 as percentages when bound to LINE_HEIGHT)
+  // 125 = 125%, 150 = 150%, 175 = 175%
   const lineHeights: Record<string, number> = {
-    tight: 1.25,
-    normal: 1.5,
-    relaxed: 1.75,
+    tight: 125,
+    normal: 150,
+    relaxed: 175,
   };
 
   for (const [key, value] of Object.entries(lineHeights)) {
@@ -338,7 +340,7 @@ function buildTypographyCollection(): FigmaPluginVariableCollection {
       id: `rivers-ds-typography/lineHeight-${key}`,
       name: `typography/lineHeight-${key}`,
       type: "FLOAT",
-      description: `Line height: ${value}`,
+      description: `Line height: ${value}%`,
       valuesByMode: {
         Default: value,
       },
@@ -771,6 +773,9 @@ function buildComponentSlots(spec: ComponentSpec): FigmaPluginSlot[] {
       );
       const defaultText = (textMapping?.defaultValue as string) || slot.name;
       figmaSlot.defaults = { text: defaultText };
+      
+      // Add fontFamily binding to text slots
+      figmaSlot.variableBindings["fontFamily"] = "fonts/ui";
     }
 
     return figmaSlot;
@@ -960,8 +965,12 @@ function resolveSizeOverrideToFigmaField(propName: string): string | string[] | 
     paddingX: "paddingLeft",
     paddingY: "paddingTop",
     fontSize: "fontSize",
+    fontWeight: "fontWeight",
+    lineHeight: "lineHeight",
     gap: "itemSpacing",
     borderRadius: "topLeftRadius",
+    iconSize: "iconSize",
+    hideLabel: "hideLabel",
   };
   if (propName === "paddingX") return ["paddingLeft", "paddingRight"];
   if (propName === "paddingY") return ["paddingTop", "paddingBottom"];
