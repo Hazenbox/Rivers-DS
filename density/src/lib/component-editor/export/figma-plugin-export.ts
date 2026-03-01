@@ -905,16 +905,24 @@ function buildComponentVariants(spec: ComponentSpec): FigmaPluginComponentVarian
     if (s.tokenOverrides) {
       const bindings: Record<string, string> = {};
       for (const [propName, tokenRef] of Object.entries(s.tokenOverrides)) {
-        if (tokenRef.type !== "system") continue;
         const cssField = resolveSizeOverrideToFigmaField(propName);
-        const varName = mapTokenPathToVariableName(tokenRef.path);
-        if (cssField && varName) {
-          if (Array.isArray(cssField)) {
-            for (const f of cssField) {
-              bindings[f] = varName;
+        
+        if (tokenRef.type === "system") {
+          const varName = mapTokenPathToVariableName(tokenRef.path);
+          if (cssField && varName) {
+            if (Array.isArray(cssField)) {
+              for (const f of cssField) {
+                bindings[f] = varName;
+              }
+            } else {
+              bindings[cssField] = varName;
             }
-          } else {
-            bindings[cssField] = varName;
+          }
+        } else if (tokenRef.type === "literal") {
+          // Handle literal values (e.g., hideLabel: "true", paddingX: "0")
+          if (cssField) {
+            const fieldName = Array.isArray(cssField) ? cssField[0] : cssField;
+            bindings[fieldName] = tokenRef.value;
           }
         }
       }
@@ -1044,93 +1052,99 @@ function buildCodeConnect(spec: ComponentSpec): FigmaPluginCodeConnect {
 // ============================================
 
 function buildTextStyles(): FigmaPluginTextStyle[] {
+  // Use Geist as the default UI font (design system default)
+  const uiFont = "Geist";
+  const codeFont = "Geist Mono";
+  
+  // Line heights as percentages for better scalability
+  // Figma interprets values > 1 as percentages when applied to text styles
   return [
     {
       name: "Heading/H1",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Bold",
       fontSize: 36,
-      lineHeight: 40,
+      lineHeight: 111, // ~40px at 36px = 111%
       letterSpacing: -0.5,
     },
     {
       name: "Heading/H2",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "SemiBold",
       fontSize: 30,
-      lineHeight: 36,
+      lineHeight: 120, // ~36px at 30px = 120%
       letterSpacing: -0.25,
     },
     {
       name: "Heading/H3",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "SemiBold",
       fontSize: 24,
-      lineHeight: 32,
+      lineHeight: 133, // ~32px at 24px = 133%
       letterSpacing: 0,
     },
     {
       name: "Heading/H4",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Medium",
       fontSize: 20,
-      lineHeight: 28,
+      lineHeight: 140, // ~28px at 20px = 140%
       letterSpacing: 0,
     },
     {
       name: "Body/Large",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Regular",
       fontSize: 18,
-      lineHeight: 28,
+      lineHeight: 156, // ~28px at 18px = 156%
       letterSpacing: 0,
     },
     {
       name: "Body/Default",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Regular",
       fontSize: 16,
-      lineHeight: 24,
+      lineHeight: 150, // ~24px at 16px = 150%
       letterSpacing: 0,
     },
     {
       name: "Body/Small",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Regular",
       fontSize: 14,
-      lineHeight: 20,
+      lineHeight: 143, // ~20px at 14px = 143%
       letterSpacing: 0,
     },
     {
       name: "Label/Default",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Medium",
       fontSize: 14,
-      lineHeight: 20,
+      lineHeight: 143, // ~20px at 14px = 143%
       letterSpacing: 0,
     },
     {
       name: "Label/Small",
-      fontFamily: "Inter",
+      fontFamily: uiFont,
       fontStyle: "Medium",
       fontSize: 12,
-      lineHeight: 16,
+      lineHeight: 133, // ~16px at 12px = 133%
       letterSpacing: 0,
     },
     {
       name: "Code/Default",
-      fontFamily: "JetBrains Mono",
+      fontFamily: codeFont,
       fontStyle: "Regular",
       fontSize: 14,
-      lineHeight: 20,
+      lineHeight: 143, // ~20px at 14px = 143%
       letterSpacing: 0,
     },
     {
       name: "Code/Small",
-      fontFamily: "JetBrains Mono",
+      fontFamily: codeFont,
       fontStyle: "Regular",
       fontSize: 12,
-      lineHeight: 16,
+      lineHeight: 133, // ~16px at 12px = 133%
       letterSpacing: 0,
     },
   ];
